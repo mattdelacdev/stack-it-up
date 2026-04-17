@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Reveal from "@/components/Reveal";
 
 const steps = [
   {
@@ -75,43 +76,49 @@ export default function Home() {
 
         <section id="how" className="relative border-y-4 border-primary/30 bg-bg-deep/50 py-16 sm:py-24">
           <div className="mx-auto max-w-6xl px-6">
-            <h2 className="font-display text-3xl sm:text-5xl mb-12 sm:mb-16 text-text">
-              How it <span className="text-primary">works</span>
-            </h2>
+            <Reveal as="div">
+              <h2 className="font-display text-3xl sm:text-5xl mb-12 sm:mb-16 text-text">
+                How it <span className="text-primary">works</span>
+              </h2>
+            </Reveal>
             <ol className="grid gap-6 sm:grid-cols-3 sm:gap-8">
-              {steps.map((s) => (
-                <li key={s.n} className="card-retro group">
+              {steps.map((s, i) => (
+                <Reveal as="li" key={s.n} delay={i * 120} className="card-retro group">
                   <p className="font-display text-5xl text-primary/60 group-hover:text-accent transition-colors">
                     {s.n}
                   </p>
                   <h3 className="mt-4 font-display text-2xl text-text">{s.title}</h3>
                   <p className="mt-3 text-text/70 leading-relaxed">{s.copy}</p>
-                </li>
+                </Reveal>
               ))}
             </ol>
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
-          <h2 className="font-display text-3xl sm:text-5xl mb-12 text-text">
-            What you can <span className="text-secondary">optimize</span>
-          </h2>
+          <Reveal>
+            <h2 className="font-display text-3xl sm:text-5xl mb-12 text-text">
+              What you can <span className="text-secondary">optimize</span>
+            </h2>
+          </Reveal>
           <ul className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-            {features.map((f) => (
-              <li
+            {features.map((f, i) => (
+              <Reveal
+                as="li"
                 key={f.title}
+                delay={i * 100}
                 className="card-retro flex flex-col items-start hover:-translate-y-1"
               >
                 <span className="text-4xl sm:text-5xl" aria-hidden>{f.emoji}</span>
                 <h3 className="mt-4 font-display text-xl text-accent">{f.title}</h3>
                 <p className="mt-2 text-sm sm:text-base text-text/70">{f.copy}</p>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </section>
 
         <section className="mx-auto max-w-4xl px-6 pb-20 sm:pb-28 text-center">
-          <div className="card-retro !p-8 sm:!p-12 !border-accent">
+          <Reveal className="card-retro !p-8 sm:!p-12 !border-accent">
             <h2 className="font-display text-3xl sm:text-4xl text-text">
               Ready in <span className="text-accent">under a minute.</span>
             </h2>
@@ -121,7 +128,7 @@ export default function Home() {
             <Link href="/quiz" className="btn-primary mt-8">
               Let&apos;s go →
             </Link>
-          </div>
+          </Reveal>
         </section>
       </main>
 
