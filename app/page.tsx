@@ -45,8 +45,8 @@ export default function Home() {
       <main id="main" className="relative z-10">
         <section className="mx-auto max-w-6xl px-6 pt-10 pb-20 sm:pt-16 sm:pb-28 lg:pt-24 lg:pb-36">
           <div className="max-w-4xl">
-            <p className="font-mono text-accent text-xl sm:text-2xl tracking-wider mb-4">
-              &gt; initialize.routine()
+            <p className="font-display text-accent text-sm sm:text-base uppercase tracking-[0.3em] mb-5">
+              Personalized in 60 seconds
             </p>
             <h1 className="font-display text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
               <span className="text-gradient">Build your</span>
