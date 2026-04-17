@@ -166,6 +166,7 @@ export default function QuizPage() {
 
   function goBack() {
     if (stepIdx > 0) setStepIdx((i) => i - 1);
+    else router.push("/");
   }
 
   return (
@@ -254,8 +255,7 @@ export default function QuizPage() {
             <button
               type="button"
               onClick={goBack}
-              disabled={stepIdx === 0}
-              className="font-display text-sm uppercase tracking-wider text-text/70 hover:text-accent disabled:opacity-30 disabled:hover:text-text/70 transition-colors py-2"
+              className="font-display text-sm uppercase tracking-wider text-text/70 hover:text-accent transition-colors py-2"
             >
               ← Back
             </button>
