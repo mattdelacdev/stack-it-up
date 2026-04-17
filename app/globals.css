@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-text font-body antialiased;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(217, 70, 239, 0.15), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.12), transparent 50%),
+      linear-gradient(180deg, #1E1B4B 0%, #15123A 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-primary text-bg;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-4 ring-accent ring-offset-2 ring-offset-bg;
+  }
+}
+
+@layer components {
+  .retro-grid {
+    background-image:
+      linear-gradient(rgba(217, 70, 239, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .scanlines::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, #D946EF, #FBBF24, #06B6D4);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .btn-retro {
+    @apply inline-flex items-center justify-center gap-2 rounded-none border-4 border-bg px-6 py-3 font-display text-base font-bold uppercase tracking-wider transition-all duration-150 shadow-retro hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-retro-sm active:translate-x-[6px] active:translate-y-[6px] active:shadow-none;
+  }
+
+  .btn-primary {
+    @apply btn-retro bg-primary text-bg;
+  }
+
+  .btn-secondary {
+    @apply btn-retro bg-secondary text-bg;
+  }
+
+  .btn-accent {
+    @apply btn-retro bg-accent text-bg;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-none border-4 border-primary px-6 py-3 font-display text-base font-bold uppercase tracking-wider text-primary transition-all duration-150 hover:bg-primary hover:text-bg;
+  }
+
+  .card-retro {
+    @apply relative border-4 border-text/20 bg-bg-deep/80 p-6 backdrop-blur-sm transition-all duration-200;
+  }
+
+  .card-retro:hover {
+    @apply border-accent;
+  }
+}
