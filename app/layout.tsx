@@ -21,6 +21,7 @@ const mono = VT323({
 
 const body = Space_Grotesk({
   subsets: ["latin"],
+  weight: ["400", "700"],
   variable: "--font-body",
   display: "swap",
 });
