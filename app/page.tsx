@@ -63,7 +63,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="order-first lg:order-last">
+            <div className="hidden lg:block lg:order-last">
               <HeroStack />
             </div>
           </div>
