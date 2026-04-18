@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 export type Goal =
   | "energy"
@@ -33,7 +33,7 @@ export interface Supplement {
 }
 
 export async function fetchSupplements(): Promise<Record<string, Supplement>> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("supplements")
     .select("id, name, dose, timing, why, tag");
   if (error) throw error;
