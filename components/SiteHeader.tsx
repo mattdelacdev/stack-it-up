@@ -12,6 +12,7 @@ type AuthUser = {
   email: string;
   firstName: string | null;
   isAdmin: boolean;
+  username: string | null;
 } | null;
 
 export default function SiteHeader({ authUser = null }: { authUser?: AuthUser }) {

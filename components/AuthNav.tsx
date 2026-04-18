@@ -7,6 +7,7 @@ type AuthUser = {
   email: string;
   firstName: string | null;
   isAdmin: boolean;
+  username: string | null;
 } | null;
 
 export default function AuthNav({ user }: { user: AuthUser }) {
@@ -64,6 +65,17 @@ export default function AuthNav({ user }: { user: AuthUser }) {
           className="absolute right-0 mt-2 w-48 border-2 border-primary/40 bg-bg-deep/95 backdrop-blur-md shadow-xl"
         >
           <ul className="py-2">
+            {user.username && (
+              <li>
+                <Link
+                  role="menuitem"
+                  href={`/u/${user.username}`}
+                  className="block px-4 py-2 font-display text-xs tracking-[0.2em] text-text/80 hover:bg-primary/10 hover:text-accent"
+                >
+                  MY PROFILE
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 role="menuitem"

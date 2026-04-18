@@ -12,6 +12,7 @@ export default async function SiteLayout({
         email: user.email ?? "",
         firstName: profile?.first_name ?? null,
         isAdmin: profile?.role === "admin",
+        username: profile?.username ?? null,
       }
     : null;
   return (

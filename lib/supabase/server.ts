@@ -36,8 +36,26 @@ export async function getCurrentProfile() {
   if (!user) return { user: null, profile: null };
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, email, first_name, last_name, role")
+    .select(
+      "id, email, first_name, last_name, role, username, bio, website, avatar_url, avatar_uploaded_path, instagram, tiktok, twitter, youtube, location, is_public",
+    )
     .eq("id", user.id)
     .maybeSingle();
   return { user, profile };
+}
+
+export function resolveAvatarUrl(
+  profile: {
+    avatar_url?: string | null;
+    avatar_uploaded_path?: string | null;
+  } | null,
+): string | null {
+  if (!profile) return null;
+  if (profile.avatar_uploaded_path) {
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (base) {
+      return `${base}/storage/v1/object/public/avatars/${profile.avatar_uploaded_path}`;
+    }
+  }
+  return profile.avatar_url ?? null;
 }

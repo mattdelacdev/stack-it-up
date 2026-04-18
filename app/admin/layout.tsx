@@ -16,6 +16,7 @@ export default async function AdminLayout({
     email: user.email ?? "",
     firstName: profile?.first_name ?? null,
     isAdmin: true,
+    username: profile?.username ?? null,
   };
 
   return (
