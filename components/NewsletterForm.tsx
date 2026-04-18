@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getSupabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase/browser";
 
 export default function NewsletterForm() {
   const [firstName, setFirstName] = useState("");

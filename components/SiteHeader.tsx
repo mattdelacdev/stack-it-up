@@ -6,8 +6,15 @@ import { useEffect, useRef, useState } from "react";
 import { benefitList } from "@/lib/benefits";
 import SupplementSearch from "./SupplementSearch";
 import ThemeToggle from "./ThemeToggle";
+import AuthNav from "./AuthNav";
 
-export default function SiteHeader() {
+type AuthUser = {
+  email: string;
+  firstName: string | null;
+  isAdmin: boolean;
+} | null;
+
+export default function SiteHeader({ authUser = null }: { authUser?: AuthUser }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopOpen, setDesktopOpen] = useState(false);
@@ -128,6 +135,8 @@ export default function SiteHeader() {
           </Link>
 
           <SupplementSearch />
+
+          <AuthNav user={authUser} />
         </nav>
 
         <div className="lg:hidden flex items-center gap-2">
@@ -217,6 +226,39 @@ export default function SiteHeader() {
               <Link href="/quiz" className="btn-primary !text-sm !px-5 !py-3 text-center">
                 Start the Quiz →
               </Link>
+              {authUser ? (
+                <>
+                  <Link
+                    href="/account"
+                    className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
+                  >
+                    Account
+                  </Link>
+                  {authUser.isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
+                    >
+                      Admin
+                    </Link>
+                  )}
+                  <form action="/auth/signout" method="post">
+                    <button
+                      type="submit"
+                      className="w-full text-left font-display text-sm uppercase tracking-wider text-primary hover:text-accent px-3 py-2"
+                    >
+                      Log out
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
+                >
+                  Log in
+                </Link>
+              )}
             </div>
           </div>
         </div>

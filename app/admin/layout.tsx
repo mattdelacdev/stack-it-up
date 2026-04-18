@@ -1,15 +1,29 @@
 import Link from "next/link";
+import { redirect, notFound } from "next/navigation";
+import SiteHeader from "@/components/SiteHeader";
+import { getCurrentProfile } from "@/lib/supabase/server";
 
 export const metadata = { title: "Admin — StackItUp" };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { user, profile } = await getCurrentProfile();
+  if (!user) redirect("/login?next=/admin");
+  if (profile?.role !== "admin") notFound();
+
+  const authUser = {
+    email: user.email ?? "",
+    firstName: profile?.first_name ?? null,
+    isAdmin: true,
+  };
+
   return (
     <div className="min-h-screen bg-bg text-text">
-      <header className="border-b-4 border-primary/40 bg-bg-deep/60">
-        <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-4">
-          <Link href="/admin" className="font-display text-xl text-text">
+      <SiteHeader authUser={authUser} />
+      <div className="border-b-4 border-primary/40 bg-bg-deep/60">
+        <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-3">
+          <Link href="/admin" className="font-display text-sm text-text">
             <span className="text-gradient">ADMIN</span>
           </Link>
           <nav className="flex gap-4 font-display text-xs tracking-[0.3em]">
@@ -20,14 +34,8 @@ export default function AdminLayout({
               SUPPLEMENTS
             </Link>
           </nav>
-          <Link
-            href="/"
-            className="ml-auto font-display text-xs tracking-[0.3em] text-text/60 hover:text-accent"
-          >
-            ← SITE
-          </Link>
         </div>
-      </header>
+      </div>
       <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
     </div>
   );

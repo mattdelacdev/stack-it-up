@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSupabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase/browser";
 import type { Supplement } from "@/lib/supplements";
 
 const TIMINGS: Supplement["timing"][] = [

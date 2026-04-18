@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSupabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase/browser";
 
 interface Subscriber {
   id: string;
