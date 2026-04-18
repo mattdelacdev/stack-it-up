@@ -65,6 +65,11 @@ export default function SiteFooter() {
                   Take the Quiz
                 </Link>
               </li>
+              <li>
+                <Link href="/#newsletter" className="text-text/75 hover:text-accent transition-colors">
+                  Newsletter
+                </Link>
+              </li>
             </ul>
           </div>
 

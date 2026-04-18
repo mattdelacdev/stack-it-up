@@ -3,6 +3,7 @@ import { Bungee, VT323, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import NewsletterForm from "@/components/NewsletterForm";
 
 const display = Bungee({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({
         </a>
         <SiteHeader />
         {children}
+        <NewsletterForm />
         <SiteFooter />
       </body>
     </html>

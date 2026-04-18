@@ -102,6 +102,13 @@ export default function SiteHeader() {
             How it works
           </Link>
 
+          <Link
+            href="/#newsletter"
+            className="font-display text-xs uppercase tracking-wider text-text/80 hover:text-accent transition-colors px-3 py-2"
+          >
+            Newsletter
+          </Link>
+
           <Link href="/quiz" className="btn-ghost !px-4 !py-2 !text-sm ml-2">
             Start Quiz
           </Link>
@@ -173,6 +180,12 @@ export default function SiteHeader() {
                 className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
               >
                 How it works
+              </Link>
+              <Link
+                href="/#newsletter"
+                className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
+              >
+                Newsletter
               </Link>
               <Link href="/quiz" className="btn-primary !text-sm !px-5 !py-3 text-center">
                 Start the Quiz →
