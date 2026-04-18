@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import HeroStack from "@/components/HeroStack";
 import { benefitList } from "@/lib/benefits";
 
 const steps = [
@@ -34,31 +35,36 @@ export default function Home() {
 
       <main id="main" className="relative z-10">
         <section className="mx-auto max-w-6xl px-6 pt-10 pb-20 sm:pt-16 sm:pb-28 lg:pt-24 lg:pb-36">
-          <div className="max-w-4xl">
-            <p className="font-display text-accent text-sm sm:text-base uppercase tracking-[0.3em] mb-5">
-              Personalized in 60 seconds
-            </p>
-            <h1 className="font-display text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
-              <span className="text-gradient">Build your</span>
-              <br />
-              <span className="text-text">supplement</span>
-              <br />
-              <span className="text-accent">stack.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg sm:text-xl text-text/80 leading-relaxed">
-              Answer six quick questions. Get a personalized, no-BS supplement
-              routine backed by the boring, reliable science.
-            </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Link href="/quiz" className="btn-primary">
-                Start the Quiz →
-              </Link>
-              <Link
-                href="#how"
-                className="font-display text-sm sm:text-base uppercase tracking-wider text-text/70 hover:text-accent transition-colors underline underline-offset-8 decoration-2 decoration-primary/50 hover:decoration-accent px-2 py-3"
-              >
-                How it works
-              </Link>
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:items-center">
+            <div>
+              <p className="font-display text-accent text-sm sm:text-base uppercase tracking-[0.3em] mb-5">
+                Personalized in 60 seconds
+              </p>
+              <h1 className="font-display text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
+                <span className="text-gradient">Build your</span>
+                <br />
+                <span className="text-text">supplement</span>
+                <br />
+                <span className="text-accent">stack.</span>
+              </h1>
+              <p className="mt-8 max-w-2xl text-lg sm:text-xl text-text/80 leading-relaxed">
+                Answer six quick questions. Get a personalized, no-BS supplement
+                routine backed by the boring, reliable science.
+              </p>
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <Link href="/quiz" className="btn-primary">
+                  Start the Quiz →
+                </Link>
+                <Link
+                  href="#how"
+                  className="font-display text-sm sm:text-base uppercase tracking-wider text-text/70 hover:text-accent transition-colors underline underline-offset-8 decoration-2 decoration-primary/50 hover:decoration-accent px-2 py-3"
+                >
+                  How it works
+                </Link>
+              </div>
+            </div>
+            <div className="order-first lg:order-last">
+              <HeroStack />
             </div>
           </div>
         </section>
