@@ -6,6 +6,8 @@ import {
   resolveAvatarUrl,
 } from "@/lib/supabase/server";
 import AvatarUploader from "./AvatarUploader";
+import StackManager from "./StackManager";
+import { fetchUserStacks } from "@/lib/stacks";
 
 export const metadata = { title: "Settings — StackItUp" };
 
@@ -118,6 +120,7 @@ export default async function SettingsPage({
 
   const { saved, emailPending, error } = await searchParams;
   const avatar = resolveAvatarUrl(profile);
+  const stacks = await fetchUserStacks(user.id);
   const errorMsg = error ? ERRORS[error] ?? "Something went wrong." : null;
 
   return (
@@ -304,6 +307,8 @@ export default async function SettingsPage({
             </button>
           </div>
         </form>
+
+        <StackManager stacks={stacks} />
       </div>
     </main>
   );

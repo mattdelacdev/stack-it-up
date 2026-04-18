@@ -5,6 +5,8 @@ import {
   fetchSupplementList,
   type Supplement,
 } from "@/lib/supplements";
+import { fetchViewerState } from "@/lib/stacks";
+import { toggleFavorite, toggleStack } from "./actions";
 
 const TAG_META: Record<Supplement["tag"], { label: string; className: string }> = {
   core: { label: "CORE", className: "bg-accent text-bg" },
@@ -39,9 +41,10 @@ export default async function SupplementPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [supplement, all] = await Promise.all([
+  const [supplement, all, viewer] = await Promise.all([
     fetchSupplementById(id),
     fetchSupplementList(),
+    fetchViewerState(id),
   ]);
   if (!supplement) notFound();
 
@@ -95,10 +98,71 @@ export default async function SupplementPage({
             </div>
           </dl>
 
-          <div className="mt-10">
+          <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link href="/quiz" className="btn-primary">
               Build your stack →
             </Link>
+            {viewer.userId ? (
+              <>
+                <form action={toggleFavorite}>
+                  <input type="hidden" name="supplement_id" value={supplement.id} />
+                  <input type="hidden" name="is_favorite" value={viewer.isFavorite ? "1" : "0"} />
+                  <button
+                    type="submit"
+                    className={
+                      viewer.isFavorite
+                        ? "border-4 border-accent bg-accent/20 px-4 py-2 font-display text-xs tracking-[0.2em] text-accent shadow-retro"
+                        : "border-4 border-primary/60 px-4 py-2 font-display text-xs tracking-[0.2em] text-text hover:border-accent hover:text-accent"
+                    }
+                    aria-pressed={viewer.isFavorite}
+                  >
+                    <span aria-hidden>{viewer.isFavorite ? "★" : "☆"}</span>{" "}
+                    {viewer.isFavorite ? "FAVORITED" : "FAVORITE"}
+                  </button>
+                </form>
+                <form action={toggleStack}>
+                  <input type="hidden" name="supplement_id" value={supplement.id} />
+                  <input type="hidden" name="kind" value="morning" />
+                  <input type="hidden" name="in_stack" value={viewer.inMorning ? "1" : "0"} />
+                  <button
+                    type="submit"
+                    className={
+                      viewer.inMorning
+                        ? "border-4 border-secondary bg-secondary/20 px-4 py-2 font-display text-xs tracking-[0.2em] text-secondary shadow-retro"
+                        : "border-4 border-primary/60 px-4 py-2 font-display text-xs tracking-[0.2em] text-text hover:border-secondary hover:text-secondary"
+                    }
+                    aria-pressed={viewer.inMorning}
+                  >
+                    <span aria-hidden>☀️</span>{" "}
+                    {viewer.inMorning ? "IN MORNING" : "ADD TO MORNING"}
+                  </button>
+                </form>
+                <form action={toggleStack}>
+                  <input type="hidden" name="supplement_id" value={supplement.id} />
+                  <input type="hidden" name="kind" value="evening" />
+                  <input type="hidden" name="in_stack" value={viewer.inEvening ? "1" : "0"} />
+                  <button
+                    type="submit"
+                    className={
+                      viewer.inEvening
+                        ? "border-4 border-primary bg-primary/20 px-4 py-2 font-display text-xs tracking-[0.2em] text-primary shadow-retro"
+                        : "border-4 border-primary/60 px-4 py-2 font-display text-xs tracking-[0.2em] text-text hover:border-primary hover:text-primary"
+                    }
+                    aria-pressed={viewer.inEvening}
+                  >
+                    <span aria-hidden>🌙</span>{" "}
+                    {viewer.inEvening ? "IN EVENING" : "ADD TO EVENING"}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <Link
+                href={`/login?next=/supplements/${supplement.id}`}
+                className="border-4 border-primary/60 px-4 py-2 font-display text-xs tracking-[0.2em] text-text hover:border-accent hover:text-accent"
+              >
+                SIGN IN TO SAVE
+              </Link>
+            )}
           </div>
 
           <p className="mt-8 text-xs sm:text-sm text-text/50 leading-relaxed max-w-2xl">

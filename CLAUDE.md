@@ -7,7 +7,8 @@ Personalized supplement stack generator. Six-question quiz → tailored routine.
 - Next.js 16 (App Router), React 19, TypeScript
 - Tailwind CSS 3 (no plugins)
 - `next/font` for Bungee (display), VT323 (mono), Space_Grotesk (body)
-- No database, no auth, no analytics — quiz state lives in client storage
+- Supabase — Google OAuth, `profiles` table with admin role gating, public-profile fields, `avatars` storage bucket
+- Quiz answers still live in client storage (`lib/storage.ts`); auth/profile state is server-rendered via Supabase SSR
 
 ## Scripts
 
@@ -17,9 +18,12 @@ Personalized supplement stack generator. Six-question quiz → tailored routine.
 
 ## Layout
 
-- `app/` — routes: `/` (landing), `/quiz`, `/results`, `/optimize/[slug]`
-- `components/` — shared UI (`HeroStack`, `Reveal`, `SiteHeader`, `SiteFooter`, `NewsletterForm`)
-- `lib/` — data (`benefits.ts`, `supplements.ts`) and `storage.ts` for quiz state
+- `app/(site)/` — public routes: `/` landing, `/quiz`, `/results`, `/optimize/[slug]`, `/supplements` + `/supplements/[id]`, `/login`, `/settings` (account), `/u/[username]` (public profile)
+- `app/admin/` — admin-only: dashboard, `profiles` (role editing), `subscribers`, `supplements`
+- `app/auth/` — `callback` (OAuth exchange) and `signout`
+- `components/` — shared UI (`AuthNav`, `HeroStack`, `Reveal`, `SiteHeader`, `SiteFooter`, `NewsletterForm`, `SupplementSearch`, `ThemeToggle`)
+- `lib/` — data (`benefits.ts`, `supplements.ts`), quiz `storage.ts`, and `supabase/{browser,server,middleware}.ts` clients
+- `supabase/migrations/` — `0001_auth.sql`, `0002_admin_profiles.sql`, `0003_public_profiles.sql`
 - `app/globals.css` — component classes (`btn-primary`, `card-retro`, `retro-grid`, `reveal`, quiz slide animations)
 
 ## Design vocabulary

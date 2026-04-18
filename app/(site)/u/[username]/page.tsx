@@ -1,8 +1,12 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getServerSupabase, resolveAvatarUrl } from "@/lib/supabase/server";
+import { fetchUserStacks } from "@/lib/stacks";
+import type { Supplement } from "@/lib/supplements";
 
 type PublicProfile = {
+  id: string;
   username: string;
   first_name: string | null;
   last_name: string | null;
@@ -22,7 +26,7 @@ async function loadProfile(username: string): Promise<PublicProfile | null> {
   const { data } = await supabase
     .from("profiles")
     .select(
-      "username, first_name, last_name, bio, website, avatar_url, avatar_uploaded_path, instagram, tiktok, twitter, youtube, location",
+      "id, username, first_name, last_name, bio, website, avatar_url, avatar_uploaded_path, instagram, tiktok, twitter, youtube, location",
     )
     .eq("username", username.toLowerCase())
     .eq("is_public", true)
@@ -60,6 +64,7 @@ export default async function PublicProfilePage({
     .filter(Boolean)
     .join(" ");
   const avatar = resolveAvatarUrl(profile);
+  const stacks = await fetchUserStacks(profile.id);
 
   return (
     <main className="min-h-screen bg-bg text-text px-6 py-16">
@@ -103,8 +108,74 @@ export default async function PublicProfilePage({
 
           <SocialLinks profile={profile} />
         </div>
+
+        {stacks.morning.length > 0 && (
+          <StackSection title="Morning Stack" emoji="☀️" items={stacks.morning} accent="secondary" />
+        )}
+        {stacks.evening.length > 0 && (
+          <StackSection title="Evening Stack" emoji="🌙" items={stacks.evening} accent="primary" />
+        )}
+        {stacks.favorites.length > 0 && (
+          <FavoritesSection items={stacks.favorites} />
+        )}
       </div>
     </main>
+  );
+}
+
+function StackSection({
+  title,
+  emoji,
+  items,
+  accent,
+}: {
+  title: string;
+  emoji: string;
+  items: Supplement[];
+  accent: "primary" | "secondary";
+}) {
+  const accentClass = accent === "primary" ? "text-primary" : "text-secondary";
+  return (
+    <section className="mt-8 card-retro">
+      <h2 className={`font-display text-xl sm:text-2xl tracking-[0.15em] ${accentClass}`}>
+        <span aria-hidden>{emoji}</span> {title.toUpperCase()}
+      </h2>
+      <ol className="mt-4 divide-y divide-primary/20">
+        {items.map((s) => (
+          <li key={s.id} className="flex items-center justify-between gap-3 py-3">
+            <Link
+              href={`/supplements/${s.id}`}
+              className="font-display text-base sm:text-lg text-accent hover:text-primary"
+            >
+              {s.name}
+            </Link>
+            <span className="font-mono text-xs text-text/60">{s.dose}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+function FavoritesSection({ items }: { items: Supplement[] }) {
+  return (
+    <section className="mt-8 card-retro">
+      <h2 className="font-display text-xl sm:text-2xl tracking-[0.15em] text-accent">
+        <span aria-hidden>★</span> FAVORITES
+      </h2>
+      <ul className="mt-4 flex flex-wrap gap-2">
+        {items.map((s) => (
+          <li key={s.id}>
+            <Link
+              href={`/supplements/${s.id}`}
+              className="inline-block border-2 border-primary/60 px-3 py-1 font-display text-sm text-text hover:border-accent hover:text-accent"
+            >
+              {s.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
