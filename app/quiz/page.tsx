@@ -103,6 +103,7 @@ const DEFAULTS: QuizAnswers = {
 export default function QuizPage() {
   const router = useRouter();
   const [stepIdx, setStepIdx] = useState(0);
+  const [direction, setDirection] = useState<"forward" | "back">("forward");
   const [answers, setAnswers] = useState<QuizAnswers>(DEFAULTS);
 
   const step = STEPS[stepIdx];
@@ -157,6 +158,7 @@ export default function QuizPage() {
 
   function goNext() {
     if (stepIdx < STEPS.length - 1) {
+      setDirection("forward");
       setStepIdx((i) => i + 1);
     } else {
       saveAnswers(answers);
@@ -165,8 +167,10 @@ export default function QuizPage() {
   }
 
   function goBack() {
-    if (stepIdx > 0) setStepIdx((i) => i - 1);
-    else router.push("/");
+    if (stepIdx > 0) {
+      setDirection("back");
+      setStepIdx((i) => i - 1);
+    } else router.push("/");
   }
 
   return (
@@ -194,7 +198,12 @@ export default function QuizPage() {
           />
         </div>
 
-        <div key={step.id} className="animate-in fade-in duration-300">
+        <div
+          key={step.id}
+          className={
+            direction === "forward" ? "quiz-slide-forward" : "quiz-slide-back"
+          }
+        >
           <p className="font-mono text-accent text-lg sm:text-xl mb-3">
             &gt; question_{String(stepIdx + 1).padStart(2, "0")}
           </p>

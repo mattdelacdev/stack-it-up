@@ -102,11 +102,62 @@
     transform: translateY(0);
   }
 
+  .animate-fade-in-down {
+    animation: fade-in-down 220ms ease-out both;
+  }
+
+  .quiz-slide-forward {
+    animation: quiz-slide-forward 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .quiz-slide-back {
+    animation: quiz-slide-back 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .reveal {
       opacity: 1;
       transform: none;
       transition: none;
     }
+
+    .animate-fade-in-down,
+    .quiz-slide-forward,
+    .quiz-slide-back {
+      animation: none;
+    }
+  }
+}
+
+@keyframes quiz-slide-forward {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes quiz-slide-back {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -146,7 +146,7 @@ export default function SiteHeader() {
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="md:hidden border-t-2 border-primary/30 bg-bg-deep/95 backdrop-blur-md"
+          className="md:hidden border-t-2 border-primary/30 bg-bg-deep/95 backdrop-blur-md animate-fade-in-down origin-top"
         >
           <div className="mx-auto max-w-6xl px-6 py-4">
             <p className="font-display text-xs uppercase tracking-[0.2em] text-text/50 mb-3">
