@@ -33,6 +33,9 @@ export default async function AdminLayout({
             <Link href="/admin/supplements" className="hover:text-accent">
               SUPPLEMENTS
             </Link>
+            <Link href="/admin/profiles" className="hover:text-accent">
+              PROFILES
+            </Link>
           </nav>
         </div>
       </div>
