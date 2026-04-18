@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   const requiresAuth =
-    pathname.startsWith("/admin") || pathname.startsWith("/account");
+    pathname.startsWith("/admin") || pathname.startsWith("/settings");
 
   if (requiresAuth && !user) {
     const loginUrl = request.nextUrl.clone();

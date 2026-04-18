@@ -79,10 +79,10 @@ export default function AuthNav({ user }: { user: AuthUser }) {
             <li>
               <Link
                 role="menuitem"
-                href="/account"
+                href="/settings"
                 className="block px-4 py-2 font-display text-xs tracking-[0.2em] text-text/80 hover:bg-primary/10 hover:text-accent"
               >
-                ACCOUNT
+                SETTINGS
               </Link>
             </li>
             {user.isAdmin && (

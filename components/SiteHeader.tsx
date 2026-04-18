@@ -230,10 +230,10 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
               {authUser ? (
                 <>
                   <Link
-                    href="/account"
+                    href="/settings"
                     className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
                   >
-                    Account
+                    Settings
                   </Link>
                   {authUser.isAdmin && (
                     <Link

@@ -7,7 +7,7 @@ import {
 } from "@/lib/supabase/server";
 import AvatarUploader from "./AvatarUploader";
 
-export const metadata = { title: "Account — StackItUp" };
+export const metadata = { title: "Settings — StackItUp" };
 
 const RESERVED = new Set([
   "admin","api","account","auth","login","logout","signup","signout",
@@ -38,7 +38,7 @@ async function updateProfile(formData: FormData) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login?next=/account");
+  if (!user) redirect("/login?next=/settings");
 
   const first_name = (formData.get("first_name") as string | null)?.trim() || null;
   const last_name = (formData.get("last_name") as string | null)?.trim() || null;
@@ -56,16 +56,16 @@ async function updateProfile(formData: FormData) {
   let username: string | null = null;
   if (usernameRaw) {
     if (!/^[a-z0-9_]{3,30}$/.test(usernameRaw)) {
-      redirect("/account?error=username_format");
+      redirect("/settings?error=username_format");
     }
     if (RESERVED.has(usernameRaw)) {
-      redirect("/account?error=username_reserved");
+      redirect("/settings?error=username_reserved");
     }
     username = usernameRaw;
   }
 
   if (bio && bio.length > 280) {
-    redirect("/account?error=bio_length");
+    redirect("/settings?error=bio_length");
   }
 
   const { error: profileError } = await supabase
@@ -85,7 +85,7 @@ async function updateProfile(formData: FormData) {
     })
     .eq("id", user.id);
   if (profileError) {
-    if (profileError.code === "23505") redirect("/account?error=username_taken");
+    if (profileError.code === "23505") redirect("/settings?error=username_taken");
     throw new Error(profileError.message);
   }
 
@@ -96,9 +96,9 @@ async function updateProfile(formData: FormData) {
     emailNotice = "&emailPending=1";
   }
 
-  revalidatePath("/account");
+  revalidatePath("/settings");
   if (username) revalidatePath(`/u/${username}`);
-  redirect(`/account?saved=1${emailNotice}`);
+  redirect(`/settings?saved=1${emailNotice}`);
 }
 
 const ERRORS: Record<string, string> = {
@@ -108,13 +108,13 @@ const ERRORS: Record<string, string> = {
   bio_length: "Bio must be 280 characters or fewer.",
 };
 
-export default async function AccountPage({
+export default async function SettingsPage({
   searchParams,
 }: {
   searchParams: Promise<{ saved?: string; emailPending?: string; error?: string }>;
 }) {
   const { profile, user } = await getCurrentProfile();
-  if (!user) redirect("/login?next=/account");
+  if (!user) redirect("/login?next=/settings");
 
   const { saved, emailPending, error } = await searchParams;
   const avatar = resolveAvatarUrl(profile);
@@ -124,7 +124,7 @@ export default async function AccountPage({
     <main className="min-h-screen bg-bg text-text px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <h1 className="font-display text-3xl sm:text-4xl">
-          <span className="text-gradient">ACCOUNT</span>
+          <span className="text-gradient">SETTINGS</span>
         </h1>
         <p className="mt-3 text-text/70">
           Your public profile at{" "}
@@ -303,12 +303,6 @@ export default async function AccountPage({
               Save
             </button>
           </div>
-        </form>
-
-        <form action="/auth/signout" method="post" className="mt-4 text-right">
-          <button type="submit" className="btn-secondary">
-            Log out
-          </button>
         </form>
       </div>
     </main>
