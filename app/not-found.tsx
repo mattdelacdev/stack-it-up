@@ -5,18 +5,6 @@ export default function NotFound() {
     <div className="relative overflow-hidden min-h-screen">
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-30" aria-hidden />
 
-      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <Link
-          href="/"
-          className="font-display text-xl text-primary tracking-widest hover:text-accent transition-colors sm:text-2xl"
-        >
-          STACK<span className="text-accent">·</span>IT<span className="text-accent">·</span>UP
-        </Link>
-        <Link href="/quiz" className="hidden sm:inline-flex btn-ghost !px-4 !py-2 !text-sm">
-          Start Quiz
-        </Link>
-      </header>
-
       <main className="relative z-10">
         <section className="mx-auto max-w-6xl px-6 pt-10 pb-20 sm:pt-16 sm:pb-28 lg:pt-24 lg:pb-36">
           <div className="max-w-4xl">

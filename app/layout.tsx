@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bungee, VT323, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import SiteHeader from "@/components/SiteHeader";
 
 const display = Bungee({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <SiteHeader />
         {children}
       </body>
     </html>

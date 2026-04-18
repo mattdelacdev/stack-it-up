@@ -173,17 +173,11 @@ export default function QuizPage() {
     <div className="relative min-h-screen">
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-20" aria-hidden />
 
-      <header className="relative z-10 mx-auto flex max-w-4xl items-center justify-between px-6 py-6">
-        <Link
-          href="/"
-          className="font-display text-lg text-primary tracking-widest hover:text-accent transition-colors sm:text-xl"
-        >
-          STACK<span className="text-accent">·</span>IT<span className="text-accent">·</span>UP
-        </Link>
+      <div className="relative z-10 mx-auto flex max-w-4xl items-center justify-end px-6 pt-6">
         <span className="font-mono text-lg text-text/70">
           {stepIdx + 1}<span className="text-accent">/</span>{STEPS.length}
         </span>
-      </header>
+      </div>
 
       <main id="main" className="relative z-10 mx-auto max-w-4xl px-6 pb-20">
         <div

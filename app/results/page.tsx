@@ -73,20 +73,14 @@ export default function ResultsPage() {
     <div className="relative min-h-screen">
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-20" aria-hidden />
 
-      <header className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
-        <Link
-          href="/"
-          className="font-display text-lg text-primary tracking-widest hover:text-accent transition-colors sm:text-xl"
-        >
-          STACK<span className="text-accent">·</span>IT<span className="text-accent">·</span>UP
-        </Link>
+      <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-end px-6 pt-6">
         <button
           onClick={retake}
           className="font-display text-xs sm:text-sm uppercase tracking-wider text-text/70 hover:text-accent transition-colors py-2"
         >
           ↻ Retake
         </button>
-      </header>
+      </div>
 
       <main id="main" className="relative z-10 mx-auto max-w-5xl px-6 pb-24">
         <section className="mb-12 sm:mb-16">
