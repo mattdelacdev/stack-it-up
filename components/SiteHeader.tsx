@@ -48,7 +48,7 @@ export default function SiteHeader() {
           STACK<span className="text-accent">·</span>IT<span className="text-accent">·</span>UP
         </Link>
 
-        <nav className="hidden md:flex items-center gap-2">
+        <nav className="hidden lg:flex items-center gap-2">
           <div className="relative" ref={desktopRef}>
             <button
               type="button"
@@ -130,7 +130,7 @@ export default function SiteHeader() {
           <SupplementSearch />
         </nav>
 
-        <div className="md:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-2">
           <SupplementSearch />
           <ThemeToggle />
 
@@ -167,7 +167,7 @@ export default function SiteHeader() {
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="md:hidden border-t-2 border-primary/30 bg-bg-deep/95 backdrop-blur-md animate-fade-in-down origin-top"
+          className="lg:hidden border-t-2 border-primary/30 bg-bg-deep/95 backdrop-blur-md animate-fade-in-down origin-top"
         >
           <div className="mx-auto max-w-6xl px-6 py-4">
             <p className="font-display text-xs uppercase tracking-[0.2em] text-text/50 mb-3">
