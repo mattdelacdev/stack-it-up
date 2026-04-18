@@ -40,6 +40,26 @@ export async function fetchSupplements(): Promise<Record<string, Supplement>> {
   return Object.fromEntries((data ?? []).map((s) => [s.id, s as Supplement]));
 }
 
+export async function fetchSupplementList(): Promise<Supplement[]> {
+  const { data, error } = await getSupabase()
+    .from("supplements")
+    .select("id, name, dose, timing, why, tag")
+    .order("tag")
+    .order("name");
+  if (error) throw error;
+  return (data ?? []) as Supplement[];
+}
+
+export async function fetchSupplementById(id: string): Promise<Supplement | null> {
+  const { data, error } = await getSupabase()
+    .from("supplements")
+    .select("id, name, dose, timing, why, tag")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as Supplement) ?? null;
+}
+
 export function buildStack(
   a: QuizAnswers,
   supplements: Record<string, Supplement>,

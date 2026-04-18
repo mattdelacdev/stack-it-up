@@ -97,6 +97,13 @@ export default function SiteHeader() {
           </div>
 
           <Link
+            href="/supplements"
+            className="font-display text-xs uppercase tracking-wider text-text/80 hover:text-accent transition-colors px-3 py-2"
+          >
+            Supplements
+          </Link>
+
+          <Link
             href="/#how"
             className="font-display text-xs uppercase tracking-wider text-text/80 hover:text-accent transition-colors px-3 py-2"
           >
@@ -182,6 +189,12 @@ export default function SiteHeader() {
               ))}
             </ul>
             <div className="flex flex-col gap-2">
+              <Link
+                href="/supplements"
+                className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
+              >
+                Supplements
+              </Link>
               <Link
                 href="/#how"
                 className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
