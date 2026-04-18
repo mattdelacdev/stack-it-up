@@ -19,6 +19,9 @@ export default function SupplementsAdmin() {
   const [editing, setEditing] = useState<(Supplement & { _isNew?: boolean }) | null>(
     null,
   );
+  const [query, setQuery] = useState("");
+  const [timingFilter, setTimingFilter] = useState<string>("");
+  const [tagFilter, setTagFilter] = useState<string>("");
 
   async function load() {
     setLoading(true);
@@ -96,8 +99,54 @@ export default function SupplementsAdmin() {
         <p className="mt-6 text-text/60">No supplements yet.</p>
       )}
 
-      {rows.length > 0 && (
-        <div className="mt-6 overflow-x-auto border-4 border-primary/40">
+      {rows.length > 0 && (() => {
+        const q = query.trim().toLowerCase();
+        const filtered = rows.filter((r) => {
+          if (timingFilter && r.timing !== timingFilter) return false;
+          if (tagFilter && r.tag !== tagFilter) return false;
+          if (!q) return true;
+          return (
+            r.id.toLowerCase().includes(q) ||
+            r.name.toLowerCase().includes(q) ||
+            r.dose.toLowerCase().includes(q) ||
+            r.why.toLowerCase().includes(q)
+          );
+        });
+        return (
+        <>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <input
+            type="search"
+            placeholder="Search id, name, dose, why…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className={`${inputCls} flex-1 min-w-[200px]`}
+          />
+          <select
+            value={timingFilter}
+            onChange={(e) => setTimingFilter(e.target.value)}
+            className={inputCls + " max-w-[180px]"}
+          >
+            <option value="">All timings</option>
+            {TIMINGS.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <select
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            className={inputCls + " max-w-[180px]"}
+          >
+            <option value="">All tags</option>
+            {TAGS.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <span className="self-center font-display text-xs tracking-[0.2em] text-text/60">
+            {filtered.length} / {rows.length}
+          </span>
+        </div>
+        <div className="mt-4 overflow-x-auto border-4 border-primary/40">
           <table className="w-full font-body text-sm">
             <thead className="bg-bg-deep/60 font-display text-xs tracking-[0.2em]">
               <tr>
@@ -110,7 +159,14 @@ export default function SupplementsAdmin() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-6 text-center text-text/60">
+                    No matches.
+                  </td>
+                </tr>
+              )}
+              {filtered.map((r) => (
                 <tr key={r.id} className="border-t-2 border-primary/20">
                   <td className="px-4 py-3 font-mono text-text/60">{r.id}</td>
                   <td className="px-4 py-3">{r.name}</td>
@@ -136,7 +192,9 @@ export default function SupplementsAdmin() {
             </tbody>
           </table>
         </div>
-      )}
+        </>
+        );
+      })()}
 
       {editing && (
         <SupplementModal
