@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { benefitList } from "@/lib/benefits";
+import SupplementSearch from "./SupplementSearch";
 import ThemeToggle from "./ThemeToggle";
 
 export default function SiteHeader() {
@@ -117,14 +118,20 @@ export default function SiteHeader() {
             Newsletter
           </Link>
 
-          <Link href="/quiz" className="btn-ghost !px-4 !py-2 !text-sm ml-2">
+          <ThemeToggle />
+
+          <Link
+            href="/quiz"
+            className="inline-flex items-center justify-center h-10 px-4 border-2 border-primary font-display text-xs uppercase tracking-wider text-primary hover:bg-primary hover:text-bg transition-colors"
+          >
             Start Quiz
           </Link>
 
-          <ThemeToggle />
+          <SupplementSearch />
         </nav>
 
         <div className="md:hidden flex items-center gap-2">
+          <SupplementSearch />
           <ThemeToggle />
 
         <button
