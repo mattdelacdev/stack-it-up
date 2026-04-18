@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { clearAnswers, loadAnswers } from "@/lib/storage";
 import {
   buildStack,
+  fetchSupplements,
   groupByTiming,
   type QuizAnswers,
   type Supplement,
@@ -39,6 +40,7 @@ const TAG_META: Record<Supplement["tag"], { label: string; className: string }> 
 export default function ResultsPage() {
   const router = useRouter();
   const [answers, setAnswers] = useState<QuizAnswers | null>(null);
+  const [supplements, setSupplements] = useState<Record<string, Supplement> | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -48,10 +50,16 @@ export default function ResultsPage() {
       return;
     }
     setAnswers(a);
-    setReady(true);
+    fetchSupplements()
+      .then(setSupplements)
+      .catch(() => setSupplements({}))
+      .finally(() => setReady(true));
   }, [router]);
 
-  const stack = useMemo(() => (answers ? buildStack(answers) : []), [answers]);
+  const stack = useMemo(
+    () => (answers && supplements ? buildStack(answers, supplements) : []),
+    [answers, supplements],
+  );
   const grouped = useMemo(() => groupByTiming(stack), [stack]);
 
   function retake() {
@@ -59,7 +67,7 @@ export default function ResultsPage() {
     router.push("/quiz");
   }
 
-  if (!ready || !answers) {
+  if (!ready || !answers || !supplements) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="font-mono text-accent text-xl animate-pulse">

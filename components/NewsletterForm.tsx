@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function NewsletterForm() {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [pending, setPending] = useState(false);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!firstName.trim()) {
       setError("Please enter your first name.");
@@ -19,6 +21,15 @@ export default function NewsletterForm() {
       return;
     }
     setError(null);
+    setPending(true);
+    const { error: dbError } = await supabase
+      .from("subscribers")
+      .insert({ email, first_name: firstName.trim(), source: "newsletter" });
+    setPending(false);
+    if (dbError && dbError.code !== "23505") {
+      setError("Something went wrong. Please try again.");
+      return;
+    }
     setSubmitted(true);
   }
 
@@ -74,8 +85,8 @@ export default function NewsletterForm() {
                   className="w-full border-2 border-primary/40 bg-bg/60 px-4 py-3 font-body text-text placeholder:text-text/40 focus:outline-none focus:border-accent"
                 />
               </div>
-              <button type="submit" className="btn-primary">
-                Subscribe →
+              <button type="submit" className="btn-primary" disabled={pending}>
+                {pending ? "Subscribing…" : "Subscribe →"}
               </button>
               {error && (
                 <p role="alert" className="sm:col-span-3 text-sm text-accent">
