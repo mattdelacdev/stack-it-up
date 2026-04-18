@@ -1,116 +1,66 @@
+import Image from "next/image";
+
 export default function HeroStack() {
   return (
-    <div className="relative w-full max-w-md mx-auto lg:max-w-none aspect-square">
+    <div className="relative w-full max-w-md mx-auto lg:max-w-none">
       <div
         aria-hidden
-        className="absolute inset-0 rounded-full blur-3xl opacity-40"
+        className="absolute -inset-8 rounded-full blur-3xl opacity-40 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle at 50% 50%, #D946EF 0%, #06B6D4 40%, transparent 70%)",
         }}
       />
 
-      <svg
-        viewBox="0 0 400 400"
-        className="relative w-full h-full drop-shadow-[0_0_30px_rgba(217,70,239,0.3)]"
-        role="img"
-        aria-label="Illustration of a personalized supplement stack"
-      >
-        <defs>
-          <linearGradient id="pink" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#F472B6" />
-            <stop offset="1" stopColor="#D946EF" />
-          </linearGradient>
-          <linearGradient id="cyan" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#67E8F9" />
-            <stop offset="1" stopColor="#06B6D4" />
-          </linearGradient>
-          <linearGradient id="amber" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#FDE68A" />
-            <stop offset="1" stopColor="#F59E0B" />
-          </linearGradient>
-          <linearGradient id="violet" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#C4B5FD" />
-            <stop offset="1" stopColor="#8B5CF6" />
-          </linearGradient>
-          <linearGradient id="shine" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stopColor="white" stopOpacity="0.6" />
-            <stop offset="1" stopColor="white" stopOpacity="0" />
-          </linearGradient>
-        </defs>
+      <div className="relative aspect-[3/4] overflow-hidden border-4 border-primary/60 shadow-[0_0_40px_rgba(217,70,239,0.35)]">
+        <Image
+          src="/hero-supplements.jpg"
+          alt="A spilled bottle of colorful supplement capsules and powders"
+          fill
+          priority
+          sizes="(min-width: 1024px) 40vw, 80vw"
+          className="object-cover saturate-[1.15] contrast-[1.05]"
+        />
 
-        {/* retro sun / backdrop */}
-        <circle cx="200" cy="200" r="150" fill="url(#violet)" opacity="0.12" />
-        <circle cx="200" cy="200" r="110" fill="url(#pink)" opacity="0.18" />
+        {/* duotone tint toward brand palette */}
+        <div
+          aria-hidden
+          className="absolute inset-0 mix-blend-color"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(217,70,239,0.55) 0%, rgba(30,27,75,0.25) 50%, rgba(6,182,212,0.5) 100%)",
+          }}
+        />
 
-        {/* scanlines on backdrop */}
-        <g opacity="0.25">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <line
-              key={i}
-              x1="60"
-              x2="340"
-              y1={130 + i * 12}
-              y2={130 + i * 12}
-              stroke="#1E1B4B"
-              strokeWidth="2"
-            />
-          ))}
-        </g>
+        {/* darken bottom for text contrast */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 50%, rgba(30,27,75,0.55) 100%)",
+          }}
+        />
 
-        {/* Capsule 1 - pink, top */}
-        <g transform="translate(85 90) rotate(-18)">
-          <rect x="0" y="0" width="180" height="58" rx="29" fill="url(#pink)" />
-          <rect x="90" y="0" width="90" height="58" rx="29" fill="#FEF3C7" opacity="0.95" />
-          <rect x="88" y="0" width="4" height="58" fill="#1E1B4B" opacity="0.25" />
-          <rect x="10" y="8" width="80" height="10" rx="5" fill="url(#shine)" />
-          <rect x="0" y="0" width="180" height="58" rx="29" fill="none" stroke="#1E1B4B" strokeWidth="3" opacity="0.4" />
-        </g>
+        {/* scanlines */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none opacity-30 mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, rgba(0,0,0,0.4) 0px, rgba(0,0,0,0.4) 1px, transparent 1px, transparent 3px)",
+          }}
+        />
 
-        {/* Capsule 2 - cyan, middle */}
-        <g transform="translate(70 180) rotate(8)">
-          <rect x="0" y="0" width="190" height="62" rx="31" fill="url(#cyan)" />
-          <rect x="0" y="0" width="95" height="62" rx="31" fill="#1E1B4B" opacity="0.85" />
-          <rect x="93" y="0" width="4" height="62" fill="#0E7490" opacity="0.5" />
-          <rect x="12" y="8" width="70" height="10" rx="5" fill="url(#shine)" opacity="0.5" />
-          <rect x="0" y="0" width="190" height="62" rx="31" fill="none" stroke="#1E1B4B" strokeWidth="3" opacity="0.4" />
-        </g>
+        {/* retro badge */}
+        <div className="absolute top-4 right-4 bg-bg-deep/90 border-2 border-accent px-3 py-1.5 font-mono text-accent text-sm tracking-[0.15em]">
+          YOUR·STACK
+        </div>
 
-        {/* Pill 3 - amber tablet */}
-        <g transform="translate(130 275) rotate(-6)">
-          <ellipse cx="70" cy="25" rx="70" ry="25" fill="url(#amber)" />
-          <ellipse cx="70" cy="22" rx="68" ry="22" fill="none" stroke="#92400E" strokeWidth="2" opacity="0.4" />
-          <line x1="30" y1="25" x2="110" y2="25" stroke="#92400E" strokeWidth="2" opacity="0.5" />
-          <ellipse cx="50" cy="15" rx="22" ry="4" fill="white" opacity="0.5" />
-        </g>
-
-        {/* sparkles */}
-        <g fill="#FBBF24">
-          <path d="M70 70 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4 z" />
-          <path d="M330 140 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" opacity="0.9" />
-          <path d="M340 310 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" opacity="0.7" />
-        </g>
-        <g fill="#06B6D4">
-          <circle cx="55" cy="280" r="5" />
-          <circle cx="355" cy="220" r="4" opacity="0.8" />
-        </g>
-
-        {/* retro label badge */}
-        <g transform="translate(245 50)">
-          <rect x="0" y="0" width="110" height="34" rx="4" fill="#1E1B4B" stroke="#FBBF24" strokeWidth="2" />
-          <text
-            x="55"
-            y="23"
-            textAnchor="middle"
-            fontFamily="monospace"
-            fontSize="14"
-            fill="#FBBF24"
-            letterSpacing="2"
-          >
-            YOUR·STACK
-          </text>
-        </g>
-      </svg>
+        {/* corner tick marks */}
+        <span aria-hidden className="absolute top-2 left-2 w-5 h-5 border-t-2 border-l-2 border-accent" />
+        <span aria-hidden className="absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-accent" />
+      </div>
     </div>
   );
 }
