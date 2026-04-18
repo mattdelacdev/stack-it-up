@@ -95,21 +95,6 @@ export default function HeroStack() {
           <circle cx="355" cy="220" r="4" opacity="0.8" />
         </g>
 
-        {/* retro label badge */}
-        <g transform="translate(245 50)">
-          <rect x="0" y="0" width="110" height="34" rx="4" fill="#1E1B4B" stroke="#FBBF24" strokeWidth="2" />
-          <text
-            x="55"
-            y="23"
-            textAnchor="middle"
-            fontFamily="monospace"
-            fontSize="14"
-            fill="#FBBF24"
-            letterSpacing="2"
-          >
-            YOUR·STACK
-          </text>
-        </g>
       </svg>
     </div>
   );
