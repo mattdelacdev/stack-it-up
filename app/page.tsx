@@ -102,7 +102,7 @@ export default function Home() {
                   className="card-retro group flex h-full flex-col items-start hover:-translate-y-1"
                 >
                   <span className="text-4xl sm:text-5xl" aria-hidden>{f.emoji}</span>
-                  <h3 className="mt-4 font-display text-xl text-accent">{f.title}</h3>
+                  <h3 className="mt-4 font-display text-base sm:text-xl text-accent break-words hyphens-auto">{f.title}</h3>
                   <p className="mt-2 text-sm sm:text-base text-text/70">{f.copy}</p>
                   <span className="mt-4 font-display text-xs uppercase tracking-wider text-primary/80 group-hover:text-accent transition-colors">
                     Learn more →
@@ -128,12 +128,6 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="relative z-10 border-t-4 border-primary/30 py-8">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-text/60">
-          <p>© {new Date().getFullYear()} StackItUp — educational only, not medical advice.</p>
-          <p className="font-mono text-accent">v1.0.0</p>
-        </div>
-      </footer>
     </div>
   );
 }

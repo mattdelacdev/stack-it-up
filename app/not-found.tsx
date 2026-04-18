@@ -37,12 +37,6 @@ export default function NotFound() {
         </section>
       </main>
 
-      <footer className="relative z-10 border-t-4 border-primary/30 py-8">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-text/60">
-          <p>© {new Date().getFullYear()} StackItUp — educational only, not medical advice.</p>
-          <p className="font-mono text-accent">404</p>
-        </div>
-      </footer>
     </div>
   );
 }
