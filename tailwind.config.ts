@@ -8,12 +8,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#D946EF",
-        secondary: "#06B6D4",
-        accent: "#FBBF24",
-        bg: "#1E1B4B",
-        "bg-deep": "#15123A",
-        text: "#E9D5FF",
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
+        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+        accent: "rgb(var(--color-accent) / <alpha-value>)",
+        bg: "rgb(var(--color-bg) / <alpha-value>)",
+        "bg-deep": "rgb(var(--color-bg-deep) / <alpha-value>)",
+        text: "rgb(var(--color-text) / <alpha-value>)",
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
@@ -21,12 +21,12 @@ const config: Config = {
         body: ["var(--font-body)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        retro: "6px 6px 0 0 #FBBF24",
-        "retro-sm": "3px 3px 0 0 #FBBF24",
-        "retro-primary": "6px 6px 0 0 #D946EF",
-        "retro-secondary": "6px 6px 0 0 #06B6D4",
-        glow: "0 0 20px rgba(217, 70, 239, 0.5), 0 0 40px rgba(217, 70, 239, 0.3)",
-        "glow-cyan": "0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(6, 182, 212, 0.3)",
+        retro: "6px 6px 0 0 rgb(var(--color-accent))",
+        "retro-sm": "3px 3px 0 0 rgb(var(--color-accent))",
+        "retro-primary": "6px 6px 0 0 rgb(var(--color-primary))",
+        "retro-secondary": "6px 6px 0 0 rgb(var(--color-secondary))",
+        glow: "0 0 20px rgb(var(--color-primary) / 0.5), 0 0 40px rgb(var(--color-primary) / 0.3)",
+        "glow-cyan": "0 0 20px rgb(var(--color-secondary) / 0.5), 0 0 40px rgb(var(--color-secondary) / 0.3)",
       },
       animation: {
         "gradient-shift": "gradient-shift 8s ease infinite",

@@ -4,7 +4,23 @@
 
 @layer base {
   :root {
+    --color-primary: 217 70 239;
+    --color-secondary: 6 182 212;
+    --color-accent: 251 191 36;
+    --color-bg: 30 27 75;
+    --color-bg-deep: 21 18 58;
+    --color-text: 233 213 255;
     color-scheme: dark;
+  }
+
+  [data-theme="light"] {
+    --color-primary: 192 38 211;
+    --color-secondary: 8 145 178;
+    --color-accent: 234 88 12;
+    --color-bg: 255 244 214;
+    --color-bg-deep: 255 255 255;
+    --color-text: 30 27 75;
+    color-scheme: light;
   }
 
   html {
@@ -14,9 +30,9 @@
   body {
     @apply bg-bg text-text font-body antialiased;
     background-image:
-      radial-gradient(ellipse at top left, rgba(217, 70, 239, 0.15), transparent 50%),
-      radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.12), transparent 50%),
-      linear-gradient(180deg, #1E1B4B 0%, #15123A 100%);
+      radial-gradient(ellipse at top left, rgb(var(--color-primary) / 0.15), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgb(var(--color-secondary) / 0.12), transparent 50%),
+      linear-gradient(180deg, rgb(var(--color-bg)) 0%, rgb(var(--color-bg-deep)) 100%);
     background-attachment: fixed;
     min-height: 100vh;
   }
@@ -33,8 +49,8 @@
 @layer components {
   .retro-grid {
     background-image:
-      linear-gradient(rgba(217, 70, 239, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+      linear-gradient(rgb(var(--color-primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--color-secondary) / 0.1) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
@@ -54,7 +70,12 @@
   }
 
   .text-gradient {
-    background: linear-gradient(90deg, #D946EF, #FBBF24, #06B6D4);
+    background: linear-gradient(
+      90deg,
+      rgb(var(--color-primary)),
+      rgb(var(--color-accent)),
+      rgb(var(--color-secondary))
+    );
     background-size: 200% 200%;
     -webkit-background-clip: text;
     background-clip: text;

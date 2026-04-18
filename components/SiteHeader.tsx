@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { benefitList } from "@/lib/benefits";
+import ThemeToggle from "./ThemeToggle";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -112,7 +113,12 @@ export default function SiteHeader() {
           <Link href="/quiz" className="btn-ghost !px-4 !py-2 !text-sm ml-2">
             Start Quiz
           </Link>
+
+          <ThemeToggle />
         </nav>
+
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
 
         <button
           type="button"
@@ -120,7 +126,7 @@ export default function SiteHeader() {
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
           onClick={() => setMobileOpen((v) => !v)}
-          className="md:hidden inline-flex items-center justify-center w-10 h-10 border-2 border-primary/50 text-accent hover:bg-primary/10 transition-colors"
+          className="inline-flex items-center justify-center w-10 h-10 border-2 border-primary/50 text-accent hover:bg-primary/10 transition-colors"
         >
           <span className="sr-only">Toggle menu</span>
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
@@ -141,6 +147,7 @@ export default function SiteHeader() {
             )}
           </svg>
         </button>
+        </div>
       </div>
 
       {mobileOpen && (
