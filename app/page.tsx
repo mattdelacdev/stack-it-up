@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import { benefitList } from "@/lib/benefits";
 
 const steps = [
   {
@@ -19,12 +20,12 @@ const steps = [
   },
 ];
 
-const features = [
-  { emoji: "⚡", title: "Energy", copy: "Smooth focus without the jitters." },
-  { emoji: "🌙", title: "Sleep", copy: "Wind down and wake up rested." },
-  { emoji: "💪", title: "Performance", copy: "Build, recover, repeat." },
-  { emoji: "🛡️", title: "Immunity", copy: "Stay resilient year-round." },
-];
+const features = benefitList.map((b) => ({
+  slug: b.slug,
+  emoji: b.emoji,
+  title: b.title,
+  copy: b.tagline,
+}));
 
 export default function Home() {
   return (
@@ -95,23 +96,30 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+        <section id="optimize" className="mx-auto max-w-6xl px-6 py-16 sm:py-24 scroll-mt-24">
           <Reveal>
-            <h2 className="font-display text-3xl sm:text-5xl mb-12 text-text">
+            <h2 className="font-display text-3xl sm:text-5xl mb-4 text-text">
               What you can <span className="text-secondary">optimize</span>
             </h2>
+            <p className="mb-12 text-text/70 sm:text-lg">
+              Tap any benefit to learn more — then build your stack.
+            </p>
           </Reveal>
           <ul className="grid gap-4 grid-cols-2 lg:grid-cols-4">
             {features.map((f, i) => (
-              <Reveal
-                as="li"
-                key={f.title}
-                delay={i * 100}
-                className="card-retro flex flex-col items-start hover:-translate-y-1"
-              >
-                <span className="text-4xl sm:text-5xl" aria-hidden>{f.emoji}</span>
-                <h3 className="mt-4 font-display text-xl text-accent">{f.title}</h3>
-                <p className="mt-2 text-sm sm:text-base text-text/70">{f.copy}</p>
+              <Reveal as="li" key={f.title} delay={i * 100}>
+                <Link
+                  href={`/optimize/${f.slug}`}
+                  aria-label={`Learn more about ${f.title}`}
+                  className="card-retro group flex h-full flex-col items-start hover:-translate-y-1"
+                >
+                  <span className="text-4xl sm:text-5xl" aria-hidden>{f.emoji}</span>
+                  <h3 className="mt-4 font-display text-xl text-accent">{f.title}</h3>
+                  <p className="mt-2 text-sm sm:text-base text-text/70">{f.copy}</p>
+                  <span className="mt-4 font-display text-xs uppercase tracking-wider text-primary/80 group-hover:text-accent transition-colors">
+                    Learn more →
+                  </span>
+                </Link>
               </Reveal>
             ))}
           </ul>
