@@ -27,6 +27,12 @@
     scroll-behavior: smooth;
   }
 
+  /* Dose unit preference: show only the variant matching html[data-dose-pref]. */
+  [data-dose-pref="native"] [data-dose-variant="si"],
+  [data-dose-pref="si"] [data-dose-variant="native"] {
+    display: none;
+  }
+
   body {
     @apply bg-bg text-text font-body antialiased;
     background-image:

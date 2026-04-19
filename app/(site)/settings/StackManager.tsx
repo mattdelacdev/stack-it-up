@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Supplement } from "@/lib/supplements";
 import type { StackKind, UserStacks } from "@/lib/stacks";
+import { DualDose } from "@/lib/dose";
 import {
   moveStackItem,
   removeFavorite,
@@ -60,7 +61,7 @@ function StackList({
                 {s.name}
               </Link>
               <span className="hidden sm:inline font-mono text-xs text-text/50">
-                {s.dose}
+                <DualDose s={s} />
               </span>
               <ReorderButton
                 kind={kind}

@@ -85,7 +85,7 @@ export async function fetchFeaturedStack(slug: string): Promise<FeaturedStack | 
       supabase
         .from("featured_stack_items")
         .select(
-          "position, note, supplements(id, name, dose, timing, why, tag)",
+          "position, note, supplements(id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag)",
         )
         .eq("stack_slug", slug)
         .order("position"),

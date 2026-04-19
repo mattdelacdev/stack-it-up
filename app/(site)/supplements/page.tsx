@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
+import { DualDose } from "@/lib/dose";
 
 export const metadata = {
   title: "Supplement Library",
@@ -61,7 +62,7 @@ export default async function SupplementsPage() {
                   <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
                     <div className="border-l-4 border-accent/70 pl-3">
                       <dt className="font-display text-accent uppercase tracking-wider">Dose</dt>
-                      <dd className="mt-1 text-text/80">{s.dose}</dd>
+                      <dd className="mt-1 text-text/80"><DualDose s={s} /></dd>
                     </div>
                     <div className="border-l-4 border-secondary/70 pl-3">
                       <dt className="font-display text-secondary uppercase tracking-wider">When</dt>

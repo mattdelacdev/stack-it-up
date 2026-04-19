@@ -58,14 +58,17 @@ export interface Supplement {
   id: string;
   name: string;
   dose: string;
+  dose_low?: number | null;
+  dose_high?: number | null;
+  dose_unit?: string | null;
   timing: "morning" | "afternoon" | "evening" | "anytime";
   why: string;
   tag: "core" | "goal" | "lifestyle";
   content?: SupplementContent;
 }
 
-const SELECT_COLS = "id, name, dose, timing, why, tag, content";
-const SELECT_COLS_LIST = "id, name, dose, timing, why, tag";
+const SELECT_COLS = "id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag, content";
+const SELECT_COLS_LIST = "id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag";
 
 export async function fetchSupplements(): Promise<Record<string, Supplement>> {
   const { data, error } = await getSupabase()

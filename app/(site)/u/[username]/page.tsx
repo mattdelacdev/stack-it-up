@@ -5,6 +5,7 @@ import { getServerSupabase, resolveAvatarUrl } from "@/lib/supabase/server";
 import { fetchUserStacks } from "@/lib/stacks";
 import type { Supplement } from "@/lib/supplements";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
+import { DualDose } from "@/lib/dose";
 
 type PublicProfile = {
   id: string;
@@ -197,7 +198,7 @@ function StackSection({
             >
               {s.name}
             </Link>
-            <span className="font-mono text-xs text-text/60">{s.dose}</span>
+            <span className="font-mono text-xs text-text/60"><DualDose s={s} /></span>
           </li>
         ))}
       </ol>

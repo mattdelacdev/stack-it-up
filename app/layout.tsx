@@ -101,7 +101,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;}else{document.documentElement.dataset.theme='dark';}}catch(e){document.documentElement.dataset.theme='dark';}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;}else{document.documentElement.dataset.theme='dark';}var d=localStorage.getItem('dosePref');document.documentElement.dataset.dosePref=(d==='si')?'si':'native';}catch(e){document.documentElement.dataset.theme='dark';document.documentElement.dataset.dosePref='native';}})();`,
           }}
         />
       </head>

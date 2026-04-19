@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { clearAnswers, loadAnswers } from "@/lib/storage";
+import { DualDose } from "@/lib/dose";
 import {
   buildStack,
   fetchSupplements,
@@ -146,7 +147,7 @@ export default function ResultsPage() {
                               {tag.label}
                             </span>
                           </div>
-                          <p className="mt-2 font-mono text-accent text-lg">{s.dose}</p>
+                          <p className="mt-2 font-mono text-accent text-lg"><DualDose s={s} /></p>
                           <p className="mt-3 text-sm sm:text-base text-text/70 leading-relaxed">
                             {s.why}
                           </p>

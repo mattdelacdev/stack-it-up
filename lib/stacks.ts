@@ -9,7 +9,7 @@ export interface UserStacks {
   favorites: Supplement[];
 }
 
-const SUPPLEMENT_COLS = "id, name, dose, timing, why, tag";
+const SUPPLEMENT_COLS = "id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag";
 
 export async function fetchUserStacks(userId: string): Promise<UserStacks> {
   const supabase = await getServerSupabase();

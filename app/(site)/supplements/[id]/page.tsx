@@ -8,6 +8,7 @@ import {
 } from "@/lib/supplements";
 import { fetchViewerState } from "@/lib/stacks";
 import { fetchStacksForSupplement, type HeroAccent } from "@/lib/featured-stacks";
+import { DualDose } from "@/lib/dose";
 import { toggleFavorite, toggleStack } from "./actions";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
@@ -202,7 +203,7 @@ export default async function SupplementPage({
               <dt className="font-display text-accent text-xs uppercase tracking-wider">
                 Typical dose
               </dt>
-              <dd className="mt-2 text-text/85 text-lg">{supplement.dose}</dd>
+              <dd className="mt-2 text-text/85 text-lg"><DualDose s={supplement} /></dd>
             </div>
             <div className="card-retro">
               <dt className="font-display text-secondary text-xs uppercase tracking-wider">

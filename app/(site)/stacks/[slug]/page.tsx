@@ -10,6 +10,7 @@ import {
 import type { Supplement } from "@/lib/supplements";
 import { SITE_NAME } from "@/lib/site";
 import StackTimingNav from "@/components/StackTimingNav";
+import { DualDose } from "@/lib/dose";
 
 const ACCENT_TEXT: Record<HeroAccent, string> = {
   primary: "text-primary",
@@ -217,7 +218,7 @@ export default async function FeaturedStackPage({
                                 <dt className="font-display text-text/50 uppercase tracking-widest">
                                   Dose
                                 </dt>
-                                <dd className="mt-1 text-text/85">{s.dose}</dd>
+                                <dd className="mt-1 text-text/85"><DualDose s={s} /></dd>
                               </div>
                               <div>
                                 <dt className="font-display text-text/50 uppercase tracking-widest">
