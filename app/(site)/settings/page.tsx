@@ -8,7 +8,11 @@ import {
 import Link from "next/link";
 import AvatarUploader from "./AvatarUploader";
 import StackManager from "./StackManager";
+import ManageBillingButton from "@/components/ManageBillingButton";
+import UpgradeButton from "@/components/UpgradeButton";
 import { fetchUserStacks } from "@/lib/stacks";
+import { stripe } from "@/lib/stripe";
+import { getServiceSupabase } from "@/lib/supabase/service";
 
 export const metadata = {
   title: "Account Settings",
@@ -119,12 +123,56 @@ const ERRORS: Record<string, string> = {
 export default async function SettingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ saved?: string; emailPending?: string; error?: string }>;
+  searchParams: Promise<{
+    saved?: string;
+    emailPending?: string;
+    error?: string;
+    upgraded?: string;
+    session_id?: string;
+  }>;
 }) {
-  const { profile, user } = await getCurrentProfile();
+  let { profile, user } = await getCurrentProfile();
   if (!user) redirect("/login?next=/settings");
 
-  const { saved, emailPending, error } = await searchParams;
+  const { saved, emailPending, error, upgraded, session_id } =
+    await searchParams;
+
+  // Fallback: if the webhook hasn't run yet (or isn't configured), verify
+  // the Stripe checkout session and flip tier here on the success redirect.
+  if (session_id && profile?.tier !== "pro") {
+    try {
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+      const matchesUser =
+        session.client_reference_id === user.id &&
+        (session.payment_status === "paid" ||
+          session.status === "complete");
+      if (matchesUser) {
+        const customerId =
+          typeof session.customer === "string"
+            ? session.customer
+            : session.customer?.id;
+        const subscriptionId =
+          typeof session.subscription === "string"
+            ? session.subscription
+            : session.subscription?.id;
+        const service = getServiceSupabase();
+        await service
+          .from("profiles")
+          .update({
+            tier: "pro",
+            stripe_customer_id: customerId ?? null,
+            stripe_subscription_id: subscriptionId ?? null,
+          })
+          .eq("id", user.id);
+        if (profile) {
+          profile = { ...profile, tier: "pro" };
+        }
+      }
+    } catch (e) {
+      console.error("Failed to verify Stripe session:", e);
+    }
+  }
+
   const avatar = resolveAvatarUrl(profile);
   const stacks = await fetchUserStacks(user.id);
   const errorMsg = error ? ERRORS[error] ?? "Something went wrong." : null;
@@ -152,6 +200,11 @@ export default async function SettingsPage({
           .
         </p>
 
+        {upgraded && (
+          <div className="mt-6 border-2 border-accent/60 bg-accent/10 px-4 py-3 text-sm text-text">
+            ⚡ Welcome to Pro! Your subscription is active — 5 expert chats per day.
+          </div>
+        )}
         {saved && (
           <div className="mt-6 border-2 border-secondary/60 bg-secondary/10 px-4 py-3 text-sm text-text">
             Saved.
@@ -189,16 +242,9 @@ export default async function SettingsPage({
               </p>
             </div>
             {profile?.tier === "pro" ? (
-              <Link
-                href="/pricing"
-                className="font-display text-xs uppercase tracking-[0.2em] text-text/70 hover:text-accent"
-              >
-                Manage →
-              </Link>
+              <ManageBillingButton />
             ) : (
-              <Link href="/pricing" className="btn-accent">
-                Upgrade to Pro
-              </Link>
+              <UpgradeButton signedIn label="Upgrade to Pro" className="btn-accent" />
             )}
           </div>
         </div>

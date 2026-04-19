@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
 import { getCurrentProfile } from "@/lib/supabase/server";
+import UpgradeButton from "@/components/UpgradeButton";
+import ManageBillingButton from "@/components/ManageBillingButton";
 
 const title = "Pricing";
 const description =
@@ -157,7 +159,14 @@ export default async function PricingPage() {
                 </ul>
 
                 <div className="mt-8">
-                  {plan.disabled ? (
+                  {plan.name === "Pro" && currentTier === "pro" ? (
+                    <ManageBillingButton
+                      className="btn-accent w-full text-center"
+                      label="Manage subscription"
+                    />
+                  ) : plan.name === "Pro" ? (
+                    <UpgradeButton signedIn={Boolean(user)} />
+                  ) : plan.disabled ? (
                     <span className="inline-flex items-center justify-center w-full h-12 border-2 border-text/20 font-display text-xs uppercase tracking-wider text-text/50">
                       {plan.cta.label}
                     </span>
@@ -213,11 +222,12 @@ export default async function PricingPage() {
             </div>
             <div>
               <dt className="font-display text-accent uppercase tracking-wider text-sm">
-                Is Stripe checkout live?
+                How does billing work?
               </dt>
               <dd className="mt-2 text-text/80">
-                Not yet — this page is a preview. Payment integration is on
-                the way.
+                Secure checkout & subscription management via Stripe. Click
+                Upgrade to Pro to subscribe; manage or cancel anytime from
+                your settings.
               </dd>
             </div>
           </dl>
