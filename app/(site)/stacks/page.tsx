@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { fetchFeaturedStacks, type HeroAccent } from "@/lib/featured-stacks";
 import { SITE_NAME } from "@/lib/site";
 
+export const revalidate = 3600;
+
 const title = "Featured Supplement Stacks";
 const description =
   "Curated, science-backed supplement stacks for sleep, focus, fitness, stress, energy, immunity, gut health, and longevity. Pick the goal — get the routine.";

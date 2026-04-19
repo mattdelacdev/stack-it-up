@@ -2,6 +2,8 @@ import Link from "next/link";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
 import { DualDose } from "@/lib/dose";
 
+export const revalidate = 3600;
+
 export const metadata = {
   title: "Supplement Library",
   description:
@@ -48,10 +50,10 @@ export default async function SupplementsPage() {
                   href={`/supplements/${s.id}`}
                   className="card-retro block h-full hover:-translate-y-1 transition-transform"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <h2 className="font-display text-xl sm:text-2xl text-primary">{s.name}</h2>
+                  <div className="flex items-start justify-between gap-3">
+                    <h2 className="min-w-0 font-display text-xl sm:text-2xl text-primary break-words">{s.name}</h2>
                     <span
-                      className={`font-display text-[10px] tracking-widest px-2 py-1 ${tag.className}`}
+                      className={`shrink-0 font-display text-[10px] tracking-widest px-2 py-1 ${tag.className}`}
                     >
                       {tag.label}
                     </span>
