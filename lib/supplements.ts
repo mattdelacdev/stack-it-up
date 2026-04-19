@@ -65,11 +65,31 @@ export interface Supplement {
   timing: "morning" | "afternoon" | "evening" | "anytime";
   why: string;
   tag: "core" | "goal" | "lifestyle";
+  video_url?: string | null;
   content?: SupplementContent;
 }
 
-const SELECT_COLS = "id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag, content";
+const SELECT_COLS = "id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag, video_url, content";
 const SELECT_COLS_LIST = "id, name, dose, dose_low, dose_high, dose_unit, timing, why, tag";
+
+export function youtubeEmbedId(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url.trim());
+    const host = u.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") return u.pathname.slice(1).split("/")[0] || null;
+    if (host.endsWith("youtube.com") || host.endsWith("youtube-nocookie.com")) {
+      if (u.pathname === "/watch") return u.searchParams.get("v");
+      const parts = u.pathname.split("/").filter(Boolean);
+      if (parts[0] === "embed" || parts[0] === "shorts" || parts[0] === "live") {
+        return parts[1] ?? null;
+      }
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
 
 export async function fetchSupplements(): Promise<Record<string, Supplement>> {
   const { data, error } = await getSupabase()

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import {
   fetchSupplementById,
   fetchSupplementList,
+  youtubeEmbedId,
   type Supplement,
 } from "@/lib/supplements";
 import { fetchViewerState } from "@/lib/stacks";
@@ -87,6 +88,7 @@ export default async function SupplementPage({
   const tag = TAG_META[supplement.tag];
   const timing = TIMING_META[supplement.timing];
   const c = supplement.content ?? {};
+  const videoId = youtubeEmbedId(supplement.video_url);
   const byId = new Map(all.map((s) => [s.id, s]));
   const stacksWith = (c.stacksWith ?? [])
     .map((sid) => byId.get(sid))
@@ -327,6 +329,24 @@ export default async function SupplementPage({
             <p className="max-w-3xl text-text/85 text-lg leading-[1.7]">
               {c.mechanism}
             </p>
+          </Section>
+        )}
+
+        {videoId && (
+          <Section eyebrow="Watch" title="Video review" accent="primary">
+            <div className="max-w-3xl">
+              <div className="relative w-full border-4 border-primary/60 shadow-retro" style={{ aspectRatio: "16 / 9" }}>
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+                  title={`${supplement.name} video review`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  className="absolute inset-0 h-full w-full"
+                />
+              </div>
+            </div>
           </Section>
         )}
 

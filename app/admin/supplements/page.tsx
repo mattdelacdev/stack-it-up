@@ -27,7 +27,7 @@ export default function SupplementsAdmin() {
     setLoading(true);
     const { data, error } = await getSupabase()
       .from("supplements")
-      .select("id, name, dose, timing, why, tag")
+      .select("id, name, dose, timing, why, tag, video_url")
       .order("tag")
       .order("name");
     setLoading(false);
@@ -84,6 +84,7 @@ export default function SupplementsAdmin() {
               timing: "anytime",
               why: "",
               tag: "goal",
+              video_url: "",
               _isNew: true,
             })
           }
@@ -286,6 +287,17 @@ function SupplementModal({
                 </option>
               ))}
             </select>
+          </Field>
+          <Field label="YouTube review URL (optional)">
+            <input
+              type="url"
+              placeholder="https://youtube.com/watch?v=..."
+              value={draft.video_url ?? ""}
+              onChange={(e) =>
+                setDraft({ ...draft, video_url: e.target.value || null })
+              }
+              className={inputCls}
+            />
           </Field>
           <Field label="Why">
             <textarea
