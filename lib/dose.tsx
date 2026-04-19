@@ -5,9 +5,9 @@ export type DosePref = "native" | "si";
 
 export interface DoseFields {
   dose: string | null;
-  dose_low: number | null;
-  dose_high: number | null;
-  dose_unit: string | null;
+  dose_low?: number | null;
+  dose_high?: number | null;
+  dose_unit?: string | null;
 }
 
 const IU_PER_MCG_D3 = 40;
