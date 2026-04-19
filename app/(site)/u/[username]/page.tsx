@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getServerSupabase, resolveAvatarUrl } from "@/lib/supabase/server";
 import { fetchUserStacks } from "@/lib/stacks";
 import type { Supplement } from "@/lib/supplements";
+import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 type PublicProfile = {
   id: string;
@@ -41,13 +42,36 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { username } = await params;
   const profile = await loadProfile(username);
-  if (!profile) return { title: "Profile not found — StackItUp" };
+  if (!profile)
+    return {
+      title: "Profile Not Found",
+      description: "This StackItUp profile doesn't exist or is private.",
+      robots: { index: false, follow: false },
+    };
   const name =
     [profile.first_name, profile.last_name].filter(Boolean).join(" ") ||
     `@${profile.username}`;
+  const title = `${name} (@${profile.username})`;
+  const description =
+    profile.bio ??
+    `See ${name}'s personalized supplement stack, favorites, and routine on StackItUp.`;
+  const url = `/u/${profile.username}`;
   return {
-    title: `${name} — StackItUp`,
-    description: profile.bio ?? `${name}'s supplement stack on StackItUp.`,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "profile",
+      title,
+      description,
+      url,
+      siteName: SITE_NAME,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
@@ -66,8 +90,32 @@ export default async function PublicProfilePage({
   const avatar = resolveAvatarUrl(profile);
   const stacks = await fetchUserStacks(profile.id);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    mainEntity: {
+      "@type": "Person",
+      name: fullName || `@${profile.username}`,
+      alternateName: `@${profile.username}`,
+      description: profile.bio ?? undefined,
+      image: avatar ?? undefined,
+      url: absoluteUrl(`/u/${profile.username}`),
+      sameAs: [
+        profile.website,
+        profile.instagram,
+        profile.tiktok,
+        profile.twitter,
+        profile.youtube,
+      ].filter(Boolean),
+    },
+  };
+
   return (
     <main className="min-h-screen bg-bg text-text px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="mx-auto max-w-2xl">
         <div className="card-retro">
           <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">

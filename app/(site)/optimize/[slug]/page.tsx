@@ -1,19 +1,41 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { benefits, benefitList, type BenefitSlug } from "@/lib/benefits";
+import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 export function generateStaticParams() {
   return benefitList.map((b) => ({ slug: b.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const b = benefits[slug as BenefitSlug];
   if (!b) return {};
+  const title = `Optimize ${b.title}`;
+  const description = `${b.tagline} Supplements, timing, and science-backed tips to optimize ${b.title.toLowerCase()}.`;
+  const url = `/optimize/${b.slug}`;
   return {
-    title: `${b.title} — StackItUp`,
-    description: b.tagline,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url,
+      siteName: SITE_NAME,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
@@ -24,8 +46,44 @@ export default async function BenefitPage({ params }: { params: Promise<{ slug: 
 
   const others = benefitList.filter((b) => b.slug !== benefit.slug);
 
+  const faqLd = benefit.faq?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: benefit.faq.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: benefit.title,
+        item: absoluteUrl(`/optimize/${benefit.slug}`),
+      },
+    ],
+  };
+
   return (
     <div className="relative overflow-hidden">
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-30" aria-hidden />
 
       <main className="relative z-10">

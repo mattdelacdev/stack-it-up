@@ -23,6 +23,37 @@ export interface QuizAnswers {
   ageGroup: "under30" | "30to50" | "over50";
 }
 
+export interface SupplementForm {
+  name: string;
+  note?: string;
+}
+
+export interface SupplementFaq {
+  q: string;
+  a: string;
+}
+
+export interface SupplementSource {
+  title: string;
+  url: string;
+}
+
+export interface SupplementContent {
+  benefits?: string[];
+  mechanism?: string;
+  onset?: string;
+  doseNotes?: string;
+  timingNotes?: string;
+  goodFor?: string[];
+  avoidIf?: string[];
+  sideEffects?: string[];
+  forms?: SupplementForm[];
+  stacksWith?: string[];
+  avoidWith?: string[];
+  faq?: SupplementFaq[];
+  sources?: SupplementSource[];
+}
+
 export interface Supplement {
   id: string;
   name: string;
@@ -30,12 +61,16 @@ export interface Supplement {
   timing: "morning" | "afternoon" | "evening" | "anytime";
   why: string;
   tag: "core" | "goal" | "lifestyle";
+  content?: SupplementContent;
 }
+
+const SELECT_COLS = "id, name, dose, timing, why, tag, content";
+const SELECT_COLS_LIST = "id, name, dose, timing, why, tag";
 
 export async function fetchSupplements(): Promise<Record<string, Supplement>> {
   const { data, error } = await getSupabase()
     .from("supplements")
-    .select("id, name, dose, timing, why, tag");
+    .select(SELECT_COLS_LIST);
   if (error) throw error;
   return Object.fromEntries((data ?? []).map((s) => [s.id, s as Supplement]));
 }
@@ -43,7 +78,7 @@ export async function fetchSupplements(): Promise<Record<string, Supplement>> {
 export async function fetchSupplementList(): Promise<Supplement[]> {
   const { data, error } = await getSupabase()
     .from("supplements")
-    .select("id, name, dose, timing, why, tag")
+    .select(SELECT_COLS_LIST)
     .order("tag")
     .order("name");
   if (error) throw error;
@@ -53,7 +88,7 @@ export async function fetchSupplementList(): Promise<Supplement[]> {
 export async function fetchSupplementById(id: string): Promise<Supplement | null> {
   const { data, error } = await getSupabase()
     .from("supplements")
-    .select("id, name, dose, timing, why, tag")
+    .select(SELECT_COLS)
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;

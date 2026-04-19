@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import {
   fetchSupplementById,
   fetchSupplementList,
@@ -7,6 +8,7 @@ import {
 } from "@/lib/supplements";
 import { fetchViewerState } from "@/lib/stacks";
 import { toggleFavorite, toggleStack } from "./actions";
+import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 const TAG_META: Record<Supplement["tag"], { label: string; className: string }> = {
   core: { label: "CORE", className: "bg-accent text-bg" },
@@ -25,13 +27,31 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
-}) {
+}): Promise<Metadata> {
   const { id } = await params;
   const s = await fetchSupplementById(id);
   if (!s) return {};
+  const title = `${s.name} — Benefits, Dose, Timing & Side Effects`;
+  const description = s.content?.mechanism
+    ? `${s.why} ${s.content.mechanism}`.slice(0, 160)
+    : s.why;
+  const url = `/supplements/${s.id}`;
   return {
-    title: `${s.name} — StackItUp`,
-    description: s.why,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url,
+      siteName: SITE_NAME,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
@@ -50,20 +70,100 @@ export default async function SupplementPage({
 
   const tag = TAG_META[supplement.tag];
   const timing = TIMING_META[supplement.timing];
-  const others = all.filter((s) => s.id !== supplement.id).slice(0, 6);
+  const c = supplement.content ?? {};
+  const byId = new Map(all.map((s) => [s.id, s]));
+  const stacksWith = (c.stacksWith ?? [])
+    .map((sid) => byId.get(sid))
+    .filter((s): s is Supplement => Boolean(s));
+  const avoidWith = (c.avoidWith ?? [])
+    .map((sid) => byId.get(sid))
+    .filter((s): s is Supplement => Boolean(s));
+  const others = all
+    .filter(
+      (s) => s.id !== supplement.id && !c.stacksWith?.includes(s.id),
+    )
+    .slice(0, 6);
+
+  const url = absoluteUrl(`/supplements/${supplement.id}`);
+
+  const supplementLd = {
+    "@context": "https://schema.org",
+    "@type": "DietarySupplement",
+    name: supplement.name,
+    description: supplement.why,
+    recommendedIntake: {
+      "@type": "RecommendedDoseSchedule",
+      doseValue: supplement.dose,
+      doseUnit: "serving",
+      frequency: timing.label,
+    },
+    url,
+    brand: { "@type": "Brand", name: SITE_NAME },
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+      { "@type": "ListItem", position: 2, name: "Supplements", item: absoluteUrl("/supplements") },
+      { "@type": "ListItem", position: 3, name: supplement.name, item: url },
+    ],
+  };
+
+  const faqLd =
+    c.faq && c.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: c.faq.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }
+      : null;
 
   return (
     <div className="relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(supplementLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-30" aria-hidden />
 
       <main className="relative z-10">
-        <section className="mx-auto max-w-4xl px-6 pt-10 pb-16 sm:pt-16 sm:pb-20">
-          <Link
-            href="/supplements"
-            className="font-display text-xs sm:text-sm uppercase tracking-wider text-text/60 hover:text-accent transition-colors"
+        <section className="mx-auto max-w-4xl px-6 pt-10 pb-10 sm:pt-16">
+          <nav
+            aria-label="Breadcrumb"
+            className="font-display text-xs sm:text-sm uppercase tracking-wider text-text/60"
           >
-            ← Back to supplements
-          </Link>
+            <ol className="flex flex-wrap items-center gap-2">
+              <li>
+                <Link href="/" className="hover:text-accent">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li>
+                <Link href="/supplements" className="hover:text-accent">
+                  Supplements
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li className="text-text/80">{supplement.name}</li>
+            </ol>
+          </nav>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <span
@@ -83,7 +183,7 @@ export default async function SupplementPage({
             {supplement.why}
           </p>
 
-          <dl className="mt-10 grid gap-5 sm:grid-cols-2 max-w-2xl">
+          <dl className="mt-10 grid gap-5 sm:grid-cols-3 max-w-3xl">
             <div className="card-retro">
               <dt className="font-display text-accent text-xs uppercase tracking-wider">
                 Typical dose
@@ -96,6 +196,14 @@ export default async function SupplementPage({
               </dt>
               <dd className="mt-2 text-text/85 text-lg">{timing.label}</dd>
             </div>
+            {c.onset && (
+              <div className="card-retro">
+                <dt className="font-display text-primary text-xs uppercase tracking-wider">
+                  Onset
+                </dt>
+                <dd className="mt-2 text-text/85 text-lg">{c.onset}</dd>
+              </div>
+            )}
           </dl>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -106,7 +214,11 @@ export default async function SupplementPage({
               <>
                 <form action={toggleFavorite}>
                   <input type="hidden" name="supplement_id" value={supplement.id} />
-                  <input type="hidden" name="is_favorite" value={viewer.isFavorite ? "1" : "0"} />
+                  <input
+                    type="hidden"
+                    name="is_favorite"
+                    value={viewer.isFavorite ? "1" : "0"}
+                  />
                   <button
                     type="submit"
                     className={
@@ -123,7 +235,11 @@ export default async function SupplementPage({
                 <form action={toggleStack}>
                   <input type="hidden" name="supplement_id" value={supplement.id} />
                   <input type="hidden" name="kind" value="morning" />
-                  <input type="hidden" name="in_stack" value={viewer.inMorning ? "1" : "0"} />
+                  <input
+                    type="hidden"
+                    name="in_stack"
+                    value={viewer.inMorning ? "1" : "0"}
+                  />
                   <button
                     type="submit"
                     className={
@@ -140,7 +256,11 @@ export default async function SupplementPage({
                 <form action={toggleStack}>
                   <input type="hidden" name="supplement_id" value={supplement.id} />
                   <input type="hidden" name="kind" value="evening" />
-                  <input type="hidden" name="in_stack" value={viewer.inEvening ? "1" : "0"} />
+                  <input
+                    type="hidden"
+                    name="in_stack"
+                    value={viewer.inEvening ? "1" : "0"}
+                  />
                   <button
                     type="submit"
                     className={
@@ -164,10 +284,239 @@ export default async function SupplementPage({
               </Link>
             )}
           </div>
+        </section>
 
-          <p className="mt-8 text-xs sm:text-sm text-text/50 leading-relaxed max-w-2xl">
-            Educational only, not medical advice. Check with a clinician before starting anything
-            new, especially if you&apos;re on medication or pregnant.
+        {c.benefits && c.benefits.length > 0 && (
+          <Section eyebrow="What it does" title="Benefits" accent="accent">
+            <ul className="grid gap-3 sm:grid-cols-2 max-w-3xl">
+              {c.benefits.map((b) => (
+                <li key={b} className="flex gap-3 text-text/85 leading-[1.6]">
+                  <span aria-hidden className="text-accent font-display mt-1">
+                    ▸
+                  </span>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        {c.mechanism && (
+          <Section eyebrow="The science" title="How it works" accent="secondary">
+            <p className="max-w-3xl text-text/85 text-lg leading-[1.7]">
+              {c.mechanism}
+            </p>
+          </Section>
+        )}
+
+        {(c.doseNotes || c.timingNotes) && (
+          <Section eyebrow="Getting it right" title="Dose & timing" accent="primary">
+            <div className="grid gap-6 md:grid-cols-2 max-w-3xl">
+              {c.doseNotes && (
+                <div>
+                  <h3 className="font-display text-accent text-xs uppercase tracking-widest mb-3">
+                    Dose guidance
+                  </h3>
+                  <p className="text-text/85 leading-[1.65]">{c.doseNotes}</p>
+                </div>
+              )}
+              {c.timingNotes && (
+                <div>
+                  <h3 className="font-display text-secondary text-xs uppercase tracking-widest mb-3">
+                    Best time to take
+                  </h3>
+                  <p className="text-text/85 leading-[1.65]">{c.timingNotes}</p>
+                </div>
+              )}
+            </div>
+          </Section>
+        )}
+
+        {((c.goodFor && c.goodFor.length > 0) ||
+          (c.avoidIf && c.avoidIf.length > 0)) && (
+          <Section
+            eyebrow="Is it for you?"
+            title="Who should (and shouldn't) take it"
+            accent="accent"
+          >
+            <div className="grid gap-6 md:grid-cols-2 max-w-3xl">
+              {c.goodFor && c.goodFor.length > 0 && (
+                <div>
+                  <h3 className="font-display text-secondary text-xs uppercase tracking-widest mb-3">
+                    Good for
+                  </h3>
+                  <ul className="space-y-2">
+                    {c.goodFor.map((g) => (
+                      <li key={g} className="flex gap-2 text-text/85">
+                        <span aria-hidden className="text-secondary">
+                          ✓
+                        </span>
+                        <span>{g}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {c.avoidIf && c.avoidIf.length > 0 && (
+                <div>
+                  <h3 className="font-display text-primary text-xs uppercase tracking-widest mb-3">
+                    Skip or ask a doctor if
+                  </h3>
+                  <ul className="space-y-2">
+                    {c.avoidIf.map((a) => (
+                      <li key={a} className="flex gap-2 text-text/85">
+                        <span aria-hidden className="text-primary">
+                          ✗
+                        </span>
+                        <span>{a}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </Section>
+        )}
+
+        {c.sideEffects && c.sideEffects.length > 0 && (
+          <Section
+            eyebrow="Know before you start"
+            title="Side effects & safety"
+            accent="primary"
+          >
+            <ul className="grid gap-3 sm:grid-cols-2 max-w-3xl">
+              {c.sideEffects.map((s) => (
+                <li key={s} className="flex gap-3 text-text/85 leading-[1.6]">
+                  <span aria-hidden className="text-primary font-display mt-1">
+                    !
+                  </span>
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        {c.forms && c.forms.length > 0 && (
+          <Section
+            eyebrow="Shopping guide"
+            title="Forms & what to look for"
+            accent="secondary"
+          >
+            <ul className="grid gap-4 sm:grid-cols-2 max-w-3xl">
+              {c.forms.map((f) => (
+                <li key={f.name} className="card-retro">
+                  <div className="font-display text-accent text-sm tracking-wider">
+                    {f.name}
+                  </div>
+                  {f.note && (
+                    <p className="mt-2 text-text/80 text-sm leading-[1.55]">
+                      {f.note}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        {(stacksWith.length > 0 || avoidWith.length > 0) && (
+          <Section
+            eyebrow="Combining"
+            title="Stacks well with / avoid pairing"
+            accent="accent"
+          >
+            <div className="grid gap-6 md:grid-cols-2 max-w-3xl">
+              {stacksWith.length > 0 && (
+                <div>
+                  <h3 className="font-display text-secondary text-xs uppercase tracking-widest mb-3">
+                    Stacks well with
+                  </h3>
+                  <ul className="space-y-2">
+                    {stacksWith.map((s) => (
+                      <li key={s.id}>
+                        <Link
+                          href={`/supplements/${s.id}`}
+                          className="text-accent hover:text-secondary font-display text-sm tracking-wider"
+                        >
+                          → {s.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {avoidWith.length > 0 && (
+                <div>
+                  <h3 className="font-display text-primary text-xs uppercase tracking-widest mb-3">
+                    Avoid pairing with
+                  </h3>
+                  <ul className="space-y-2">
+                    {avoidWith.map((s) => (
+                      <li key={s.id}>
+                        <Link
+                          href={`/supplements/${s.id}`}
+                          className="text-primary hover:text-accent font-display text-sm tracking-wider"
+                        >
+                          ✗ {s.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </Section>
+        )}
+
+        {c.faq && c.faq.length > 0 && (
+          <Section eyebrow="Common questions" title="FAQ" accent="secondary">
+            <div className="max-w-3xl space-y-4">
+              {c.faq.map((f) => (
+                <details key={f.q} className="card-retro group">
+                  <summary className="cursor-pointer font-display text-text text-base sm:text-lg tracking-wide list-none flex items-center justify-between gap-4">
+                    <span>{f.q}</span>
+                    <span
+                      aria-hidden
+                      className="text-accent font-display transition-transform group-open:rotate-45"
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-4 text-text/85 leading-[1.65]">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </Section>
+        )}
+
+        {c.sources && c.sources.length > 0 && (
+          <Section
+            eyebrow="References"
+            title="Sources & further reading"
+            accent="primary"
+          >
+            <ul className="max-w-3xl space-y-2">
+              {c.sources.map((s) => (
+                <li key={s.url} className="text-text/75 text-sm">
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent hover:text-secondary underline-offset-4 hover:underline"
+                  >
+                    {s.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        <section className="mx-auto max-w-4xl px-6 pb-10">
+          <p className="text-xs sm:text-sm text-text/50 leading-relaxed">
+            Educational only, not medical advice. Check with a clinician before
+            starting anything new, especially if you&apos;re on medication or pregnant.
           </p>
         </section>
 
@@ -199,5 +548,37 @@ export default async function SupplementPage({
         )}
       </main>
     </div>
+  );
+}
+
+function Section({
+  eyebrow,
+  title,
+  accent,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  accent: "primary" | "secondary" | "accent";
+  children: React.ReactNode;
+}) {
+  const accentClass =
+    accent === "primary"
+      ? "text-primary"
+      : accent === "secondary"
+        ? "text-secondary"
+        : "text-accent";
+  return (
+    <section className="mx-auto max-w-4xl px-6 py-10 border-t-4 border-primary/20">
+      <p
+        className={`font-display text-xs uppercase tracking-[0.3em] ${accentClass} mb-3`}
+      >
+        {eyebrow}
+      </p>
+      <h2 className="font-display text-3xl sm:text-4xl text-text mb-6 leading-[1.05]">
+        {title}
+      </h2>
+      {children}
+    </section>
   );
 }

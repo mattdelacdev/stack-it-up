@@ -2,8 +2,9 @@ import Link from "next/link";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
 
 export const metadata = {
-  title: "Supplements — StackItUp",
-  description: "Browse every supplement in the StackItUp library.",
+  title: "Supplement Library",
+  description:
+    "Browse every supplement in the StackItUp library — with dose, timing, and the science-backed reason each one belongs in a routine.",
 };
 
 const TAG_META: Record<Supplement["tag"], { label: string; className: string }> = {

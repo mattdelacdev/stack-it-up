@@ -2,7 +2,12 @@ import { redirect } from "next/navigation";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 
-export const metadata = { title: "Log in — StackItUp" };
+export const metadata = {
+  title: "Log In",
+  description:
+    "Sign in to StackItUp with Google to save your supplement stack, manage your profile, and sync favorites across devices.",
+  robots: { index: false, follow: false },
+};
 
 async function signInWithGoogle(formData: FormData) {
   "use server";

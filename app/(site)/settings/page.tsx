@@ -9,7 +9,12 @@ import AvatarUploader from "./AvatarUploader";
 import StackManager from "./StackManager";
 import { fetchUserStacks } from "@/lib/stacks";
 
-export const metadata = { title: "Settings — StackItUp" };
+export const metadata = {
+  title: "Account Settings",
+  description:
+    "Manage your StackItUp profile: update your name, username, bio, avatar, social links, and public profile visibility.",
+  robots: { index: false, follow: false },
+};
 
 const RESERVED = new Set([
   "admin","api","account","auth","login","logout","signup","signout",

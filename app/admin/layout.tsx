@@ -3,7 +3,12 @@ import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/SiteHeader";
 import { getCurrentProfile } from "@/lib/supabase/server";
 
-export const metadata = { title: "Admin — StackItUp" };
+export const metadata = {
+  title: { default: "Admin Dashboard", template: "%s — Admin — StackItUp" },
+  description:
+    "StackItUp admin dashboard for managing subscribers, supplements, and user profiles.",
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminLayout({
   children,

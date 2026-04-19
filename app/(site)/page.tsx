@@ -1,7 +1,27 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import HeroStack from "@/components/HeroStack";
 import { benefitList } from "@/lib/benefits";
+import { fetchFeaturedStacks, type HeroAccent } from "@/lib/featured-stacks";
+
+const STACK_ACCENT_TEXT: Record<HeroAccent, string> = {
+  primary: "text-primary",
+  secondary: "text-secondary",
+  accent: "text-accent",
+};
+
+const STACK_ACCENT_BORDER: Record<HeroAccent, string> = {
+  primary: "hover:border-primary",
+  secondary: "hover:border-secondary",
+  accent: "hover:border-accent",
+};
+
+export const metadata: Metadata = {
+  title: "Build Your Personalized Supplement Stack",
+  description:
+    "Answer six quick questions and get a no-BS, science-backed supplement routine built around your goals, diet, activity, and sleep.",
+};
 
 const steps = [
   {
@@ -28,7 +48,8 @@ const features = benefitList.map((b) => ({
   copy: b.tagline,
 }));
 
-export default function Home() {
+export default async function Home() {
+  const featuredStacks = await fetchFeaturedStacks();
   return (
     <div className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-30" aria-hidden />
@@ -119,7 +140,67 @@ export default function Home() {
           </ul>
         </section>
 
-        <section className="mx-auto max-w-4xl px-6 pb-20 sm:pb-28 text-center">
+        <section
+          id="stacks"
+          className="relative border-y-4 border-primary/30 bg-bg-deep/50 py-16 sm:py-24 scroll-mt-24"
+        >
+          <div className="mx-auto max-w-6xl px-6">
+            <Reveal>
+              <p className="font-display text-accent text-xs sm:text-sm uppercase tracking-[0.3em] mb-3">
+                Featured stacks
+              </p>
+              <h2 className="font-display text-3xl sm:text-5xl text-text max-w-3xl">
+                Already know your goal?{" "}
+                <span className="text-gradient">Start with a stack.</span>
+              </h2>
+              <p className="mt-4 max-w-2xl text-text/70 sm:text-lg">
+                Curated, science-backed routines for the goals we get asked about most. Skip
+                the quiz and jump straight in.
+              </p>
+            </Reveal>
+
+            <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {featuredStacks.map((s, i) => (
+                <Reveal as="li" key={s.slug} delay={i * 80}>
+                  <Link
+                    href={`/stacks/${s.slug}`}
+                    className={`card-retro group flex h-full flex-col hover:-translate-y-1 transition-transform ${STACK_ACCENT_BORDER[s.hero_accent]}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {s.emoji && (
+                        <span className="text-4xl leading-none" aria-hidden>
+                          {s.emoji}
+                        </span>
+                      )}
+                      <h3
+                        className={`font-display text-lg sm:text-xl ${STACK_ACCENT_TEXT[s.hero_accent]}`}
+                      >
+                        {s.name}
+                      </h3>
+                    </div>
+                    <p className="mt-3 text-sm text-text/75 leading-[1.6] flex-1">
+                      {s.tagline}
+                    </p>
+                    <span className="mt-4 font-display text-xs uppercase tracking-wider text-primary/80 group-hover:text-accent transition-colors">
+                      See the stack →
+                    </span>
+                  </Link>
+                </Reveal>
+              ))}
+            </ul>
+
+            <div className="mt-10">
+              <Link
+                href="/stacks"
+                className="font-display text-sm uppercase tracking-[0.2em] text-text/70 hover:text-accent transition-colors underline underline-offset-8 decoration-2 decoration-primary/50 hover:decoration-accent"
+              >
+                Browse all stacks →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-4xl px-6 py-20 sm:py-28 text-center">
           <Reveal className="card-retro !p-8 sm:!p-12 !border-accent">
             <h2 className="font-display text-3xl sm:text-4xl text-text">
               Ready in <span className="text-accent">under a minute.</span>
