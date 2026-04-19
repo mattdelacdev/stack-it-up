@@ -1,6 +1,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { NextResponse } from "next/server";
 import { getServerSupabase } from "@/lib/supabase/server";
+import { checkAndRecord, rateLimitMessage } from "@/lib/rate-limit";
 import type { QuizAnswers, Supplement } from "@/lib/supplements";
 
 export const runtime = "nodejs";
@@ -28,6 +29,17 @@ export async function POST(req: Request) {
     const { answers } = (await req.json()) as { answers: QuizAnswers };
     if (!answers) {
       return NextResponse.json({ error: "Missing answers" }, { status: 400 });
+    }
+
+    const rl = await checkAndRecord(req, "stack");
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: rateLimitMessage(rl), retryAfterSec: rl.retryAfterSec },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rl.retryAfterSec) },
+        },
+      );
     }
 
     const supabase = await getServerSupabase();

@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
+import { checkAndRecord, rateLimitMessage } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -38,6 +39,17 @@ export async function POST(req: Request) {
     const { messages } = (await req.json()) as { messages: Msg[] };
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "No messages" }, { status: 400 });
+    }
+
+    const rl = await checkAndRecord(req, "chat");
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: rateLimitMessage(rl), retryAfterSec: rl.retryAfterSec },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rl.retryAfterSec) },
+        },
+      );
     }
 
     const ai = new GoogleGenAI({ apiKey });
