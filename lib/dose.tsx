@@ -30,10 +30,8 @@ function toSI(low: number, high: number | null, unit: string): Convert {
   if (unit === "IU") {
     return { low: low / IU_PER_MCG_D3, high: high == null ? null : high / IU_PER_MCG_D3, unit: "mcg" };
   }
-  // g → mg when values stay readable (< 10 g). Covers omega-3 (1–2 g),
-  // creatine (5 g), melatonin, etc. Keep g above 10 so whey/collagen
-  // don't show as 25000 mg.
-  if (unit === "g" && low < 10 && (high == null || high < 10)) {
+  // g → mg if under 1 g (keep g otherwise to avoid "5000 mg" ugliness)
+  if (unit === "g" && low < 1 && (high == null || high < 1)) {
     return { low: low * 1000, high: high == null ? null : high * 1000, unit: "mg" };
   }
   // mcg → mg if ≥ 1000 mcg
