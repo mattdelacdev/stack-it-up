@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
 import { DualDose } from "@/lib/dose";
+import { BuyGuideButton } from "@/components/BuyGuideButton";
 
 export const revalidate = 3600;
 
@@ -40,6 +41,21 @@ export default async function SupplementsPage() {
           Every supplement we stack. Each card links to a quick breakdown of dose, timing, and
           why it belongs in a routine.
         </p>
+
+        <div className="mt-10 card-retro flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+          <div>
+            <p className="font-display text-accent text-xs uppercase tracking-[0.3em] mb-2">
+              The full guide
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl text-text">
+              StackItUp PDF Guide
+            </h2>
+            <p className="mt-2 text-sm text-text/75 max-w-md">
+              Every supplement, dose, timing, and the science — in one downloadable PDF.
+            </p>
+          </div>
+          <BuyGuideButton />
+        </div>
 
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {supplements.map((s) => {

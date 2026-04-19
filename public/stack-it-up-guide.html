@@ -1,0 +1,2182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Stack It Up — Supplement Field Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=VT323&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+:root {
+  --primary: #D946EF;
+  --secondary: #06B6D4;
+  --accent: #FBBF24;
+  --bg: #1E1B4B;
+  --bg-deep: #15123A;
+  --text: #E9D5FF;
+  --border: rgba(233, 213, 255, 0.18);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; color: var(--text); font-family: 'Space Grotesk', sans-serif; background: var(--bg-deep); }
+
+@page { size: Letter; margin: 0; }
+
+.page {
+  width: 8.5in;
+  height: 11in;
+  padding: 0.7in 0.75in;
+  page-break-after: always;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+}
+.page:last-child { page-break-after: auto; }
+
+.retro-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-family: 'Bungee', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+}
+
+/* Cover */
+.cover { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.cover-inner { position: relative; z-index: 1; max-width: 6in; }
+.cover-title {
+  font-family: 'Bungee', sans-serif;
+  font-size: 84px;
+  line-height: 1;
+  margin: 0 0 24px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.02em;
+}
+.cover-sub { font-size: 20px; line-height: 1.4; color: var(--text); margin: 0 0 40px; opacity: 0.9; }
+.cover-badge {
+  display: inline-flex; gap: 14px; align-items: center;
+  border: 3px solid var(--accent); padding: 10px 22px;
+  font-family: 'Bungee', sans-serif; font-size: 12px; letter-spacing: 0.2em;
+  color: var(--accent); box-shadow: 6px 6px 0 var(--primary);
+}
+.cover-footer {
+  position: absolute; bottom: 0.6in; left: 0; right: 0; text-align: center;
+  font-family: 'VT323', monospace; font-size: 16px; color: var(--secondary); letter-spacing: 0.1em;
+}
+
+/* TOC */
+.toc { padding-top: 0.8in; }
+.section-title {
+  font-family: 'Bungee', sans-serif; font-size: 44px; margin: 0 0 36px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.toc-group { margin-bottom: 28px; }
+.toc-group-title {
+  font-family: 'Bungee', sans-serif; font-size: 14px; letter-spacing: 0.25em;
+  color: var(--secondary); margin: 0 0 10px; padding-bottom: 6px;
+  border-bottom: 2px solid var(--border);
+}
+.toc-list { list-style: none; margin: 0; padding: 0; }
+.toc-list li { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 15px; }
+.toc-name { color: var(--text); font-weight: 500; }
+.toc-dots { flex: 1; border-bottom: 2px dotted var(--border); margin: 0 4px 4px; }
+.toc-page { font-family: 'VT323', monospace; color: var(--accent); font-size: 18px; }
+
+/* Supplement page */
+.supp-head { border-bottom: 3px solid var(--border); padding-bottom: 18px; margin-bottom: 18px; }
+.supp-name {
+  font-family: 'Bungee', sans-serif; font-size: 38px; margin: 0 0 10px; line-height: 1;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.supp-why { font-size: 14px; color: var(--text); opacity: 0.85; margin: 0; font-style: italic; }
+
+.specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.spec {
+  border: 3px solid var(--border); padding: 10px 12px;
+  background: rgba(217, 70, 239, 0.08);
+  box-shadow: 3px 3px 0 var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.spec-label { font-family: 'Bungee', sans-serif; font-size: 8px; letter-spacing: 0.25em; color: var(--secondary); text-transform: uppercase; }
+.spec-value { font-size: 13px; color: var(--text); font-weight: 500; }
+
+.block { margin-bottom: 14px; }
+.block-title {
+  font-family: 'Bungee', sans-serif; font-size: 11px; letter-spacing: 0.22em;
+  color: var(--accent); text-transform: uppercase; margin: 0 0 8px;
+}
+.block p { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--text); }
+.bullet { list-style: none; margin: 0; padding: 0; }
+.bullet li {
+  font-size: 12.5px; line-height: 1.5; padding: 3px 0 3px 16px; position: relative;
+}
+.bullet li::before {
+  content: "▸"; position: absolute; left: 0; color: var(--primary);
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.forms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+.form-row { border-left: 3px solid var(--secondary); padding: 4px 10px; font-size: 11.5px; }
+.form-name { font-weight: 700; color: var(--text); }
+.form-note { color: var(--text); opacity: 0.7; font-size: 11px; }
+
+.tags { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  display: inline-block; padding: 3px 10px; font-family: 'VT323', monospace;
+  font-size: 14px; letter-spacing: 0.05em; border: 2px solid var(--secondary);
+  color: var(--secondary); background: rgba(6, 182, 212, 0.1);
+}
+.tag-warn { border-color: var(--primary); color: var(--primary); background: rgba(217, 70, 239, 0.1); }
+
+.faq { margin-bottom: 10px; padding-left: 12px; border-left: 2px solid var(--primary); }
+.faq-q { font-weight: 700; font-size: 12.5px; color: var(--accent); margin-bottom: 3px; }
+.faq-a { font-size: 12px; color: var(--text); opacity: 0.9; line-height: 1.5; }
+
+.sources { list-style: none; margin: 0; padding: 0; }
+.sources li { font-size: 11px; margin-bottom: 6px; }
+.src-title { color: var(--text); }
+.src-url { font-family: 'VT323', monospace; color: var(--secondary); font-size: 12px; word-break: break-all; }
+
+/* Back */
+.back { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.back-inner { position: relative; z-index: 1; max-width: 5.5in; }
+.back-title {
+  font-family: 'Bungee', sans-serif; font-size: 64px; line-height: 1; margin: 0 0 24px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.back-body { font-size: 15px; line-height: 1.55; margin: 0 0 36px; opacity: 0.9; }
+.back-cta { margin-bottom: 40px; }
+.back-brand {
+  font-family: 'Bungee', sans-serif; font-size: 28px; color: var(--accent);
+  letter-spacing: 0.15em; margin-bottom: 4px;
+}
+.back-url { font-family: 'VT323', monospace; font-size: 20px; color: var(--secondary); letter-spacing: 0.1em; }
+.disclaimer {
+  font-size: 10px; line-height: 1.5; opacity: 0.55; max-width: 4.5in;
+  margin: 0 auto; border-top: 1px solid var(--border); padding-top: 14px;
+}
+</style>
+</head>
+<body>
+
+  <section class="page cover">
+    <div class="retro-grid" aria-hidden="true"></div>
+    <div class="cover-inner">
+      <p class="eyebrow">Stack It Up presents</p>
+      <h1 class="cover-title">The Supplement<br/>Field Guide</h1>
+      <p class="cover-sub">19 science-backed supplements. Dosing, timing, trade-offs — decoded.</p>
+      <div class="cover-badge">
+        <span>Volume 01</span>
+        <span>·</span>
+        <span>2026 Edition</span>
+      </div>
+    </div>
+    <div class="cover-footer">stackitup — your stack, dialed in.</div>
+  </section>
+
+  <section class="page toc">
+    <p class="eyebrow">Table of Contents</p>
+    <h2 class="section-title">What's inside</h2>
+    
+    <div class="toc-group">
+      <h3 class="toc-group-title">Core</h3>
+      <ul class="toc-list">
+        
+          <li><span class="toc-name">Multivitamin</span><span class="toc-dots"></span><span class="toc-page">3</span></li>
+          <li><span class="toc-name">Omega-3 (EPA/DHA)</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
+      </ul>
+    </div>
+    
+    <div class="toc-group">
+      <h3 class="toc-group-title">Goal-based</h3>
+      <ul class="toc-list">
+        
+          <li><span class="toc-name">Ashwagandha (KSM-66)</span><span class="toc-dots"></span><span class="toc-page">5</span></li>
+          <li><span class="toc-name">Caffeine + L-Theanine</span><span class="toc-dots"></span><span class="toc-page">6</span></li>
+          <li><span class="toc-name">Collagen Peptides</span><span class="toc-dots"></span><span class="toc-page">7</span></li>
+          <li><span class="toc-name">Creatine Monohydrate</span><span class="toc-dots"></span><span class="toc-page">8</span></li>
+          <li><span class="toc-name">Glucosamine + Chondroitin</span><span class="toc-dots"></span><span class="toc-page">9</span></li>
+          <li><span class="toc-name">Magnesium Glycinate</span><span class="toc-dots"></span><span class="toc-page">10</span></li>
+          <li><span class="toc-name">Melatonin</span><span class="toc-dots"></span><span class="toc-page">11</span></li>
+          <li><span class="toc-name">Probiotic (Multi-strain)</span><span class="toc-dots"></span><span class="toc-page">12</span></li>
+          <li><span class="toc-name">Protein Powder</span><span class="toc-dots"></span><span class="toc-page">13</span></li>
+          <li><span class="toc-name">Psyllium Husk</span><span class="toc-dots"></span><span class="toc-page">14</span></li>
+          <li><span class="toc-name">Vitamin C</span><span class="toc-dots"></span><span class="toc-page">15</span></li>
+          <li><span class="toc-name">Zinc</span><span class="toc-dots"></span><span class="toc-page">16</span></li>
+      </ul>
+    </div>
+    
+    <div class="toc-group">
+      <h3 class="toc-group-title">Lifestyle</h3>
+      <ul class="toc-list">
+        
+          <li><span class="toc-name">B-Complex</span><span class="toc-dots"></span><span class="toc-page">17</span></li>
+          <li><span class="toc-name">Electrolytes (Na/K/Mg)</span><span class="toc-dots"></span><span class="toc-page">18</span></li>
+          <li><span class="toc-name">Iron Bisglycinate</span><span class="toc-dots"></span><span class="toc-page">19</span></li>
+          <li><span class="toc-name">Vitamin B12 (Methylcobalamin)</span><span class="toc-dots"></span><span class="toc-page">20</span></li>
+          <li><span class="toc-name">Vitamin D3 + K2</span><span class="toc-dots"></span><span class="toc-page">21</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Core · 01 / 19</p>
+        <h2 class="supp-name">Multivitamin</h2>
+        <p class="supp-why">Covers baseline micronutrient gaps from day-to-day eating.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">1 capsules</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Afternoon</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Subtle; most people don't feel a multi day-to-day — benefit is cumulative nutrient adequacy</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Fills everyday gaps in vitamins A, C, D, E, K, and most B vitamins</li><li>Insurance policy on days your diet is less than ideal</li><li>Supports baseline energy metabolism and immune function</li><li>Convenient single dose vs stacking many individual vitamins</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>A multivitamin delivers the RDA or near-RDA dose of micronutrients your body can't make on its own. Water-soluble vitamins (B, C) are excreted if you overshoot; fat-soluble (A, D, E, K) are stored, so stick to reasonable doses.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>One serving per day with food. Avoid mega-dose formulas — more is rarely better and can push fat-soluble vitamins into the toxic range.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Take with the largest meal of the day so fat-soluble vitamins (A, D, E, K) absorb properly.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Anyone with an inconsistent diet</li><li>Restrictive diets (elimination, low-calorie)</li><li>Frequent travelers</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You already take high-dose individual vitamins</li><li>You have hemochromatosis (skip iron-containing formulas)</li><li>You're on warfarin (vitamin K interacts — talk to your doctor)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Nausea if taken on empty stomach</li><li>Bright yellow urine (harmless — excess B2 riboflavin)</li><li>Constipation or upset stomach from iron in some formulas</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Capsule / tablet</div>
+          <div class="form-note">Most common; cheapest</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Gummy</div>
+          <div class="form-note">Palatable but usually misses iron, magnesium, potassium</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Methylated B</div>
+          <div class="form-note">Better absorption for MTHFR variants</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">omega3</span><span class="tag">vitd</span><span class="tag">creatine</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I really need a multivitamin if I eat well?</div>
+        <div class="faq-a">If your diet is consistently varied and nutrient-dense, probably not. It's insurance, not a foundation.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Men's vs women's multi — does it matter?</div>
+        <div class="faq-a">Mostly iron content. Menstruating women need more iron; men usually don't and should often skip iron-containing formulas.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I take it on an empty stomach?</div>
+        <div class="faq-a">You can, but fat-soluble vitamins absorb much better with food, and some people get nausea without it.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH Office of Dietary Supplements — Multivitamin/mineral Supplements</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/MVMS-Consumer/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Core · 02 / 19</p>
+        <h2 class="supp-name">Omega-3 (EPA/DHA)</h2>
+        <p class="supp-why">Supports heart, brain, and joint health.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">1–2 g</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">4–12 weeks for measurable changes in blood omega-3 index</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Lowers triglycerides and supports cardiovascular health</li><li>Anti-inflammatory effects for joints and recovery</li><li>DHA is a structural lipid in brain and eye tissue</li><li>May support mood and reduce symptoms of mild depression</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>EPA and DHA are long-chain omega-3 fatty acids that incorporate into cell membranes and compete with pro-inflammatory omega-6 pathways. They're the precursors to resolvins and protectins — signaling molecules that actively resolve inflammation.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>Aim for 1–2 g combined EPA+DHA daily. Check the label — a '1000 mg fish oil softgel' often contains only 300 mg actual EPA+DHA.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Take with a meal containing fat for best absorption. Morning is fine; split doses if taking 2+ g to reduce fishy burps.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>People who eat fatty fish less than twice a week</li><li>Elevated triglycerides</li><li>Joint stiffness</li><li>Vegans (via algae-based DHA/EPA)</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You're on blood thinners (talk to your doctor — mild additive effect)</li><li>Scheduled surgery in the next week</li><li>Fish or shellfish allergy (use algae oil instead)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Fishy aftertaste or burps</li><li>Mild GI upset at high doses</li><li>Slightly increased bleeding time at 3+ g/day</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Triglyceride (TG) form</div>
+          <div class="form-note">Better absorbed than ethyl ester</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Ethyl ester (EE)</div>
+          <div class="form-note">Cheapest; slightly lower absorption</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Algae oil</div>
+          <div class="form-note">Vegan source of EPA/DHA</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Krill oil</div>
+          <div class="form-note">Phospholipid-bound; smaller doses, pricier</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">multi</span><span class="tag">vitd</span><span class="tag">creatine</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">EPA vs DHA — which matters more?</div>
+        <div class="faq-a">Both. EPA is more studied for mood and inflammation; DHA for brain and eye structure. Pick a product with meaningful amounts of both.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Is fish oil fishy-burp situation normal?</div>
+        <div class="faq-a">Common with low-quality oils. Look for third-party tested (IFOS) products, store in the fridge, or switch to enteric-coated capsules.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I just eat fish instead?</div>
+        <div class="faq-a">Yes — 2–3 servings of fatty fish per week (salmon, sardines, mackerel) delivers comparable EPA/DHA.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Omega-3 Fatty Acids</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 03 / 19</p>
+        <h2 class="supp-name">Ashwagandha (KSM-66)</h2>
+        <p class="supp-why">Adaptogen shown to reduce cortisol and perceived stress.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">600 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Evening</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">4–8 weeks for full stress and sleep benefits</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Reduces cortisol and perceived stress in multiple RCTs</li><li>May improve sleep quality and reduce anxiety symptoms</li><li>Modest boost to strength and recovery in training studies</li><li>Some evidence for testosterone support in men</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Ashwagandha is an adaptogen — it modulates the HPA axis (the body's stress response system), blunting cortisol spikes. Active compounds are withanolides.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>600 mg/day of KSM-66 or 250–500 mg of Sensoril (standardized extracts). Raw root powder needs much higher doses to match.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Evening is traditional and supports sleep. Splitting AM/PM also works.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Chronic stress or high-stress job</li><li>Poor sleep tied to racing mind</li><li>Athletes training hard</li><li>Men with low-normal testosterone</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You have hyperthyroidism (it can raise T3/T4)</li><li>You have autoimmune disease (immune-modulating)</li><li>You're pregnant</li><li>You're on sedatives, thyroid meds, or immunosuppressants</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Drowsiness</li><li>Mild GI upset</li><li>Rare: liver issues (stop if jaundice, dark urine, or abdominal pain)</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">KSM-66</div>
+          <div class="form-note">Most-studied extract; full-spectrum root</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Sensoril</div>
+          <div class="form-note">Higher withanolide %, lower dose</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Root powder</div>
+          <div class="form-note">Traditional; needs higher doses, taste is strong</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">mag</span><span class="tag">mel</span><span class="tag">omega3</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Can I take it long-term?</div>
+        <div class="faq-a">Most studies are 8–12 weeks. Some practitioners cycle: 8 weeks on, 2 weeks off.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Does it really raise testosterone?</div>
+        <div class="faq-a">Small but significant effect in men with suboptimal T, especially when combined with training. Not a replacement for TRT.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Will it make me sleepy during the day?</div>
+        <div class="faq-a">For some, yes — that's why evening dosing is standard.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">Examine.com — Ashwagandha</span><br/><span class="src-url">https://examine.com/supplements/ashwagandha/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 04 / 19</p>
+        <h2 class="supp-name">Caffeine + L-Theanine</h2>
+        <p class="supp-why">Smoother energy and focus without the jitters.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">100 mg + 200 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">20–45 minutes</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Smoother, more focused energy than caffeine alone</li><li>Reduces jitters, anxiety, and heart-pounding feeling</li><li>Improves attention and reaction time</li><li>Synergy is well-documented in cognitive performance studies</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Caffeine blocks adenosine receptors (reducing sleepiness) and increases dopamine and norepinephrine. L-Theanine, an amino acid from tea, increases alpha brain waves and modulates glutamate — smoothing caffeine's edge without reducing its benefits.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>Classic ratio is 1:2 caffeine to theanine — 100 mg + 200 mg is a great starting point. Some stack up to 200 mg + 400 mg.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Morning or early afternoon. Avoid within 8–10 hours of bedtime — caffeine half-life is ~5 hours.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Deep-focus work</li><li>People who get anxious from coffee</li><li>Pre-workout focus</li><li>Studying or creative work</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You're sensitive to caffeine or have arrhythmia</li><li>You're pregnant (keep caffeine under 200 mg/day)</li><li>You have anxiety disorders that worsen with stimulants</li><li>It's evening — you'll wreck your sleep</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Jitters at higher caffeine doses</li><li>Sleep disruption if taken too late</li><li>Tolerance over time — cycle off periodically</li><li>Caffeine withdrawal headache if stopped cold</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Combo capsule</div>
+          <div class="form-note">Pre-dosed 100/200 mg — convenient</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Separate caffeine + theanine</div>
+          <div class="form-note">Flexible ratio tuning</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Matcha or green tea</div>
+          <div class="form-note">Naturally contains both — gentler dose</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">creatine</span><span class="tag">omega3</span></p></div>
+    <div class="block"><h4 class="block-title">Avoid with</h4><p class="tags"><span class="tag tag-warn">mel</span></p></div>
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Can I take this with coffee?</div>
+        <div class="faq-a">Sure — either use low-caffeine capsules to pair with coffee, or just add L-theanine (200 mg) to your morning brew.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Will I build tolerance?</div>
+        <div class="faq-a">To caffeine, yes. Cycle off for a few days every 4–6 weeks or keep daily doses moderate.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">How late is too late?</div>
+        <div class="faq-a">If you want to sleep at 11pm, no caffeine after ~1–2pm. Individual sensitivity varies.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">Examine.com — L-Theanine</span><br/><span class="src-url">https://examine.com/supplements/l-theanine/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 05 / 19</p>
+        <h2 class="supp-name">Collagen Peptides</h2>
+        <p class="supp-why">Supports connective tissue, joints, and skin.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">10 g</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">4–12 weeks for skin and joint benefits</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Supports skin elasticity and hydration (modest but real effect)</li><li>May reduce joint pain in active people and older adults</li><li>Can support hair and nail growth</li><li>Easy protein boost (~9 g per 10 g serving)</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Oral collagen is broken down to amino acids and small peptides (hydroxyproline-rich) that signal fibroblasts to upregulate collagen synthesis in skin and joint tissue. It's a targeted signal, not direct replacement.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>10 g hydrolyzed collagen peptides daily. Joint-focused studies often use 10–15 g type II collagen.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Anytime. Pair with vitamin C to support collagen synthesis. Morning in coffee is a common routine.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Skin aging concerns</li><li>Joint stiffness from training or age</li><li>People who don't eat bone broth or skin-on meats</li><li>Recovering from tendon/ligament injury</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Fish/beef/pork allergies (depending on source)</li><li>You're strictly vegan (collagen is always animal-derived)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Mild fullness or GI upset</li><li>Rare: allergic reactions</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Hydrolyzed peptides (Type I &amp; III)</div>
+          <div class="form-note">Skin, hair, nails — mixes easily</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Undenatured Type II (UC-II)</div>
+          <div class="form-note">Joints — small daily dose (40 mg)</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Bone broth</div>
+          <div class="form-note">Whole-food alternative; variable collagen content</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">vitc</span><span class="tag">whey</span><span class="tag">creatine</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Marine vs bovine collagen — which is better?</div>
+        <div class="faq-a">Similar benefits. Marine absorbs slightly faster; bovine is cheaper and more sustainable for most.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Does it really help skin?</div>
+        <div class="faq-a">Meta-analyses show modest but statistically significant improvements in elasticity and hydration after 8+ weeks.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I cook with it?</div>
+        <div class="faq-a">Hydrolyzed peptides are heat-stable — coffee, oatmeal, soups all fine.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">PubMed — Oral collagen supplementation meta-analysis</span><br/><span class="src-url">https://pubmed.ncbi.nlm.nih.gov/33742704/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 06 / 19</p>
+        <h2 class="supp-name">Creatine Monohydrate</h2>
+        <p class="supp-why">Most-researched performance supplement — strength, power, and cognition.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">5 g</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Anytime</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">2–4 weeks to fully saturate muscles; optional 5-day loading phase of 20 g/day speeds it up</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Increases strength and power output by 5–15%</li><li>Supports lean muscle mass gains over time</li><li>Improves high-intensity exercise capacity</li><li>Emerging evidence for cognition, especially under sleep deprivation</li><li>Most-studied sports supplement — extensive safety record</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Creatine is stored in muscle as phosphocreatine, which rapidly regenerates ATP during short, intense efforts. Supplementation saturates these stores beyond what you get from diet.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>5 g daily, every day. Loading (20 g/day for 5 days) is optional — same end result, just faster. No cycling needed.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Anytime. Post-workout with carbs may slightly boost uptake but consistency matters far more than timing.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Anyone doing resistance training</li><li>High-intensity interval athletes</li><li>Vegetarians/vegans (low baseline muscle creatine)</li><li>Older adults for muscle preservation</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You have significant kidney disease (talk to your doctor)</li><li>You have creatine sensitivity (rare — GI discomfort)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>2–4 lb weight gain from water inside muscle cells (not fat, not bloat)</li><li>Mild GI upset if you take too much at once</li><li>Does NOT cause hair loss, kidney damage, or dehydration in healthy people</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Monohydrate</div>
+          <div class="form-note">Gold standard — cheapest, most researched, most effective</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Micronized monohydrate</div>
+          <div class="form-note">Same thing, finer powder — mixes better</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">HCl, ethyl ester, buffered</div>
+          <div class="form-note">Marketed as better absorbed — evidence does not support paying more</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">whey</span><span class="tag">multi</span><span class="tag">omega3</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I need to cycle creatine?</div>
+        <div class="faq-a">No. There's no physiological reason to cycle off. Take it daily indefinitely.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Will it make me bloated?</div>
+        <div class="faq-a">The weight gain is intracellular water in muscle (makes you look fuller), not subcutaneous bloat.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Is it safe for women?</div>
+        <div class="faq-a">Yes — benefits apply equally, no masculinizing effects. It's not a hormone.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Monohydrate vs HCl?</div>
+        <div class="faq-a">Monohydrate. It's much cheaper and works identically.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">ISSN Position Stand on Creatine</span><br/><span class="src-url">https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0173-z</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 07 / 19</p>
+        <h2 class="supp-name">Glucosamine + Chondroitin</h2>
+        <p class="supp-why">Well-studied for joint comfort and cartilage support.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">1500 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Afternoon</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">2–3 months — slow responder; judge after 12 weeks</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>May reduce joint pain in mild-to-moderate osteoarthritis</li><li>Supports cartilage integrity over time</li><li>Modest anti-inflammatory effect at joint tissue</li><li>Best evidence is for knee OA</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Glucosamine is a precursor to glycosaminoglycans that make up cartilage. Chondroitin inhibits enzymes that degrade cartilage. Together they may slow cartilage breakdown, though research is mixed.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>1500 mg glucosamine sulfate + 1200 mg chondroitin sulfate daily. Glucosamine sulfate (not HCl) has stronger evidence.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Split into 2–3 doses with meals to reduce GI upset.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Knee osteoarthritis</li><li>Joint aches from age or cumulative training</li><li>Those who've tried NSAIDs and want an alternative</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Shellfish allergy (most glucosamine comes from shellfish — look for vegetarian versions)</li><li>You're on warfarin (chondroitin can increase INR)</li><li>Uncontrolled diabetes (monitor blood sugar)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Mild GI upset</li><li>Rare: allergic reaction</li><li>May slightly raise blood glucose in some</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Glucosamine sulfate + chondroitin sulfate</div>
+          <div class="form-note">Combination studied in major trials</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Glucosamine HCl</div>
+          <div class="form-note">Weaker evidence than sulfate form</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Vegetarian glucosamine (from Aspergillus)</div>
+          <div class="form-note">For shellfish-allergic users</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">col</span><span class="tag">omega3</span><span class="tag">vitd</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Does it really work?</div>
+        <div class="faq-a">Evidence is mixed — some people respond strongly, others not at all. Worth a 12-week trial if you have OA.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Sulfate or HCl form?</div>
+        <div class="faq-a">Sulfate has stronger RCT evidence. The sulfate ion itself may contribute to the benefit.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I combine it with collagen?</div>
+        <div class="faq-a">Yes — they target different aspects of joint health.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NCCIH — Glucosamine and Chondroitin</span><br/><span class="src-url">https://www.nccih.nih.gov/health/glucosaminechondroitin-for-osteoarthritis-pain</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 08 / 19</p>
+        <h2 class="supp-name">Magnesium Glycinate</h2>
+        <p class="supp-why">Calms the nervous system and supports deeper sleep.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">300–400 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Evening</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Sleep benefits often felt within 1–3 nights; muscle cramp relief within a week</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Promotes parasympathetic (rest-and-digest) nervous system activity</li><li>Supports deeper, more restorative sleep</li><li>Relaxes muscles — helps with cramps and tension</li><li>Cofactor in 300+ enzyme reactions including ATP production</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Magnesium is a natural NMDA receptor antagonist and GABA agonist — it calms excitatory neurotransmission. Glycinate (bound to the amino acid glycine) is gentle on the gut and crosses the blood-brain barrier well.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>300–400 mg elemental magnesium in the evening. Note: a '500 mg magnesium glycinate' capsule contains only ~100 mg elemental magnesium — check the label.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>30–60 minutes before bed. Split the dose if you get loose stools.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Poor sleep or frequent waking</li><li>Muscle cramps or restless legs</li><li>High-stress periods</li><li>Heavy training (magnesium is lost in sweat)</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Kidney disease (talk to your doctor)</li><li>You take bisphosphonates or certain antibiotics (separate by 2+ hours)</li><li>You have low blood pressure and bradycardia</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Loose stools (more common with oxide or citrate)</li><li>Mild drowsiness</li><li>Rare: low blood pressure at high doses</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Glycinate (bisglycinate)</div>
+          <div class="form-note">Best for sleep and anxiety; gentle on gut</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Citrate</div>
+          <div class="form-note">Good absorption but laxative effect</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Malate</div>
+          <div class="form-note">Energy and muscle recovery</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Oxide</div>
+          <div class="form-note">Poorly absorbed — skip unless you need a laxative</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Threonate</div>
+          <div class="form-note">Crosses blood-brain barrier well; pricier</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">vitd</span><span class="tag">mel</span><span class="tag">ash</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Why not just use magnesium citrate?</div>
+        <div class="faq-a">Citrate is fine but more likely to cause loose stools. Glycinate is better tolerated for nightly use.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I take it every night long-term?</div>
+        <div class="faq-a">Yes — magnesium is an essential mineral, not a drug. Most Americans under-consume it.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Morning or evening?</div>
+        <div class="faq-a">Evening is standard for sleep and recovery. Morning works if you just want general supplementation.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Magnesium</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 09 / 19</p>
+        <h2 class="supp-name">Melatonin</h2>
+        <p class="supp-why">Small dose helps nudge your sleep cycle without grogginess.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">0.3–1 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Evening</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">30–60 minutes after taking; phase shifts over several days</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Signals your brain that it's time to sleep</li><li>Shortens time-to-fall-asleep for delayed sleep phase</li><li>Helpful for jet lag and shift work</li><li>Small doses (0.3–1 mg) work as well or better than large ones</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Melatonin is a hormone made by the pineal gland in response to darkness. Supplemental melatonin binds MT1/MT2 receptors and shifts the circadian phase — it's a timing cue, not a sedative.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>Start at 0.3–1 mg. Most store-bought brands sell 3–10 mg, which is 10x+ what's needed and often causes next-day grogginess. Less is more.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>30–60 minutes before target bedtime. For jet lag eastward, take at destination bedtime.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Jet lag</li><li>Shift work</li><li>Delayed sleep phase (trouble falling asleep at a normal hour)</li><li>Occasional difficulty falling asleep</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You're pregnant or breastfeeding</li><li>You have autoimmune disease (data is mixed)</li><li>You're on blood thinners or immunosuppressants</li><li>You wake up with grogginess — you're overdosing</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Vivid dreams</li><li>Morning grogginess (usually means the dose is too high)</li><li>Headache</li><li>Mild mood changes in some</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Immediate-release 0.3–1 mg</div>
+          <div class="form-note">Ideal starting dose</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Sublingual</div>
+          <div class="form-note">Faster onset; useful for middle-of-night waking</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Extended-release</div>
+          <div class="form-note">For staying asleep, not falling asleep</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">mag</span><span class="tag">ash</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Is melatonin addictive?</div>
+        <div class="faq-a">No — it doesn't cause dependence or tolerance at low doses.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I take it every night?</div>
+        <div class="faq-a">Short-term use is well-studied. For chronic insomnia, address root causes (light exposure, stress, consistent schedule) first.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Why do I feel groggy the next day?</div>
+        <div class="faq-a">Almost always a dose-too-high issue. Drop to 0.3–0.5 mg.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NCCIH — Melatonin</span><br/><span class="src-url">https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 10 / 19</p>
+        <h2 class="supp-name">Probiotic (Multi-strain)</h2>
+        <p class="supp-why">Supports a diverse gut microbiome.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">10–30 B CFU</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">2–8 weeks for most effects; strain-dependent</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>May reduce antibiotic-associated diarrhea</li><li>Supports gut barrier and may reduce bloating in IBS</li><li>Some strains help with traveler's diarrhea</li><li>Specific strains studied for immune and mood effects</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Probiotics are live bacteria that transiently colonize the gut, compete with pathogens, produce short-chain fatty acids, and modulate immune signaling. Effects are strain-specific — not all probiotics do the same thing.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>10–30 billion CFU is a reasonable range. More isn't necessarily better — strain selection matters more than dose.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Morning with or without food depending on product. Enteric-coated or shelf-stable formulas are easier to time.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Post-antibiotic recovery</li><li>IBS, mild bloating, constipation</li><li>Travelers (Saccharomyces boulardii)</li><li>Poor diet diversity</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Severe immunocompromise (discuss with doctor)</li><li>Central venous catheter or critical illness</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Transient gas or bloating in first week</li><li>Rare: infection in immunocompromised patients</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Multi-strain capsule</div>
+          <div class="form-note">Most general-purpose; refrigerated often needed</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Shelf-stable spore-based (Bacillus)</div>
+          <div class="form-note">Survives stomach acid well; no refrigeration</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Saccharomyces boulardii</div>
+          <div class="form-note">Yeast — good for antibiotic-associated diarrhea</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Fermented foods</div>
+          <div class="form-note">Yogurt, kefir, kimchi, sauerkraut — whole-food alternative</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">fiber</span><span class="tag">multi</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I need to take it forever?</div>
+        <div class="faq-a">No — probiotics transiently colonize. For lasting gut diversity, focus on fiber variety and fermented foods.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Which strain is best?</div>
+        <div class="faq-a">Depends on goal. L. rhamnosus GG for diarrhea, B. infantis for IBS, S. boulardii for travel. Match strain to evidence.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Are expensive brands worth it?</div>
+        <div class="faq-a">Potency and third-party testing matter more than price. Look for guaranteed CFU through expiration date.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NCCIH — Probiotics</span><br/><span class="src-url">https://www.nccih.nih.gov/health/probiotics-what-you-need-to-know</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 11 / 19</p>
+        <h2 class="supp-name">Protein Powder</h2>
+        <p class="supp-why">Helps you hit daily protein targets for recovery and muscle growth.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">25–30 g</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Afternoon</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Daily protein adequacy matters more than any single shake; recovery benefits accumulate over weeks</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Convenient way to hit daily protein targets (0.7–1 g/lb bodyweight for active people)</li><li>High leucine content triggers muscle protein synthesis</li><li>Faster digestion than whole-food protein post-workout</li><li>Supports satiety and body composition</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Dietary protein provides amino acids — the building blocks for muscle, enzymes, and hormones. Leucine in particular signals mTOR to initiate muscle protein synthesis. Whey is ~25% branched-chain amino acids and digests quickly.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>20–40 g per serving, 1–2x per day. It's a protein supplement, not a meal replacement — prioritize whole-food protein.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Any time you need protein — post-workout, between meals, or as breakfast. Total daily protein matters most.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Strength training / muscle gain</li><li>Weight loss (protein preserves muscle, boosts satiety)</li><li>Busy schedules with low-protein meals</li><li>Older adults fighting sarcopenia</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Whey: milk allergy or severe lactose intolerance (use isolate or plant)</li><li>You already hit protein targets via food</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Bloating or gas (lactose — switch to isolate or plant)</li><li>Constipation if fiber intake stays low</li><li>High doses stress kidneys only if kidneys are already compromised</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Whey concentrate</div>
+          <div class="form-note">80% protein; cheapest; contains lactose</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Whey isolate</div>
+          <div class="form-note">90%+ protein; minimal lactose</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Casein</div>
+          <div class="form-note">Slow-digesting; good before bed</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Plant (pea + rice blend)</div>
+          <div class="form-note">Vegan option; blend for complete amino profile</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">creatine</span><span class="tag">col</span><span class="tag">multi</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I need to drink it right after working out?</div>
+        <div class="faq-a">No — the anabolic window is 4+ hours wide. Daily total protein matters most.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Is whey safe for women?</div>
+        <div class="faq-a">Yes — whey is just filtered milk protein. No hormones, no masculinizing effects.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Concentrate or isolate?</div>
+        <div class="faq-a">Isolate if you're lactose-sensitive or cutting calories tightly. Otherwise concentrate is fine and cheaper.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">ISSN Position Stand on Protein</span><br/><span class="src-url">https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0189-4</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 12 / 19</p>
+        <h2 class="supp-name">Psyllium Husk</h2>
+        <p class="supp-why">Prebiotic fiber feeds good gut bacteria and aids digestion.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">5 g</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Evening</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Days for bowel regularity; 4–8 weeks for cholesterol benefits</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Improves both constipation and diarrhea (normalizes stool)</li><li>Lowers LDL cholesterol (FDA health claim)</li><li>Blunts post-meal blood sugar spikes</li><li>Feeds beneficial gut bacteria — short-chain fatty acids</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Psyllium is a soluble fiber that forms a gel in water. It slows gastric emptying, binds bile acids (forcing the liver to pull cholesterol from blood), and is fermented by colonic bacteria to produce butyrate.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>Start with 5 g/day and work up to 10–15 g split across meals. Drink plenty of water — essential to avoid obstruction.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Before meals lowers post-meal glucose most. Evening works for bowel regularity.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Low-fiber diets</li><li>Constipation or loose stools</li><li>Elevated LDL cholesterol</li><li>Pre/post meal blood sugar management</li><li>Keto dieters (often low fiber)</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Bowel obstruction or severe swallowing difficulty</li><li>You take certain medications — space by 2 hours (can reduce absorption)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Gas and bloating in first 1–2 weeks — ramp up slowly</li><li>Choking risk if taken with too little water</li><li>Reduced absorption of some medications taken simultaneously</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Powder</div>
+          <div class="form-note">Cheapest; mix in water quickly and drink</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Capsules</div>
+          <div class="form-note">Convenient but need 5–6 to equal one powder dose</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Whole husk vs powder</div>
+          <div class="form-note">Powder is finer, mixes smoother</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">prob</span><span class="tag">mag</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Psyllium vs other fibers?</div>
+        <div class="faq-a">Psyllium is the most-studied for cholesterol and stool normalization. Inulin is better for feeding gut bugs but causes more gas.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Will it affect my meds?</div>
+        <div class="faq-a">Can reduce absorption of meds taken at the same time. Separate by 2 hours.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Keto-friendly?</div>
+        <div class="faq-a">Yes — psyllium is almost entirely fiber, minimal digestible carbs, and very filling.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">AHA — Dietary Fiber</span><br/><span class="src-url">https://www.heart.org/en/healthy-living/healthy-eating/eat-smart/fats/dietary-fats</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 13 / 19</p>
+        <h2 class="supp-name">Vitamin C</h2>
+        <p class="supp-why">Antioxidant support and immune resilience.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">500 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Saturates tissues within days; benefits sustained with daily intake</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Powerful water-soluble antioxidant</li><li>Essential cofactor for collagen synthesis</li><li>Enhances iron absorption from plant foods</li><li>May modestly reduce cold duration</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Ascorbic acid donates electrons to neutralize free radicals, regenerates vitamin E, and is required for enzymes that hydroxylate proline and lysine during collagen formation.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>200–1000 mg/day is the effective range. Above ~400 mg, absorption drops off steeply and the excess is excreted. Mega-dosing wastes money.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Anytime. Pair with iron-rich plant meals to boost iron absorption.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Low fruit/vegetable intake</li><li>Smokers (need ~35 mg extra/day)</li><li>Plant-based diets (to boost non-heme iron absorption)</li><li>Periods of high physical or emotional stress</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You have iron overload (hemochromatosis) — enhances iron absorption</li><li>History of kidney stones at very high doses</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>GI upset and diarrhea above 2 g/day</li><li>Slightly increased oxalate — relevant for stone formers</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Ascorbic acid</div>
+          <div class="form-note">Cheapest, effective</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Buffered (calcium/magnesium ascorbate)</div>
+          <div class="form-note">Easier on sensitive stomachs</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Liposomal</div>
+          <div class="form-note">Higher absorption at large doses; pricier</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">zinc</span><span class="tag">iron</span><span class="tag">multi</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Does vitamin C prevent colds?</div>
+        <div class="faq-a">Daily C doesn't prevent colds in the general population but may modestly shorten them. Athletes and people in cold environments see more benefit.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Is mega-dosing 5g useful?</div>
+        <div class="faq-a">For most people, no — you pee out most of it.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Best time of day?</div>
+        <div class="faq-a">Any. Morning with breakfast is easy to remember.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Vitamin C</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Goal-based · 14 / 19</p>
+        <h2 class="supp-name">Zinc</h2>
+        <p class="supp-why">Supports immune cells, wound healing, and testosterone.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">15 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Cold duration benefits within days; long-term immune support builds over weeks</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Supports innate and adaptive immune function</li><li>May shorten duration of common cold if started within 24 hours</li><li>Critical for wound healing and skin health</li><li>Cofactor in testosterone production</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Zinc is a cofactor in 300+ enzymes and stabilizes cell membranes. Deficiency impairs T-cell function and slows tissue repair.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>15–30 mg/day long-term. Short-term (cold onset): up to 75 mg/day lozenges for 5–7 days. Upper limit is 40 mg/day long-term — more can induce copper deficiency.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>With food to avoid nausea. Separate from calcium, iron, and coffee (they reduce absorption).</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Frequent colds</li><li>Vegetarians/vegans (plant zinc is less bioavailable)</li><li>Men supporting testosterone</li><li>Slow wound healing</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You take high-dose zinc already from a multi</li><li>You're on certain antibiotics (separate by 2 hours)</li><li>You have Wilson's disease</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Nausea on empty stomach</li><li>Metallic taste from lozenges</li><li>Long-term high doses cause copper deficiency — anemia, neurological issues</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Picolinate</div>
+          <div class="form-note">Well-absorbed</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Bisglycinate</div>
+          <div class="form-note">Gentle on stomach</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Citrate</div>
+          <div class="form-note">Good absorption, inexpensive</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Lozenges (acetate/gluconate)</div>
+          <div class="form-note">For cold onset — contact with throat tissue matters</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Oxide</div>
+          <div class="form-note">Poorly absorbed — skip</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">vitc</span><span class="tag">multi</span><span class="tag">vitd</span></p></div>
+    <div class="block"><h4 class="block-title">Avoid with</h4><p class="tags"><span class="tag tag-warn">iron</span></p></div>
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Can I take it daily forever?</div>
+        <div class="faq-a">At 15–30 mg with a zinc/copper balance, yes. Above that, cycle or pair with 1–2 mg copper.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Do zinc lozenges really shorten colds?</div>
+        <div class="faq-a">Evidence is mixed but positive when started within 24 hours of symptoms. Lozenge form matters.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Should I take it with my multivitamin?</div>
+        <div class="faq-a">Only if your multi is low in zinc (&lt;15 mg). Don't stack multiple zinc sources.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Zinc</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Lifestyle · 15 / 19</p>
+        <h2 class="supp-name">B-Complex</h2>
+        <p class="supp-why">Essential when skipping animal products — energy and nerve function.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">1 capsule</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Days to weeks for energy, mood, and cognitive effects in deficient individuals</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Supports energy metabolism — every B vitamin is a cofactor in ATP production</li><li>Important for nerve function and neurotransmitter synthesis</li><li>Folate (B9) essential for DNA synthesis and methylation</li><li>Methylated forms benefit people with MTHFR variants</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>B vitamins are water-soluble cofactors in dozens of metabolic enzymes. They're not stored (except B12), so steady intake matters. Deficiencies in B1, B6, B9, B12 are the most common clinically.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>One capsule of a balanced B-complex daily. Avoid mega-B products (500+ mg of each) — no added benefit and some cause side effects.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Morning with food. Some people find it energizing — avoid late-day dosing.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Vegans (B12 gap)</li><li>High-stress periods (Bs deplete faster)</li><li>Alcohol use (impairs B1/thiamine)</li><li>MTHFR variants (methylated forms)</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You already take high-dose individual B vitamins</li><li>You have a rare Leber's hereditary optic neuropathy (avoid cyanocobalamin)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Bright yellow urine (harmless — B2)</li><li>Flushing from high-dose niacin (B3)</li><li>Neuropathy from chronic high-dose B6 (&gt;200 mg/day long-term)</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Standard B-complex</div>
+          <div class="form-note">Balanced, affordable</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Methylated B-complex</div>
+          <div class="form-note">Methylfolate + methylcobalamin — preferred for MTHFR</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Activated B-complex</div>
+          <div class="form-note">All Bs in coenzyme forms; pricier</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">b12</span><span class="tag">iron</span><span class="tag">multi</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I need a B-complex if I take a multi?</div>
+        <div class="faq-a">Usually not — most multis cover Bs adequately. B-complex is for targeted support or deficiency.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Methylated — do I really need it?</div>
+        <div class="faq-a">Beneficial for ~40% of people with MTHFR variants. For everyone else, standard forms work fine and cost less.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Will it boost my energy immediately?</div>
+        <div class="faq-a">Only if you were deficient. For well-fed people, effects are subtle.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — B Vitamin Fact Sheets</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/list-all/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Lifestyle · 16 / 19</p>
+        <h2 class="supp-name">Electrolytes (Na/K/Mg)</h2>
+        <p class="supp-why">Keto and heavy training deplete sodium and potassium quickly.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">1 scoop</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Afternoon</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Immediate — often felt within 15–30 minutes if depleted</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Replaces sodium and potassium lost in sweat</li><li>Helps prevent exercise-induced cramps</li><li>Supports hydration — water alone isn't always enough</li><li>Critical on keto and low-carb diets (kidneys excrete more sodium)</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Electrolytes (Na+, K+, Mg++, Cl-) maintain cell membrane potential, fluid balance, and nerve/muscle firing. Sweating, low-carb diets, and hot weather all accelerate losses.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>One scoop/packet per workout or per liter of water on low-carb/hot days. Look for ~1000 mg sodium, 200+ mg potassium, 60+ mg magnesium per serving.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Pre-workout, during long training, or first thing on low-carb days. Not needed if eating a balanced diet and not sweating heavily.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Heavy training (&gt;1 hour or high sweat)</li><li>Keto or low-carb</li><li>Hot climates or saunas</li><li>Fasting periods</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You have high blood pressure sensitive to sodium</li><li>Kidney disease (talk to your doctor about potassium)</li><li>You already eat a high-sodium diet and don't sweat much</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Too much sodium — bloating, elevated BP in sensitive people</li><li>High potassium rare from supplements but dangerous in kidney disease</li><li>GI upset from magnesium</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Powder / stick packs</div>
+          <div class="form-note">Flexible dosing; many flavors</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Tablets</div>
+          <div class="form-note">Convenient for travel</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">DIY (salt + lite salt + water)</div>
+          <div class="form-note">Cheapest; no flavoring</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">creatine</span><span class="tag">whey</span><span class="tag">mag</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I need these daily?</div>
+        <div class="faq-a">Only if you sweat heavily, train long, eat low-carb, or live somewhere hot. A balanced diet covers most needs.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Is it just salt water?</div>
+        <div class="faq-a">Sort of — but balanced sodium/potassium/magnesium works better than just salt, especially for cramps.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Will it spike my blood pressure?</div>
+        <div class="faq-a">Sodium increases BP in salt-sensitive people. Monitor if you have hypertension.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">ACSM — Fluid and Electrolyte Replacement</span><br/><span class="src-url">https://www.acsm.org/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Lifestyle · 17 / 19</p>
+        <h2 class="supp-name">Iron Bisglycinate</h2>
+        <p class="supp-why">Plant-based diets often run low on bioavailable iron.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">18 mg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Afternoon</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Ferritin rises over 2–3 months; energy improvements often noticed within 2–4 weeks</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Corrects iron-deficiency anemia</li><li>Restores energy in deficient individuals</li><li>Supports oxygen transport and cognitive function</li><li>Bisglycinate form is gentler on the gut than ferrous sulfate</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Iron is central to hemoglobin, which carries oxygen in red blood cells. Deficiency impairs oxygen delivery — fatigue, poor exercise tolerance, brain fog.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>18 mg bisglycinate daily for maintenance. Treating deficiency: 30–60 mg elemental iron under medical guidance, with ferritin monitoring. Don't supplement without confirmed deficiency.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Between meals with vitamin C for best absorption. Avoid coffee, tea, calcium, and dairy within 2 hours — all block absorption.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Menstruating women (especially heavy periods)</li><li>Vegans and vegetarians (plant iron is less bioavailable)</li><li>Endurance athletes</li><li>Pregnancy (under medical guidance)</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You haven't confirmed deficiency with a ferritin test</li><li>You have hemochromatosis</li><li>You're a man with normal iron (men rarely need to supplement)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Constipation (less common with bisglycinate)</li><li>Nausea</li><li>Dark stools (harmless)</li><li>Iron overload with unnecessary supplementation — serious</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Bisglycinate</div>
+          <div class="form-note">Gentlest; well-absorbed</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Ferrous sulfate</div>
+          <div class="form-note">Cheap, effective, more GI side effects</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Ferrous gluconate</div>
+          <div class="form-note">Middle ground</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Heme iron</div>
+          <div class="form-note">From animal sources; highest bioavailability</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">vitc</span><span class="tag">b12</span><span class="tag">b</span></p></div>
+    <div class="block"><h4 class="block-title">Avoid with</h4><p class="tags"><span class="tag tag-warn">zinc</span><span class="tag tag-warn">mag</span></p></div>
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Should I just take iron to feel more energetic?</div>
+        <div class="faq-a">No — get a ferritin test first. Iron overload causes real harm. Supplement only if deficient.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Every day or every other day?</div>
+        <div class="faq-a">Recent research suggests alternate-day dosing increases absorption and reduces side effects.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I take it with my multi?</div>
+        <div class="faq-a">Check — if your multi already has iron, don't double up without a reason.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Iron</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Lifestyle · 18 / 19</p>
+        <h2 class="supp-name">Vitamin B12 (Methylcobalamin)</h2>
+        <p class="supp-why">B12 is virtually absent in plant foods — non-negotiable for vegans.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">500 mcg</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">Weeks to months to correct deficiency; energy and cognitive benefits can be noticed earlier in deficient individuals</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Essential for red blood cell formation — prevents anemia</li><li>Required for myelin sheath — nerve function and cognition</li><li>Supports methylation (DNA synthesis, homocysteine metabolism)</li><li>Deficiency causes irreversible nerve damage if prolonged</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>B12 (cobalamin) is a cofactor for methionine synthase and methylmalonyl-CoA mutase. Only produced by bacteria — found almost exclusively in animal foods or fortified products.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>500–1000 mcg/day methylcobalamin or cyanocobalamin for vegans and vegetarians. Deficient individuals may need higher doses or injections under medical guidance.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Morning. Sublingual absorbs without needing intrinsic factor.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Vegans — non-negotiable</li><li>Vegetarians — recommended</li><li>Adults over 50 (reduced absorption from food)</li><li>People on metformin or PPIs (both reduce B12 absorption)</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>Leber's disease (rare eye condition)</li><li>You should confirm deficiency with bloodwork before injections</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Essentially none — excess is excreted</li><li>Rare: acne flare, anxiety at very high doses</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">Methylcobalamin</div>
+          <div class="form-note">Active form; preferred by some</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Cyanocobalamin</div>
+          <div class="form-note">Cheapest, stable, well-researched</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Hydroxocobalamin</div>
+          <div class="form-note">Used in injections</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Sublingual</div>
+          <div class="form-note">Absorbs without intrinsic factor</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">b</span><span class="tag">iron</span><span class="tag">multi</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Methyl vs cyano form?</div>
+        <div class="faq-a">Cyano is cheap and converts fine for most. Methyl is the active form and preferred for those with MTHFR variants or neurological issues.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I get B12 from nutritional yeast?</div>
+        <div class="faq-a">Only if fortified — read the label. Natural plant foods don't reliably contain active B12.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Do I really need 1000 mcg when RDA is 2.4?</div>
+        <div class="faq-a">Yes — absorption is very inefficient at high oral doses (only ~1% absorbed). Supplement doses intentionally oversupply.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Vitamin B12</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page supp">
+    <header class="supp-head">
+      <div>
+        <p class="eyebrow">Lifestyle · 19 / 19</p>
+        <h2 class="supp-name">Vitamin D3 + K2</h2>
+        <p class="supp-why">Critical when sun exposure is limited; supports mood and bones.</p>
+      </div>
+    </header>
+
+    <div class="specs">
+      <div class="spec"><span class="spec-label">Dose</span><span class="spec-value">2000–4000 IU</span></div>
+      <div class="spec"><span class="spec-label">Timing</span><span class="spec-value">Morning</span></div>
+      <div class="spec"><span class="spec-label">Onset</span><span class="spec-value">4–8 weeks to raise serum 25(OH)D; get a blood test before and after</span></div>
+    </div>
+
+    
+  <div class="block">
+    <h4 class="block-title">Benefits</h4>
+    <ul class="bullet"><li>Supports bone density by regulating calcium absorption</li><li>Modulates immune function; deficiency linked to frequent infections</li><li>May improve mood, especially in winter months</li><li>K2 directs calcium into bones and away from arteries</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">How it works</h4>
+    <p>Vitamin D3 (cholecalciferol) is converted to calcidiol in the liver, then calcitriol in the kidneys — a hormone that regulates hundreds of genes. K2 (MK-7) activates osteocalcin, which binds calcium into bone matrix.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Dose notes</h4>
+    <p>2000–4000 IU/day is a common maintenance range for adults with limited sun. Deficient individuals may need 5000+ IU under medical guidance. Target serum 25(OH)D of 30–50 ng/mL.</p>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Timing notes</h4>
+    <p>Take with the largest fatty meal of the day — it's fat-soluble.</p>
+  </div>
+    <div class="two-col">
+      
+  <div class="block">
+    <h4 class="block-title">Good for</h4>
+    <ul class="bullet"><li>Limited sun exposure (indoor work, northern latitudes, dark skin)</li><li>Over 50 (skin synthesizes less efficiently)</li><li>Bone density concerns</li><li>Frequent colds</li></ul>
+  </div>
+      
+  <div class="block">
+    <h4 class="block-title">Avoid if</h4>
+    <ul class="bullet"><li>You have hypercalcemia or sarcoidosis</li><li>You're on high-dose warfarin (K2 interacts)</li><li>You take thiazide diuretics (monitor calcium)</li></ul>
+  </div>
+    </div>
+    
+  <div class="block">
+    <h4 class="block-title">Side effects</h4>
+    <ul class="bullet"><li>Rare at sensible doses</li><li>Hypercalcemia with extreme doses (10,000+ IU/day sustained)</li><li>Nausea or constipation from excess</li></ul>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Common Forms</h4>
+    <div class="forms-grid">
+      
+        <div class="form-row">
+          <div class="form-name">D3 (cholecalciferol)</div>
+          <div class="form-note">Preferred — better raises blood levels than D2</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">D3 + K2 (MK-7) combo</div>
+          <div class="form-note">Synergistic for bone and arterial health</div>
+        </div>
+        <div class="form-row">
+          <div class="form-name">Liquid drops</div>
+          <div class="form-note">Flexible dosing; good for kids</div>
+        </div>
+    </div>
+  </div>
+    <div class="block"><h4 class="block-title">Stacks with</h4><p class="tags"><span class="tag">mag</span><span class="tag">omega3</span><span class="tag">multi</span></p></div>
+    
+    
+  <div class="block">
+    <h4 class="block-title">FAQ</h4>
+    
+      <div class="faq">
+        <div class="faq-q">Do I need K2 with my D3?</div>
+        <div class="faq-a">Not strictly required, but K2 helps direct the extra calcium D3 absorbs into bones rather than soft tissue. Cheap insurance.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Can I just get sun instead?</div>
+        <div class="faq-a">10–30 min midday sun on arms/legs a few times a week works for many — but skin tone, latitude, sunscreen, and season all reduce synthesis.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Is 5000 IU safe?</div>
+        <div class="faq-a">For most adults, yes — but get a 25(OH)D test to confirm you need it and aren't overshooting.</div>
+      </div>
+  </div>
+    
+  <div class="block">
+    <h4 class="block-title">Sources</h4>
+    <ul class="sources">
+      <li><span class="src-title">NIH ODS — Vitamin D</span><br/><span class="src-url">https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="page back">
+    <div class="retro-grid" aria-hidden="true"></div>
+    <div class="back-inner">
+      <p class="eyebrow">Fin.</p>
+      <h2 class="back-title">Your stack,<br/>dialed in.</h2>
+      <p class="back-body">
+        Stack It Up builds personalized supplement routines backed by research —
+        not hype. Take the quiz, get your tailored stack, and chat with our
+        AI supplement expert any time.
+      </p>
+      <div class="back-cta">
+        <div class="back-brand">STACKITUP</div>
+        <div class="back-url">stackitup.app</div>
+      </div>
+      <p class="disclaimer">
+        This guide is for educational purposes and is not medical advice.
+        Supplements can interact with medications and conditions — consult a
+        qualified healthcare provider before starting any new supplement.
+      </p>
+    </div>
+  </section>
+</body>
+</html>
