@@ -104,6 +104,11 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;}else{document.documentElement.dataset.theme='dark';}var d=localStorage.getItem('dosePref');document.documentElement.dataset.dosePref=(d==='si')?'si':'native';}catch(e){document.documentElement.dataset.theme='dark';document.documentElement.dataset.dosePref='native';}})();`,
           }}
         />
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="f4ff3dcd-8b31-4dfe-84fe-93dfaa1d90d4"
+        />
       </head>
       <body suppressHydrationWarning>
         <a
