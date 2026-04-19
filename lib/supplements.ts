@@ -116,23 +116,33 @@ export function buildStack(
 
   if (a.goals.includes("sleep") || a.sleepQuality === "poor") {
     add("mag");
+    add("glycine");
     if (a.sleepQuality === "poor") add("mel");
   }
 
-  if (a.goals.includes("focus")) add("caff-lth");
+  if (a.goals.includes("focus")) {
+    add("caff-lth");
+    add("lions");
+  }
 
   if (a.goals.includes("energy") && !a.goals.includes("focus")) {
     add("caff-lth");
   }
 
+  if (a.goals.includes("energy") && a.ageGroup !== "under30") {
+    add("coq10");
+  }
+
   if (a.goals.includes("muscle") || a.activity === "heavy") {
     add("creatine");
     add("whey");
+    add("citrulline");
   }
 
   if (a.goals.includes("stress")) {
     add("ash");
     add("mag");
+    add("ltheanine");
   }
 
   if (a.goals.includes("immunity")) {
