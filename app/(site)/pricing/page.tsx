@@ -165,7 +165,26 @@ export default async function PricingPage() {
                       label="Manage subscription"
                     />
                   ) : plan.name === "Pro" ? (
-                    <UpgradeButton signedIn={Boolean(user)} />
+                    <>
+                      <UpgradeButton signedIn={Boolean(user)} />
+                      <p className="mt-3 text-[11px] text-text/50 leading-relaxed">
+                        By subscribing you agree to our{" "}
+                        <Link
+                          href="/terms"
+                          className="underline hover:text-accent"
+                        >
+                          Terms
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          href="/refund"
+                          className="underline hover:text-accent"
+                        >
+                          Refund Policy
+                        </Link>
+                        . Cancel anytime from settings.
+                      </p>
+                    </>
                   ) : plan.disabled ? (
                     <span className="inline-flex items-center justify-center w-full h-12 border-2 border-text/20 font-display text-xs uppercase tracking-wider text-text/50">
                       {plan.cta.label}

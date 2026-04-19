@@ -69,8 +69,9 @@ export default function PrivacyPage() {
             <h2 className="font-display text-xl text-primary mb-3">Who we share with</h2>
             <p>
               Service providers that make the site work: Supabase (auth, database, storage),
-              Vercel (hosting), Google (OAuth sign-in), and Umami (analytics). Each only gets
-              what they need to do their job.
+              Vercel (hosting), Google (OAuth sign-in), Stripe (payments — card details are
+              handled directly by Stripe and never touch our servers), and Umami (analytics).
+              Each only gets what they need to do their job.
             </p>
           </section>
 
