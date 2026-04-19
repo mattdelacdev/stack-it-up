@@ -42,6 +42,9 @@ export default async function AdminLayout({
             <Link href="/admin/profiles" className="hover:text-accent">
               PROFILES
             </Link>
+            <Link href="/admin/feedback" className="hover:text-accent">
+              FEEDBACK
+            </Link>
           </nav>
         </div>
       </div>

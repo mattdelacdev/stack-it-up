@@ -8,6 +8,22 @@ export default function SiteFooter() {
   const topCompare = comparePairs.slice(0, 8);
   return (
     <footer className="relative z-10 border-t-4 border-primary/30 bg-bg-deep/40 mt-auto">
+      <div className="border-b-2 border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-6 sm:flex-row">
+          <div className="text-center sm:text-left">
+            <p className="font-display text-xs uppercase tracking-[0.3em] text-accent">
+              Got thoughts?
+            </p>
+            <p className="mt-1 font-display text-lg text-text">
+              Help us build a better stack —{" "}
+              <span className="text-gradient">send feedback</span>.
+            </p>
+          </div>
+          <Link href="/feedback" className="btn-accent !px-6 !py-3">
+            Send Feedback →
+          </Link>
+        </div>
+      </div>
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-1">
@@ -125,6 +141,11 @@ export default function SiteFooter() {
               <li>
                 <Link href="/#newsletter" className="text-text/75 hover:text-accent transition-colors">
                   Newsletter
+                </Link>
+              </li>
+              <li>
+                <Link href="/feedback" className="text-text/75 hover:text-accent transition-colors">
+                  Feedback
                 </Link>
               </li>
             </ul>
