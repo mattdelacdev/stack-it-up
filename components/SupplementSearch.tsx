@@ -4,13 +4,36 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
+import { fetchFeaturedStacks, type FeaturedStackSummary } from "@/lib/featured-stacks";
+import { benefitList } from "@/lib/benefits";
+
+type ResultKind = "supplement" | "stack" | "benefit";
+
+type Result = {
+  kind: ResultKind;
+  id: string;
+  href: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+};
+
+const KIND_LABEL: Record<ResultKind, string> = {
+  supplement: "Supplements",
+  stack: "Featured stacks",
+  benefit: "Benefits",
+};
+
+const KIND_ORDER: ResultKind[] = ["stack", "benefit", "supplement"];
 
 export default function SupplementSearch() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState("");
-  const [items, setItems] = useState<Supplement[] | null>(null);
+  const [supplements, setSupplements] = useState<Supplement[] | null>(null);
+  const [stacks, setStacks] = useState<FeaturedStackSummary[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -18,13 +41,15 @@ export default function SupplementSearch() {
   }, []);
 
   async function ensureLoaded() {
-    if (items || loading) return;
+    if ((supplements && stacks) || loading) return;
     setLoading(true);
     try {
-      const list = await fetchSupplementList();
-      setItems(list);
+      const [s, st] = await Promise.all([fetchSupplementList(), fetchFeaturedStacks()]);
+      setSupplements(s);
+      setStacks(st);
     } catch {
-      setItems([]);
+      setSupplements(supplements ?? []);
+      setStacks(stacks ?? []);
     } finally {
       setLoading(false);
     }
@@ -49,6 +74,7 @@ export default function SupplementSearch() {
       document.body.style.overflow = "hidden";
     } else {
       setQuery("");
+      setActiveIdx(0);
       document.body.style.overflow = "";
     }
     return () => {
@@ -57,25 +83,92 @@ export default function SupplementSearch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const results = useMemo(() => {
-    if (!items) return [];
+  const allResults = useMemo<Result[]>(() => {
+    const out: Result[] = [];
+    for (const s of stacks ?? []) {
+      out.push({
+        kind: "stack",
+        id: s.slug,
+        href: `/stacks/${s.slug}`,
+        title: s.name,
+        subtitle: s.tagline,
+        badge: "STACK",
+      });
+    }
+    for (const b of benefitList) {
+      out.push({
+        kind: "benefit",
+        id: b.slug,
+        href: `/optimize/${b.slug}`,
+        title: b.title,
+        subtitle: b.tagline,
+        badge: "OPTIMIZE",
+      });
+    }
+    for (const s of supplements ?? []) {
+      out.push({
+        kind: "supplement",
+        id: s.id,
+        href: `/supplements/${s.id}`,
+        title: s.name,
+        subtitle: s.why,
+        badge: s.tag.toUpperCase(),
+      });
+    }
+    return out;
+  }, [supplements, stacks]);
+
+  const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return items.slice(0, 10);
-    return items
-      .filter(
-        (s) =>
-          s.name.toLowerCase().includes(q) ||
-          s.why.toLowerCase().includes(q) ||
-          s.tag.toLowerCase().includes(q),
-      )
-      .slice(0, 20);
-  }, [items, query]);
+    const list = q
+      ? allResults.filter(
+          (r) =>
+            r.title.toLowerCase().includes(q) ||
+            r.subtitle.toLowerCase().includes(q) ||
+            r.badge.toLowerCase().includes(q),
+        )
+      : allResults;
+    return list.slice(0, 30);
+  }, [allResults, query]);
+
+  useEffect(() => {
+    setActiveIdx(0);
+  }, [query]);
+
+  const grouped = useMemo(() => {
+    const map = new Map<ResultKind, Result[]>();
+    for (const r of filtered) {
+      const list = map.get(r.kind) ?? [];
+      list.push(r);
+      map.set(r.kind, list);
+    }
+    return KIND_ORDER.filter((k) => map.has(k)).map((k) => ({
+      kind: k,
+      items: map.get(k)!,
+    }));
+  }, [filtered]);
+
+  function onInputKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIdx((i) => Math.min(i + 1, filtered.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIdx((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter") {
+      const chosen = filtered[activeIdx];
+      if (chosen) {
+        window.location.href = chosen.href;
+        setOpen(false);
+      }
+    }
+  }
 
   return (
     <>
       <button
         type="button"
-        aria-label="Search supplements"
+        aria-label="Search"
         onClick={() => setOpen(true)}
         className="inline-flex items-center justify-center w-10 h-10 border-2 border-primary/50 text-accent hover:bg-primary/10 transition-colors"
       >
@@ -89,7 +182,7 @@ export default function SupplementSearch() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Search supplements"
+          aria-label="Search StackItUp"
           className="fixed inset-0 z-[100] flex items-start justify-center px-4 pt-20 sm:pt-28"
         >
           <button
@@ -121,10 +214,14 @@ export default function SupplementSearch() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search supplements…"
+                onKeyDown={onInputKey}
+                placeholder="Search stacks, benefits, supplements…"
                 style={{ boxShadow: "none", outline: "none" }}
                 className="flex-1 bg-transparent font-mono text-sm text-text placeholder:text-text/40"
               />
+              <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-widest text-text/40 border border-text/15 px-1.5 py-0.5">
+                ⌘K
+              </span>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -136,36 +233,56 @@ export default function SupplementSearch() {
             </div>
 
             <div className="max-h-[60vh] overflow-y-auto">
-              {loading && !items ? (
+              {loading && !supplements ? (
                 <p className="px-4 py-6 text-sm font-mono text-text/60">Loading…</p>
-              ) : results.length === 0 ? (
+              ) : filtered.length === 0 ? (
                 <p className="px-4 py-6 text-sm font-mono text-text/60">
-                  No supplements match “{query}”.
+                  Nothing matches “{query}”.
                 </p>
               ) : (
-                <ul className="py-2">
-                  {results.map((s) => (
-                    <li key={s.id}>
-                      <Link
-                        href={`/supplements/${s.id}`}
-                        onClick={() => setOpen(false)}
-                        className="flex items-start justify-between gap-3 px-4 py-3 hover:bg-primary/10 group"
-                      >
-                        <span>
-                          <span className="block font-display text-sm text-accent group-hover:text-primary transition-colors">
-                            {s.name}
-                          </span>
-                          <span className="block text-xs text-text/60 mt-0.5 line-clamp-1">
-                            {s.why}
-                          </span>
-                        </span>
-                        <span className="font-display text-[9px] tracking-widest text-text/50 mt-1 shrink-0">
-                          {s.tag.toUpperCase()}
-                        </span>
-                      </Link>
-                    </li>
+                <div className="py-2">
+                  {grouped.map((group) => (
+                    <section key={group.kind} className="mb-2">
+                      <p className="px-4 pt-2 pb-1 font-display text-[10px] uppercase tracking-widest text-text/40">
+                        {KIND_LABEL[group.kind]}
+                      </p>
+                      <ul>
+                        {group.items.map((r) => {
+                          const globalIdx = filtered.indexOf(r);
+                          const isActive = globalIdx === activeIdx;
+                          return (
+                            <li key={`${r.kind}-${r.id}`}>
+                              <Link
+                                href={r.href}
+                                onClick={() => setOpen(false)}
+                                onMouseEnter={() => setActiveIdx(globalIdx)}
+                                className={`flex items-start justify-between gap-3 px-4 py-2.5 group ${
+                                  isActive ? "bg-primary/15" : "hover:bg-primary/10"
+                                }`}
+                              >
+                                <span>
+                                  <span
+                                    className={`block font-display text-sm transition-colors ${
+                                      isActive ? "text-primary" : "text-accent group-hover:text-primary"
+                                    }`}
+                                  >
+                                    {r.title}
+                                  </span>
+                                  <span className="block text-xs text-text/60 mt-0.5 line-clamp-1">
+                                    {r.subtitle}
+                                  </span>
+                                </span>
+                                <span className="font-display text-[9px] tracking-widest text-text/50 mt-1 shrink-0">
+                                  {r.badge}
+                                </span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           </div>

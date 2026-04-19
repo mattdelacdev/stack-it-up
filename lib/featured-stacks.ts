@@ -39,6 +39,39 @@ export async function fetchFeaturedStacks(): Promise<FeaturedStackSummary[]> {
   return (data ?? []) as FeaturedStackSummary[];
 }
 
+export async function fetchStacksForSupplement(
+  supplementId: string,
+): Promise<FeaturedStackSummary[]> {
+  const { data, error } = await getSupabase()
+    .from("featured_stack_items")
+    .select(
+      "position, featured_stacks!inner(slug, name, tagline, emoji, hero_accent, sort_order, is_published)",
+    )
+    .eq("supplement_id", supplementId)
+    .eq("featured_stacks.is_published", true)
+    .order("position");
+  if (error) throw error;
+  const rows = (data ?? []) as unknown as Array<{
+    featured_stacks: FeaturedStackSummary & { is_published: boolean };
+  }>;
+  const seen = new Set<string>();
+  const out: FeaturedStackSummary[] = [];
+  for (const row of rows) {
+    const s = row.featured_stacks;
+    if (!s || seen.has(s.slug)) continue;
+    seen.add(s.slug);
+    out.push({
+      slug: s.slug,
+      name: s.name,
+      tagline: s.tagline,
+      emoji: s.emoji,
+      hero_accent: s.hero_accent,
+      sort_order: s.sort_order,
+    });
+  }
+  return out.sort((a, b) => a.sort_order - b.sort_order);
+}
+
 export async function fetchFeaturedStack(slug: string): Promise<FeaturedStack | null> {
   const supabase = getSupabase();
   const [{ data: stack, error: stackErr }, { data: items, error: itemsErr }] =

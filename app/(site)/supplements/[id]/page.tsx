@@ -7,8 +7,21 @@ import {
   type Supplement,
 } from "@/lib/supplements";
 import { fetchViewerState } from "@/lib/stacks";
+import { fetchStacksForSupplement, type HeroAccent } from "@/lib/featured-stacks";
 import { toggleFavorite, toggleStack } from "./actions";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
+
+const STACK_ACCENT_TEXT: Record<HeroAccent, string> = {
+  primary: "text-primary",
+  secondary: "text-secondary",
+  accent: "text-accent",
+};
+
+const STACK_ACCENT_BORDER: Record<HeroAccent, string> = {
+  primary: "hover:border-primary",
+  secondary: "hover:border-secondary",
+  accent: "hover:border-accent",
+};
 
 const TAG_META: Record<Supplement["tag"], { label: string; className: string }> = {
   core: { label: "CORE", className: "bg-accent text-bg" },
@@ -61,10 +74,11 @@ export default async function SupplementPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [supplement, all, viewer] = await Promise.all([
+  const [supplement, all, viewer, inStacks] = await Promise.all([
     fetchSupplementById(id),
     fetchSupplementList(),
     fetchViewerState(id),
+    fetchStacksForSupplement(id).catch(() => []),
   ]);
   if (!supplement) notFound();
 
@@ -539,6 +553,42 @@ export default async function SupplementPage({
                       className={`font-display text-[10px] tracking-widest px-2 py-1 ${TAG_META[s.tag].className}`}
                     >
                       {TAG_META[s.tag].label}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {inStacks.length > 0 && (
+          <section className="mx-auto max-w-6xl px-6 py-16 border-t-4 border-primary/20">
+            <p className="font-display text-accent text-xs sm:text-sm uppercase tracking-[0.3em] mb-3">
+              Appears in
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-text">
+              Featured <span className="text-gradient">stacks</span> with {supplement.name}
+            </h2>
+            <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {inStacks.map((s) => (
+                <li key={s.slug}>
+                  <Link
+                    href={`/stacks/${s.slug}`}
+                    className={`card-retro block h-full transition-transform hover:-translate-y-1 ${STACK_ACCENT_BORDER[s.hero_accent]}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {s.emoji && (
+                        <span className="text-3xl leading-none" aria-hidden>
+                          {s.emoji}
+                        </span>
+                      )}
+                      <h3 className={`font-display text-lg ${STACK_ACCENT_TEXT[s.hero_accent]}`}>
+                        {s.name}
+                      </h3>
+                    </div>
+                    <p className="mt-3 text-sm text-text/75 leading-[1.6]">{s.tagline}</p>
+                    <span className="mt-4 block font-display text-xs uppercase tracking-wider text-primary/80">
+                      See the stack →
                     </span>
                   </Link>
                 </li>

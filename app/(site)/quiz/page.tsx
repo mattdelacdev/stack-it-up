@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { saveAnswers } from "@/lib/storage";
 import type {
   ActivityLevel,
@@ -14,6 +14,7 @@ import type {
 
 type Step = {
   id: keyof QuizAnswers;
+  label: string;
   question: string;
   subtitle: string;
   multi?: boolean;
@@ -23,6 +24,7 @@ type Step = {
 const STEPS: Step[] = [
   {
     id: "goals",
+    label: "Goals",
     question: "What do you want to optimize?",
     subtitle: "Pick as many as you want — we'll balance the stack.",
     multi: true,
@@ -39,6 +41,7 @@ const STEPS: Step[] = [
   },
   {
     id: "activity",
+    label: "Activity",
     question: "How active are you weekly?",
     subtitle: "Training load influences protein and electrolytes.",
     options: [
@@ -50,6 +53,7 @@ const STEPS: Step[] = [
   },
   {
     id: "diet",
+    label: "Diet",
     question: "How do you eat?",
     subtitle: "Diet style changes your baseline nutrient gaps.",
     options: [
@@ -61,6 +65,7 @@ const STEPS: Step[] = [
   },
   {
     id: "sleepQuality",
+    label: "Sleep",
     question: "How's your sleep lately?",
     subtitle: "Be honest — poor sleep unlocks different recommendations.",
     options: [
@@ -71,6 +76,7 @@ const STEPS: Step[] = [
   },
   {
     id: "sun",
+    label: "Sun",
     question: "How much sun do you get?",
     subtitle: "This drives your vitamin D need.",
     options: [
@@ -81,6 +87,7 @@ const STEPS: Step[] = [
   },
   {
     id: "ageGroup",
+    label: "Age",
     question: "Which age bracket?",
     subtitle: "Needs shift as you age — joints, recovery, density.",
     options: [
@@ -173,19 +180,50 @@ export default function QuizPage() {
     } else router.push("/");
   }
 
+  function goToStep(idx: number) {
+    if (idx === stepIdx) return;
+    // Only allow jumping to steps already completed (or the current one)
+    if (idx > stepIdx) return;
+    setDirection(idx > stepIdx ? "forward" : "back");
+    setStepIdx(idx);
+  }
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goBack();
+      } else if (e.key === "ArrowRight" || e.key === "Enter") {
+        if (canAdvance) {
+          e.preventDefault();
+          goNext();
+        }
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepIdx, canAdvance, answers]);
+
   return (
     <div className="relative min-h-screen">
       <div className="pointer-events-none absolute inset-0 retro-grid opacity-20" aria-hidden />
 
-      <div className="relative z-10 mx-auto flex max-w-4xl items-center justify-end px-6 pt-6">
-        <span className="font-mono text-lg text-text/70">
-          {stepIdx + 1}<span className="text-accent">/</span>{STEPS.length}
+      <div className="relative z-10 mx-auto flex max-w-4xl items-center justify-between gap-3 px-6 pt-6">
+        <span className="font-display text-accent text-xs sm:text-sm uppercase tracking-[0.2em]">
+          Step {stepIdx + 1} of {STEPS.length}
+          <span className="ml-2 text-text/60">· {step.label}</span>
+        </span>
+        <span className="font-mono text-sm text-text/60 hidden sm:inline">
+          {progress}%
         </span>
       </div>
 
       <main id="main" className="relative z-10 mx-auto max-w-4xl px-6 pb-20">
         <div
-          className="h-2 w-full bg-bg-deep border-2 border-primary/40 mb-10 sm:mb-14"
+          className="mt-4 h-2 w-full bg-bg-deep border-2 border-primary/40"
           role="progressbar"
           aria-valuenow={progress}
           aria-valuemin={0}
@@ -197,6 +235,34 @@ export default function QuizPage() {
             style={{ width: `${progress}%` }}
           />
         </div>
+
+        <ol className="mt-4 mb-10 sm:mb-14 flex flex-wrap gap-1.5" aria-label="Quiz steps">
+          {STEPS.map((s, i) => {
+            const isDone = i < stepIdx;
+            const isCurrent = i === stepIdx;
+            const clickable = i <= stepIdx;
+            return (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  onClick={() => goToStep(i)}
+                  disabled={!clickable}
+                  aria-current={isCurrent ? "step" : undefined}
+                  className={[
+                    "px-2.5 py-1 font-display text-[10px] sm:text-xs uppercase tracking-[0.18em] border-2 transition-colors",
+                    isCurrent
+                      ? "border-accent text-accent"
+                      : isDone
+                      ? "border-primary/60 text-text hover:border-accent hover:text-accent cursor-pointer"
+                      : "border-text/15 text-text/40 cursor-not-allowed",
+                  ].join(" ")}
+                >
+                  {s.label}
+                </button>
+              </li>
+            );
+          })}
+        </ol>
 
         <div
           key={step.id}
@@ -260,7 +326,7 @@ export default function QuizPage() {
               onClick={goBack}
               className="font-display text-sm uppercase tracking-wider text-text/70 hover:text-accent transition-colors py-2"
             >
-              ← Back
+              ← {stepIdx === 0 ? "Home" : "Back"}
             </button>
             <button
               type="button"

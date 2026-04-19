@@ -9,6 +9,7 @@ import {
 } from "@/lib/featured-stacks";
 import type { Supplement } from "@/lib/supplements";
 import { SITE_NAME } from "@/lib/site";
+import StackTimingNav from "@/components/StackTimingNav";
 
 const ACCENT_TEXT: Record<HeroAccent, string> = {
   primary: "text-primary",
@@ -164,11 +165,20 @@ export default async function FeaturedStackPage({
             Grouped by time of day. Tap any supplement for dose details and the science behind it.
           </p>
 
+          <StackTimingNav
+            sections={grouped.map((g) => ({
+              id: `timing-${g.timing}`,
+              label: TIMING_META[g.timing].label,
+              emoji: TIMING_META[g.timing].emoji,
+              accent: TIMING_META[g.timing].accent,
+            }))}
+          />
+
           <div className="mt-10 space-y-10">
             {grouped.map((group) => {
               const meta = TIMING_META[group.timing];
               return (
-                <div key={group.timing}>
+                <div key={group.timing} id={`timing-${group.timing}`} className="scroll-mt-24">
                   <div className="flex items-baseline gap-3">
                     <span className="text-2xl sm:text-3xl" aria-hidden>
                       {meta.emoji}
