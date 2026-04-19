@@ -12,26 +12,29 @@ export default function ShareBar({ url, title, description }: Props) {
   const [copied, setCopied] = useState(false);
 
   const encUrl = encodeURIComponent(url);
-  const encTitle = encodeURIComponent(title);
-  const encDesc = encodeURIComponent(description ?? "");
-  const encBody = encodeURIComponent(`${description ? description + "\n\n" : ""}${url}`);
+  const encTweet = encodeURIComponent(`${title}\n\n${url}`);
+  const encWa = encodeURIComponent(`${title} — ${url}`);
+  const encSubject = encodeURIComponent(title);
+  const encBody = encodeURIComponent(
+    `${title}\n\n${description ? description + "\n\n" : ""}${url}`,
+  );
 
   const links = [
     {
       name: "X",
-      href: `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`,
+      href: `https://x.com/intent/tweet?text=${encTweet}`,
     },
     {
       name: "LinkedIn",
-      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`,
+      href: `https://www.linkedin.com/feed/?shareActive=true&text=${encTweet}&shareUrl=${encUrl}`,
     },
     {
       name: "WhatsApp",
-      href: `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`,
+      href: `https://api.whatsapp.com/send?text=${encWa}`,
     },
     {
       name: "Email",
-      href: `mailto:?subject=${encTitle}&body=${encBody}`,
+      href: `mailto:?subject=${encSubject}&body=${encBody}`,
     },
   ];
 
