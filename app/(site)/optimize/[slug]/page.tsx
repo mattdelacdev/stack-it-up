@@ -95,15 +95,15 @@ export default async function BenefitPage({ params }: { params: Promise<{ slug: 
           >
             ← Back to benefits
           </Link>
-          <div className="mt-6 flex items-start gap-5 sm:gap-7">
-            <span className="text-6xl sm:text-7xl leading-none" aria-hidden>
+          <div className="mt-6 flex flex-col sm:flex-row items-start gap-4 sm:gap-7">
+            <span className="text-5xl sm:text-7xl leading-none" aria-hidden>
               {benefit.emoji}
             </span>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="font-display text-accent text-xs sm:text-sm uppercase tracking-[0.3em] mb-3">
                 What you can optimize
               </p>
-              <h1 className="font-display text-5xl sm:text-7xl text-text leading-[0.95]">
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl text-text leading-[0.95] break-words hyphens-auto">
                 {benefit.title}
               </h1>
               <p className="mt-4 text-lg sm:text-xl text-text/80">{benefit.tagline}</p>
