@@ -5,6 +5,7 @@ import Reveal from "@/components/Reveal";
 import { bestGoals, bestGoalList, type BestGoalSlug } from "@/lib/best";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
+import ShareBar from "@/components/ShareBar";
 
 export const revalidate = 3600;
 
@@ -127,8 +128,13 @@ export default async function BestGoalPage({
             ))}
           </div>
 
-          <div className="mt-10">
+          <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link href="/quiz" className="btn-primary">Build your stack →</Link>
+            <ShareBar
+              url={absoluteUrl(`/best/${g.slug}`)}
+              title={g.h1}
+              description={g.tagline}
+            />
           </div>
         </section>
 

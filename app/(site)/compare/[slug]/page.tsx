@@ -5,6 +5,7 @@ import Reveal from "@/components/Reveal";
 import { comparePairs, getComparePair } from "@/lib/compare";
 import { fetchSupplementList, type Supplement } from "@/lib/supplements";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
+import ShareBar from "@/components/ShareBar";
 
 export const revalidate = 3600;
 
@@ -112,6 +113,14 @@ export default async function ComparePage({
               {pair.verdict}
             </p>
             <p className="mt-4 text-text/80 leading-[1.7]">{pair.summary}</p>
+          </div>
+
+          <div className="mt-8">
+            <ShareBar
+              url={absoluteUrl(`/compare/${pair.slug}`)}
+              title={pair.question}
+              description={pair.verdict}
+            />
           </div>
         </section>
 

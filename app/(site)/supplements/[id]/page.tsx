@@ -11,6 +11,7 @@ import { fetchViewerState } from "@/lib/stacks";
 import { fetchStacksForSupplement, type HeroAccent } from "@/lib/featured-stacks";
 import { DualDose, hasDoseConversion } from "@/lib/dose";
 import InlineDoseToggle from "@/components/InlineDoseToggle";
+import ShareBar from "@/components/ShareBar";
 import { toggleFavorite, toggleStack } from "./actions";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
@@ -306,6 +307,14 @@ export default async function SupplementPage({
                 SIGN IN TO SAVE
               </Link>
             )}
+          </div>
+
+          <div className="mt-8">
+            <ShareBar
+              url={url}
+              title={`${supplement.name} — ${supplement.why.slice(0, 80)}`}
+              description={supplement.why}
+            />
           </div>
         </section>
 
