@@ -12,31 +12,49 @@ export default function ShareBar({ url, title, description }: Props) {
   const [copied, setCopied] = useState(false);
 
   const encUrl = encodeURIComponent(url);
-  const encTweet = encodeURIComponent(`${title}\n\n${url}`);
-  const encWa = encodeURIComponent(`${title} — ${url}`);
+  const encTweet = encodeURIComponent(`${title} ${url}`);
+  const encWa = encodeURIComponent(`${title} ${url}`);
   const encSubject = encodeURIComponent(title);
   const encBody = encodeURIComponent(
-    `${title}\n\n${description ? description + "\n\n" : ""}${url}`,
+    `${description ? description + "\n\n" : ""}${url}`,
   );
 
   const links = [
     {
       name: "X",
-      href: `https://x.com/intent/tweet?text=${encTweet}`,
+      href: `https://twitter.com/intent/tweet?text=${encTweet}`,
+      popup: true,
     },
     {
       name: "LinkedIn",
-      href: `https://www.linkedin.com/feed/?shareActive=true&text=${encTweet}&shareUrl=${encUrl}`,
+      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`,
+      popup: true,
     },
     {
       name: "WhatsApp",
       href: `https://api.whatsapp.com/send?text=${encWa}`,
+      popup: true,
     },
     {
       name: "Email",
       href: `mailto:?subject=${encSubject}&body=${encBody}`,
+      popup: false,
     },
   ];
+
+  function openShare(e: React.MouseEvent<HTMLAnchorElement>, href: string, popup: boolean) {
+    if (!popup) return;
+    e.preventDefault();
+    const w = 600;
+    const h = 600;
+    const y = window.top ? window.top.outerHeight / 2 + window.top.screenY - h / 2 : 0;
+    const x = window.top ? window.top.outerWidth / 2 + window.top.screenX - w / 2 : 0;
+    window.open(
+      href,
+      "share",
+      `popup=yes,width=${w},height=${h},left=${x},top=${y},noopener,noreferrer`,
+    );
+  }
 
   async function copy() {
     try {
@@ -60,8 +78,9 @@ export default function ShareBar({ url, title, description }: Props) {
         <a
           key={l.name}
           href={l.href}
-          target={l.name === "Email" ? undefined : "_blank"}
+          target={l.popup ? "_blank" : undefined}
           rel="noopener noreferrer"
+          onClick={(e) => openShare(e, l.href, l.popup)}
           className={btn}
         >
           {l.name.toUpperCase()}
