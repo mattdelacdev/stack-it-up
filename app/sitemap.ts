@@ -3,6 +3,8 @@ import { SITE_URL } from "@/lib/site";
 import { fetchSupplementList } from "@/lib/supplements";
 import { fetchFeaturedStacks } from "@/lib/featured-stacks";
 import { benefitList } from "@/lib/benefits";
+import { bestGoalList } from "@/lib/best";
+import { comparePairs } from "@/lib/compare";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export const revalidate = 3600;
@@ -15,10 +17,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/quiz`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/supplements`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/stacks`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/best`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/compare`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 
   const benefitRoutes: MetadataRoute.Sitemap = benefitList.map((b) => ({
     url: `${SITE_URL}/optimize/${b.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  const bestRoutes: MetadataRoute.Sitemap = bestGoalList.map((g) => ({
+    url: `${SITE_URL}/best/${g.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  const compareRoutes: MetadataRoute.Sitemap = comparePairs.map((p) => ({
+    url: `${SITE_URL}/compare/${p.slug}`,
     lastModified: now,
     changeFrequency: "monthly",
     priority: 0.7,
@@ -71,6 +89,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...benefitRoutes,
+    ...bestRoutes,
+    ...compareRoutes,
     ...supplementRoutes,
     ...stackRoutes,
     ...profileRoutes,

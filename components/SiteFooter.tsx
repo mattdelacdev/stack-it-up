@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { benefitList } from "@/lib/benefits";
+import { bestGoalList } from "@/lib/best";
+import { comparePairs } from "@/lib/compare";
 
 export default function SiteFooter() {
+  const topBest = bestGoalList.slice(0, 8);
+  const topCompare = comparePairs.slice(0, 8);
   return (
     <footer className="relative z-10 border-t-4 border-primary/30 bg-bg-deep/40 mt-auto">
       <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-1">
             <Link
               href="/"
@@ -37,6 +41,59 @@ export default function SiteFooter() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.2em] text-accent mb-4">
+              Best for
+            </p>
+            <ul className="space-y-2.5">
+              {topBest.map((g) => (
+                <li key={g.slug}>
+                  <Link
+                    href={`/best/${g.slug}`}
+                    className="text-sm text-text/75 hover:text-accent transition-colors inline-flex items-center gap-2"
+                  >
+                    <span aria-hidden>{g.emoji}</span>
+                    {g.title.replace(/^Best Supplements for /i, "")}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/best"
+                  className="text-xs text-accent hover:text-primary font-display uppercase tracking-wider"
+                >
+                  See all →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.2em] text-accent mb-4">
+              Compare
+            </p>
+            <ul className="space-y-2.5">
+              {topCompare.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/compare/${p.slug}`}
+                    className="text-sm text-text/75 hover:text-accent transition-colors"
+                  >
+                    {p.slug.replace(/-vs-/g, " vs ").replace(/-/g, " ")}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/compare"
+                  className="text-xs text-accent hover:text-primary font-display uppercase tracking-wider"
+                >
+                  See all →
+                </Link>
+              </li>
             </ul>
           </div>
 
