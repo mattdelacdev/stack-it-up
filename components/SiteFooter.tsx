@@ -82,6 +82,12 @@ export default function SiteFooter() {
               starting any new supplement — especially if you&apos;re pregnant, nursing, or on
               medication.
             </p>
+            <Link
+              href="/privacy"
+              className="mt-4 inline-block text-xs text-text/75 hover:text-accent transition-colors underline"
+            >
+              Privacy Policy
+            </Link>
           </div>
         </div>
 
