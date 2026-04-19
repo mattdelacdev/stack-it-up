@@ -232,6 +232,52 @@ export const comparePairs: ComparePair[] = [
     ],
   },
   {
+    slug: "collagen-vs-omega3",
+    a: "col",
+    b: "omega3",
+    question: "Collagen vs omega-3 for skin: which works better?",
+    verdict: "Collagen for structure and elasticity. Omega-3 for inflammation and barrier.",
+    summary:
+      "These target different skin problems. Collagen peptides rebuild dermal structure and elasticity over 8–12 weeks. Omega-3 calms the inflammation behind eczema, acne, and rosacea flares. Neither replaces SPF or a retinoid.",
+    pickA: {
+      title: "Pick collagen if…",
+      copy: "Your concern is elasticity, fine lines, or a loss of skin bounce. 10 g hydrolyzed peptides with vitamin C, daily, for 8+ weeks.",
+    },
+    pickB: {
+      title: "Pick omega-3 if…",
+      copy: "Your concern is redness, flares, or barrier dysfunction — eczema, acne, rosacea. 2–3 g combined EPA + DHA daily.",
+    },
+    bothWhen:
+      "They solve different problems. Many skin stacks run both — collagen for structure, omega-3 for the inflammation underneath.",
+    faq: [
+      { q: "Which works faster?", a: "Omega-3 shifts inflammation markers in 2–4 weeks. Collagen changes elasticity in 8–12 weeks. Different timelines, different endpoints." },
+      { q: "Do I still need sunscreen?", a: "Yes. UV damage destroys collagen faster than any supplement can build it. SPF is the non-negotiable foundation." },
+    ],
+  },
+  {
+    slug: "collagen-vs-creatine",
+    a: "col",
+    b: "creatine",
+    question: "Collagen vs creatine: do I need both?",
+    verdict: "Yes, if budget allows — they solve different problems.",
+    summary:
+      "Creatine is for muscle power, strength, and cognition. Collagen is for skin, tendon, and joint tissue. They do not compete — the only overlap is that both support training recovery, from opposite directions.",
+    pickA: {
+      title: "Pick collagen if…",
+      copy: "You care about skin aging, joint stiffness, or tendon resilience. 10–15 g hydrolyzed peptides with vitamin C.",
+    },
+    pickB: {
+      title: "Pick creatine if…",
+      copy: "You lift, sprint, or want the best-evidenced cognitive edge supplement on the market. 5 g monohydrate daily.",
+    },
+    bothWhen:
+      "Common athlete stack — creatine for the muscle, collagen for the connective tissue that holds it all together. No interaction, take them together in one shake.",
+    faq: [
+      { q: "Can I mix them in one drink?", a: "Yes. Neither is pH- or time-sensitive. Creatine + collagen + vitamin C in water or coffee is a clean daily dose." },
+      { q: "Which has more trials behind it?", a: "Creatine — by a wide margin. It is one of the most-studied supplements ever. Collagen's evidence base is newer but has grown substantially since 2015." },
+    ],
+  },
+  {
     slug: "caffeine-ltheanine-vs-ashwagandha",
     a: "caff-lth",
     b: "ash",
