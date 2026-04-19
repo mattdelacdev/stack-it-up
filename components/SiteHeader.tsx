@@ -44,7 +44,7 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
           STACK<span className="text-accent">·</span>IT<span className="text-accent">·</span>UP
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-2">
+        <nav className="hidden xl:flex items-center gap-2">
           <Link
             href="/stacks"
             className="font-display text-xs uppercase tracking-wider text-text/80 hover:text-accent transition-colors px-3 py-2"
@@ -87,7 +87,7 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
           <AuthNav user={authUser} />
         </nav>
 
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="xl:hidden flex items-center gap-2">
           <SupplementSearch />
           <ThemeToggle />
 
@@ -124,7 +124,7 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="lg:hidden border-t-2 border-primary/30 bg-bg-deep/95 backdrop-blur-md animate-fade-in-down origin-top"
+          className="xl:hidden border-t-2 border-primary/30 bg-bg-deep/95 backdrop-blur-md animate-fade-in-down origin-top"
         >
           <div className="mx-auto max-w-6xl px-6 py-4">
             <div className="flex flex-col gap-2">
