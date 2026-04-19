@@ -67,6 +67,11 @@ export function hasStructuredDose(s: DoseFields): boolean {
   return s.dose_low != null && !!s.dose_unit;
 }
 
+export function hasDoseConversion(s: DoseFields): boolean {
+  if (!hasStructuredDose(s)) return false;
+  return formatDose(s, "native") !== formatDose(s, "si");
+}
+
 /**
  * Renders both "native" and "SI" dose variants so the page can toggle via CSS
  * without re-rendering. The html[data-dose-pref] attribute (set in

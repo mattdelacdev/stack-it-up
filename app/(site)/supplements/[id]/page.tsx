@@ -8,7 +8,8 @@ import {
 } from "@/lib/supplements";
 import { fetchViewerState } from "@/lib/stacks";
 import { fetchStacksForSupplement, type HeroAccent } from "@/lib/featured-stacks";
-import { DualDose } from "@/lib/dose";
+import { DualDose, hasDoseConversion } from "@/lib/dose";
+import InlineDoseToggle from "@/components/InlineDoseToggle";
 import { toggleFavorite, toggleStack } from "./actions";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
@@ -200,9 +201,14 @@ export default async function SupplementPage({
 
           <dl className="mt-10 grid gap-5 sm:grid-cols-3 max-w-3xl">
             <div className="card-retro">
-              <dt className="font-display text-accent text-xs uppercase tracking-wider">
-                Typical dose
-              </dt>
+              <div className="flex items-start justify-between gap-2">
+                <dt className="font-display text-accent text-xs uppercase tracking-wider">
+                  Typical dose
+                </dt>
+                {hasDoseConversion(supplement) && (
+                  <InlineDoseToggle nativeUnit={supplement.dose_unit ?? ""} />
+                )}
+              </div>
               <dd className="mt-2 text-text/85 text-lg"><DualDose s={supplement} /></dd>
             </div>
             <div className="card-retro">

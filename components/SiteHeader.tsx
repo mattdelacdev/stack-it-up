@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import SupplementSearch from "./SupplementSearch";
 import ThemeToggle from "./ThemeToggle";
-import DoseUnitToggle from "./DoseUnitToggle";
 import AuthNav from "./AuthNav";
 
 type AuthUser = {
@@ -67,7 +66,6 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
             Newsletter
           </Link>
 
-          <DoseUnitToggle />
           <ThemeToggle />
 
           <Link
@@ -84,7 +82,6 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
 
         <div className="lg:hidden flex items-center gap-2">
           <SupplementSearch />
-          <DoseUnitToggle />
           <ThemeToggle />
 
         <button
