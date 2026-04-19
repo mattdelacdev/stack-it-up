@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 export async function getServerSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -28,7 +29,7 @@ export async function getServerSupabase() {
   });
 }
 
-export async function getCurrentProfile() {
+export const getCurrentProfile = cache(async () => {
   const supabase = await getServerSupabase();
   const {
     data: { user },
@@ -42,7 +43,7 @@ export async function getCurrentProfile() {
     .eq("id", user.id)
     .maybeSingle();
   return { user, profile };
-}
+});
 
 export function resolveAvatarUrl(
   profile: {

@@ -17,6 +17,8 @@ const STACK_ACCENT_BORDER: Record<HeroAccent, string> = {
   accent: "hover:border-accent",
 };
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Build Your Personalized Supplement Stack",
   description:

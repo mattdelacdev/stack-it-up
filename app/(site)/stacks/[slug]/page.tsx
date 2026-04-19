@@ -12,6 +12,8 @@ import { SITE_NAME } from "@/lib/site";
 import StackTimingNav from "@/components/StackTimingNav";
 import { DualDose } from "@/lib/dose";
 
+export const revalidate = 3600;
+
 const ACCENT_TEXT: Record<HeroAccent, string> = {
   primary: "text-primary",
   secondary: "text-secondary",
