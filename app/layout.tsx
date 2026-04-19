@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bungee, VT323, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
+import ChatBot from "@/components/ChatBot";
 
 const display = Bungee({
   subsets: ["latin"],
@@ -126,6 +127,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
+        <ChatBot />
       </body>
     </html>
   );
