@@ -2,17 +2,31 @@ import { createHash } from "node:crypto";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export type Endpoint = "chat" | "stack";
+export type Tier = "free" | "pro";
 
-const LIMITS: Record<Endpoint, { hour: number; day: number }> = {
-  chat: { hour: 10, day: 30 },
-  stack: { hour: 2, day: 5 },
+const LIMITS: Record<Endpoint, Record<Tier, { hour: number; day: number }>> = {
+  chat: {
+    free: { hour: 1, day: 1 },
+    pro: { hour: 5, day: 5 },
+  },
+  stack: {
+    free: { hour: 2, day: 5 },
+    pro: { hour: 5, day: 15 },
+  },
 };
+
+const ANON_LIMITS: Record<Endpoint, { hour: number; day: number }> =
+  {
+    chat: LIMITS.chat.free,
+    stack: LIMITS.stack.free,
+  };
 
 export type RateLimitResult = {
   allowed: boolean;
   retryAfterSec: number;
   remainingHour: number;
   remainingDay: number;
+  tier: Tier | "admin" | "anon";
 };
 
 function getIp(req: Request): string {
@@ -40,27 +54,33 @@ export async function checkAndRecord(
   } = await supabase.auth.getUser();
 
   let identifier: string;
+  let limits: { hour: number; day: number };
+  let callerTier: Tier | "anon" = "anon";
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, tier")
       .eq("id", user.id)
       .maybeSingle();
     if (profile?.role === "admin") {
-      const limits = LIMITS[endpoint];
+      const pro = LIMITS[endpoint].pro;
       return {
         allowed: true,
         retryAfterSec: 0,
-        remainingHour: limits.hour,
-        remainingDay: limits.day,
+        remainingHour: pro.hour,
+        remainingDay: pro.day,
+        tier: "admin",
       };
     }
+    callerTier = profile?.tier === "pro" ? "pro" : "free";
+    limits = LIMITS[endpoint][callerTier];
     identifier = `user:${user.id}`;
   } else {
+    limits = ANON_LIMITS[endpoint];
     identifier = `ip:${hashIp(getIp(req))}`;
   }
 
-  const { hour, day } = LIMITS[endpoint];
+  const { hour, day } = limits;
   const { data, error } = await supabase.rpc("check_ai_rate_limit", {
     p_identifier: identifier,
     p_endpoint: endpoint,
@@ -70,7 +90,13 @@ export async function checkAndRecord(
 
   if (error || !data || data.length === 0) {
     // Fail open — better to serve than to hard-block on a DB hiccup.
-    return { allowed: true, retryAfterSec: 0, remainingHour: hour, remainingDay: day };
+    return {
+      allowed: true,
+      retryAfterSec: 0,
+      remainingHour: hour,
+      remainingDay: day,
+      tier: callerTier,
+    };
   }
 
   const row = data[0] as {
@@ -84,7 +110,34 @@ export async function checkAndRecord(
     retryAfterSec: row.retry_after_sec,
     remainingHour: row.remaining_hour,
     remainingDay: row.remaining_day,
+    tier: callerTier,
   };
+}
+
+export async function getStatus(
+  endpoint: Endpoint,
+): Promise<{ tier: Tier | "admin" | "anon"; dayLimit: number }> {
+  const supabase = await getServerSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { tier: "anon", dayLimit: ANON_LIMITS[endpoint].day };
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, tier")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profile?.role === "admin") {
+    return { tier: "admin", dayLimit: LIMITS[endpoint].pro.day };
+  }
+
+  const tier: Tier = profile?.tier === "pro" ? "pro" : "free";
+  return { tier, dayLimit: LIMITS[endpoint][tier].day };
 }
 
 export function rateLimitMessage(result: RateLimitResult): string {

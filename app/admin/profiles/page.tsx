@@ -9,6 +9,7 @@ interface Profile {
   first_name: string | null;
   last_name: string | null;
   role: "user" | "admin";
+  tier: "free" | "pro";
   created_at: string | null;
 }
 
@@ -19,12 +20,13 @@ export default function ProfilesAdmin() {
   const [editing, setEditing] = useState<Profile | null>(null);
   const [query, setQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
+  const [tierFilter, setTierFilter] = useState("");
 
   async function load() {
     setLoading(true);
     const { data, error } = await getSupabase()
       .from("profiles")
-      .select("id, email, first_name, last_name, role, created_at")
+      .select("id, email, first_name, last_name, role, tier, created_at")
       .order("created_at", { ascending: false });
     setLoading(false);
     if (error) {
@@ -45,6 +47,7 @@ export default function ProfilesAdmin() {
         first_name: p.first_name,
         last_name: p.last_name,
         role: p.role,
+        tier: p.tier,
       })
       .eq("id", p.id);
     if (error) {
@@ -58,6 +61,7 @@ export default function ProfilesAdmin() {
   const q = query.trim().toLowerCase();
   const filtered = rows.filter((r) => {
     if (roleFilter && r.role !== roleFilter) return false;
+    if (tierFilter && r.tier !== tierFilter) return false;
     if (!q) return true;
     return (
       r.email.toLowerCase().includes(q) ||
@@ -100,6 +104,15 @@ export default function ProfilesAdmin() {
               <option value="user">user</option>
               <option value="admin">admin</option>
             </select>
+            <select
+              value={tierFilter}
+              onChange={(e) => setTierFilter(e.target.value)}
+              className={inputCls + " max-w-[200px]"}
+            >
+              <option value="">All tiers</option>
+              <option value="free">free</option>
+              <option value="pro">pro</option>
+            </select>
             <span className="self-center font-display text-xs tracking-[0.2em] text-text/60">
               {filtered.length} / {rows.length}
             </span>
@@ -112,6 +125,7 @@ export default function ProfilesAdmin() {
                   <th className="px-4 py-3 text-left">FIRST</th>
                   <th className="px-4 py-3 text-left">LAST</th>
                   <th className="px-4 py-3 text-left">ROLE</th>
+                  <th className="px-4 py-3 text-left">TIER</th>
                   <th className="px-4 py-3 text-left">CREATED</th>
                   <th className="px-4 py-3 text-right">ACTIONS</th>
                 </tr>
@@ -119,7 +133,7 @@ export default function ProfilesAdmin() {
               <tbody>
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="px-4 py-6 text-center text-text/60">
+                    <td colSpan={7} className="px-4 py-6 text-center text-text/60">
                       No matches.
                     </td>
                   </tr>
@@ -138,6 +152,17 @@ export default function ProfilesAdmin() {
                         }
                       >
                         {r.role.toUpperCase()}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={
+                          r.tier === "pro"
+                            ? "font-display text-xs tracking-[0.2em] text-accent"
+                            : "font-display text-xs tracking-[0.2em] text-text/70"
+                        }
+                      >
+                        {(r.tier ?? "free").toUpperCase()}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-text/60">
@@ -224,6 +249,18 @@ function ProfileModal({
             >
               <option value="user">user</option>
               <option value="admin">admin</option>
+            </select>
+          </Field>
+          <Field label="Tier">
+            <select
+              value={draft.tier}
+              onChange={(e) =>
+                setDraft({ ...draft, tier: e.target.value as Profile["tier"] })
+              }
+              className={inputCls}
+            >
+              <option value="free">free</option>
+              <option value="pro">pro</option>
             </select>
           </Field>
         </div>

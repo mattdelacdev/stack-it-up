@@ -1,6 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
-import { checkAndRecord, rateLimitMessage } from "@/lib/rate-limit";
+import { checkAndRecord, getStatus, rateLimitMessage } from "@/lib/rate-limit";
+
+export async function GET() {
+  const status = await getStatus("chat");
+  return NextResponse.json(status, {
+    headers: { "Cache-Control": "no-store" },
+  });
+}
 
 export const runtime = "nodejs";
 
@@ -86,6 +93,8 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
         "Cache-Control": "no-cache, no-transform",
+        "X-User-Tier": rl.tier,
+        "X-Remaining-Day": String(rl.remainingDay),
       },
     });
   } catch (err) {

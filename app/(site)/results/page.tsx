@@ -260,7 +260,27 @@ export default function ResultsPage() {
             })}
         </div>
 
-        <section className="mt-16 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-t-4 border-primary/30 pt-10">
+        <section className="mt-16 card-retro border-accent">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="max-w-xl">
+              <p className="font-display text-[10px] uppercase tracking-[0.3em] text-accent">
+                ⚡ Got more questions?
+              </p>
+              <h3 className="mt-2 font-display text-2xl text-text">
+                Chat with the Stack Expert.
+              </h3>
+              <p className="mt-2 text-text/70 text-sm">
+                Free gets 1 chat per day. Go Pro for 5 daily chats, saved
+                stacks synced across devices, and early access to new stacks.
+              </p>
+            </div>
+            <Link href="/pricing" className="btn-accent">
+              See Pro plans →
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-10 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-t-4 border-primary/30 pt-10">
           <p className="text-text/60 text-sm max-w-md">
             <span className="text-accent font-bold">Heads up:</span> this is educational
             only, not medical advice. Supplements can interact with meds and conditions.

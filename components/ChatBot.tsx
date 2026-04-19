@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-type Msg = { role: "user" | "model"; text: string };
+type Msg = { role: "user" | "model" | "upsell"; text: string };
 
 const GREETING: Msg = {
   role: "model",
@@ -19,6 +19,7 @@ export default function ChatBot() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tier, setTier] = useState<"free" | "pro" | "admin" | "anon" | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -50,6 +51,21 @@ export default function ChatBot() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  useEffect(() => {
+    if (!open || tier) return;
+    let cancelled = false;
+    fetch("/api/chat", { method: "GET" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (cancelled || !d) return;
+        setTier(d.tier);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [open, tier]);
+
   function clearHistory() {
     setMessages([GREETING]);
     setError(null);
@@ -78,9 +94,29 @@ export default function ChatBot() {
         body: JSON.stringify({ messages: history }),
       });
       if (!res.ok || !res.body) {
-        const msg = await res.text().catch(() => "Request failed");
-        throw new Error(msg || "Request failed");
+        const body = await res.text().catch(() => "");
+        if (res.status === 429) {
+          setMessages((prev) => [
+            ...prev.slice(0, -1),
+            {
+              role: "upsell",
+              text:
+                "You've used your free question for today. Upgrade to Pro for 5 chats per day.",
+            },
+          ]);
+          return;
+        }
+        let msg = "Request failed";
+        try {
+          const j = JSON.parse(body);
+          if (j?.error) msg = j.error;
+        } catch {
+          if (body) msg = body;
+        }
+        throw new Error(msg);
       }
+      const tier = res.headers.get("x-user-tier");
+      const remainingDay = Number(res.headers.get("x-remaining-day") ?? "0");
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let acc = "";
@@ -93,6 +129,18 @@ export default function ChatBot() {
           copy[copy.length - 1] = { role: "model", text: acc };
           return copy;
         });
+      }
+      if (tier === "free" || tier === "anon") {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "upsell",
+            text:
+              remainingDay <= 0
+                ? "You've used your free question for today. Upgrade to Pro for 5 chats per day."
+                : "Enjoying the expert? Pro gives you 5 chats per day instead of 1.",
+          },
+        ]);
       }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Something went wrong";
@@ -162,34 +210,63 @@ export default function ChatBot() {
             </div>
           </div>
 
+          {tier !== "pro" && tier !== "admin" && (
+            <a
+              href="/pricing"
+              className="block border-b-2 border-accent/50 bg-gradient-to-r from-primary/20 to-accent/20 px-4 py-2 text-xs font-display uppercase tracking-[0.15em] text-accent hover:bg-accent/20 transition-colors"
+            >
+              ⚡ Free: 1 chat/day · Go Pro for 5 →
+            </a>
+          )}
+
           <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
           >
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-              >
+            {messages.map((m, i) => {
+              if (m.role === "upsell") {
+                return (
+                  <div key={i} className="flex justify-start">
+                    <a
+                      href="/pricing"
+                      className="max-w-[85%] rounded-md px-3 py-2 text-sm bg-gradient-to-br from-primary/30 to-accent/20 border-2 border-accent text-text hover:border-primary transition-colors block"
+                    >
+                      <p className="font-display text-[10px] uppercase tracking-[0.2em] text-accent mb-1">
+                        ⚡ Go Pro
+                      </p>
+                      <p className="leading-snug">{m.text}</p>
+                      <p className="mt-1 font-display text-[10px] uppercase tracking-[0.2em] text-primary">
+                        See plans →
+                      </p>
+                    </a>
+                  </div>
+                );
+              }
+              return (
                 <div
-                  className={`max-w-[85%] rounded-md px-3 py-2 text-sm break-words ${
-                    m.role === "user"
-                      ? "bg-primary/20 border-2 border-primary/60 text-text whitespace-pre-wrap"
-                      : "bg-bg/70 border-2 border-secondary/50 text-text chat-md"
-                  }`}
+                  key={i}
+                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  {m.role === "model" ? (
-                    m.text ? (
-                      <ReactMarkdown>{m.text}</ReactMarkdown>
-                    ) : sending && i === messages.length - 1 ? (
-                      <span className="text-text/50 font-mono">…thinking</span>
-                    ) : null
-                  ) : (
-                    m.text
-                  )}
+                  <div
+                    className={`max-w-[85%] rounded-md px-3 py-2 text-sm break-words ${
+                      m.role === "user"
+                        ? "bg-primary/20 border-2 border-primary/60 text-text whitespace-pre-wrap"
+                        : "bg-bg/70 border-2 border-secondary/50 text-text chat-md"
+                    }`}
+                  >
+                    {m.role === "model" ? (
+                      m.text ? (
+                        <ReactMarkdown>{m.text}</ReactMarkdown>
+                      ) : sending && i === messages.length - 1 ? (
+                        <span className="text-text/50 font-mono">…thinking</span>
+                      ) : null
+                    ) : (
+                      m.text
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {error && (
               <p className="text-xs text-red-400 font-mono">⚠ {error}</p>
             )}

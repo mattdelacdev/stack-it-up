@@ -5,6 +5,7 @@ import {
   getServerSupabase,
   resolveAvatarUrl,
 } from "@/lib/supabase/server";
+import Link from "next/link";
 import AvatarUploader from "./AvatarUploader";
 import StackManager from "./StackManager";
 import { fetchUserStacks } from "@/lib/stacks";
@@ -163,6 +164,44 @@ export default async function SettingsPage({
             {errorMsg}
           </div>
         )}
+
+        <div
+          className={`mt-6 card-retro ${
+            profile?.tier === "pro" ? "border-accent" : ""
+          }`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="font-display text-[10px] uppercase tracking-[0.3em] text-text/60">
+                Your plan
+              </p>
+              <p className="mt-1 font-display text-2xl">
+                {profile?.tier === "pro" ? (
+                  <span className="text-accent">PRO ⚡</span>
+                ) : (
+                  <span className="text-primary">FREE</span>
+                )}
+              </p>
+              <p className="mt-1 text-sm text-text/70">
+                {profile?.tier === "pro"
+                  ? "5 expert chats per day. Thanks for supporting StackItUp."
+                  : "1 expert chat per day. Upgrade for 5× more and early access."}
+              </p>
+            </div>
+            {profile?.tier === "pro" ? (
+              <Link
+                href="/pricing"
+                className="font-display text-xs uppercase tracking-[0.2em] text-text/70 hover:text-accent"
+              >
+                Manage →
+              </Link>
+            ) : (
+              <Link href="/pricing" className="btn-accent">
+                Upgrade to Pro
+              </Link>
+            )}
+          </div>
+        </div>
 
         <div className="mt-6 card-retro">
           <AvatarUploader

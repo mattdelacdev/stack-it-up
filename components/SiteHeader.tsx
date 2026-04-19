@@ -60,6 +60,13 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
           </Link>
 
           <Link
+            href="/pricing"
+            className="font-display text-xs uppercase tracking-wider text-text/80 hover:text-accent transition-colors px-3 py-2"
+          >
+            Pricing
+          </Link>
+
+          <Link
             href="/#newsletter"
             className="font-display text-xs uppercase tracking-wider text-text/80 hover:text-accent transition-colors px-3 py-2"
           >
@@ -132,6 +139,12 @@ export default function SiteHeader({ authUser = null }: { authUser?: AuthUser })
                 className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
               >
                 Supplements
+              </Link>
+              <Link
+                href="/pricing"
+                className="font-display text-sm uppercase tracking-wider text-text/80 hover:text-accent px-3 py-2"
+              >
+                Pricing
               </Link>
               <Link
                 href="/#newsletter"
