@@ -10,14 +10,35 @@ const GREETING: Msg = {
   text: "Hey! I'm your StackItUp supplement & fitness expert. Ask me about any supplement, stack, or how to feel better, sleep better, or get stronger. 💪",
 };
 
+const STORAGE_KEY = "stackitup:chat:v1";
+
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([GREETING]);
+  const [hydrated, setHydrated] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Msg[];
+        if (Array.isArray(parsed) && parsed.length > 0) setMessages(parsed);
+      }
+    } catch {}
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch {}
+  }, [messages, hydrated]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -28,6 +49,14 @@ export default function ChatBot() {
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
+
+  function clearHistory() {
+    setMessages([GREETING]);
+    setError(null);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  }
 
   async function send() {
     const text = input.trim();
@@ -40,7 +69,9 @@ export default function ChatBot() {
     setMessages((prev) => [...prev, { role: "model", text: "" }]);
 
     try {
-      const history = next.filter((m, i) => !(i === 0 && m === GREETING));
+      const history = next.filter(
+        (m, i) => !(i === 0 && m.role === "model" && m.text === GREETING.text),
+      );
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -109,14 +140,26 @@ export default function ChatBot() {
                 <p className="text-[10px] text-text/60 font-mono">Powered by Gemini</p>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              aria-label="Close chat"
-              className="text-text/70 hover:text-accent text-2xl leading-none px-2"
-            >
-              ×
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={clearHistory}
+                disabled={sending || messages.length <= 1}
+                aria-label="Clear chat history"
+                title="Clear chat history"
+                className="font-display text-[10px] uppercase tracking-[0.15em] text-text/60 hover:text-accent disabled:opacity-30 px-2 py-1 border border-primary/30 rounded"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close chat"
+                className="text-text/70 hover:text-accent text-2xl leading-none px-2"
+              >
+                ×
+              </button>
+            </div>
           </div>
 
           <div
