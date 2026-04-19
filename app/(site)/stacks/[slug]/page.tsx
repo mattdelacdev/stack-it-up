@@ -8,6 +8,7 @@ import {
   type HeroAccent,
 } from "@/lib/featured-stacks";
 import type { Supplement } from "@/lib/supplements";
+import { SITE_NAME } from "@/lib/site";
 
 const ACCENT_TEXT: Record<HeroAccent, string> = {
   primary: "text-primary",
@@ -52,13 +53,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const stack = await fetchFeaturedStack(slug);
   if (!stack) return { title: "Stack not found" };
+  const title = stack.name;
+  const description = stack.tagline;
+  const url = `/stacks/${stack.slug}`;
   return {
-    title: stack.name,
-    description: stack.tagline,
+    title,
+    description,
+    alternates: { canonical: url },
     openGraph: {
-      title: `${stack.name} — StackItUp`,
-      description: stack.tagline,
       type: "article",
+      title: `${stack.name} — ${SITE_NAME}`,
+      description,
+      url,
+      siteName: SITE_NAME,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${stack.name} — ${SITE_NAME}`,
+      description,
     },
   };
 }

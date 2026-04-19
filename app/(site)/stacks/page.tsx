@@ -1,11 +1,28 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { fetchFeaturedStacks, type HeroAccent } from "@/lib/featured-stacks";
+import { SITE_NAME } from "@/lib/site";
+
+const title = "Featured Supplement Stacks";
+const description =
+  "Curated, science-backed supplement stacks for sleep, focus, fitness, stress, energy, immunity, gut health, and longevity. Pick the goal — get the routine.";
 
 export const metadata: Metadata = {
-  title: "Featured Supplement Stacks",
-  description:
-    "Curated, science-backed supplement stacks for sleep, focus, fitness, stress, energy, immunity, gut health, and longevity. Pick the goal — get the routine.",
+  title,
+  description,
+  alternates: { canonical: "/stacks" },
+  openGraph: {
+    type: "website",
+    title: `${title} — ${SITE_NAME}`,
+    description,
+    url: "/stacks",
+    siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${title} — ${SITE_NAME}`,
+    description,
+  },
 };
 
 const ACCENT_BORDER: Record<HeroAccent, string> = {

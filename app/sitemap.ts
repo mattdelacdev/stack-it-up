@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { fetchSupplementList } from "@/lib/supplements";
+import { fetchFeaturedStacks } from "@/lib/featured-stacks";
 import { benefitList } from "@/lib/benefits";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -13,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/quiz`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/supplements`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/stacks`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
   ];
 
   const benefitRoutes: MetadataRoute.Sitemap = benefitList.map((b) => ({
@@ -53,5 +55,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // ignore
   }
 
-  return [...staticRoutes, ...benefitRoutes, ...supplementRoutes, ...profileRoutes];
+  let stackRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const stacks = await fetchFeaturedStacks();
+    stackRoutes = stacks.map((s) => ({
+      url: `${SITE_URL}/stacks/${s.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }));
+  } catch {
+    // ignore
+  }
+
+  return [
+    ...staticRoutes,
+    ...benefitRoutes,
+    ...supplementRoutes,
+    ...stackRoutes,
+    ...profileRoutes,
+  ];
 }
