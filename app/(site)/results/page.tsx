@@ -6,8 +6,6 @@ import { useEffect, useMemo, useState } from "react";
 import { clearAnswers, loadAnswers } from "@/lib/storage";
 import { DualDose } from "@/lib/dose";
 import {
-  buildStack,
-  fetchSupplements,
   groupByTiming,
   type QuizAnswers,
   type Supplement,
@@ -38,11 +36,23 @@ const TAG_META: Record<Supplement["tag"], { label: string; className: string }> 
   },
 };
 
+const LOADING_STAGES = [
+  "Reading your answers…",
+  "Scanning the supplement catalog…",
+  "Consulting the AI expert…",
+  "Balancing the stack…",
+  "Finalizing recommendations…",
+];
+
 export default function ResultsPage() {
   const router = useRouter();
   const [answers, setAnswers] = useState<QuizAnswers | null>(null);
-  const [supplements, setSupplements] = useState<Record<string, Supplement> | null>(null);
+  const [stack, setStack] = useState<Supplement[]>([]);
+  const [summary, setSummary] = useState<string>("");
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState(0);
 
   useEffect(() => {
     const a = loadAnswers();
@@ -51,16 +61,47 @@ export default function ResultsPage() {
       return;
     }
     setAnswers(a);
-    fetchSupplements()
-      .then(setSupplements)
-      .catch(() => setSupplements({}))
-      .finally(() => setReady(true));
+
+    let cancelled = false;
+    const started = Date.now();
+    const progressTimer = setInterval(() => {
+      if (cancelled) return;
+      const elapsed = (Date.now() - started) / 1000;
+      const pct = Math.min(92, Math.round((1 - Math.exp(-elapsed / 5)) * 100));
+      setProgress(pct);
+      setStage(Math.min(LOADING_STAGES.length - 1, Math.floor(elapsed / 2)));
+    }, 200);
+
+    fetch("/api/stack", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answers: a }),
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error((await res.text()) || "Request failed");
+        return res.json() as Promise<{ stack: Supplement[]; summary: string }>;
+      })
+      .then((data) => {
+        if (cancelled) return;
+        setStack(data.stack);
+        setSummary(data.summary);
+        setProgress(100);
+        setStage(LOADING_STAGES.length - 1);
+        setTimeout(() => !cancelled && setReady(true), 250);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : "Something went wrong");
+        setReady(true);
+      })
+      .finally(() => clearInterval(progressTimer));
+
+    return () => {
+      cancelled = true;
+      clearInterval(progressTimer);
+    };
   }, [router]);
 
-  const stack = useMemo(
-    () => (answers && supplements ? buildStack(answers, supplements) : []),
-    [answers, supplements],
-  );
   const grouped = useMemo(() => groupByTiming(stack), [stack]);
 
   function retake() {
@@ -68,12 +109,36 @@ export default function ResultsPage() {
     router.push("/quiz");
   }
 
-  if (!ready || !answers || !supplements) {
+  if (!ready || !answers) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="font-mono text-accent text-xl animate-pulse">
-          &gt; computing_stack...
-        </p>
+      <div className="min-h-screen flex items-center justify-center px-6">
+        <div className="w-full max-w-md">
+          <p className="font-mono text-accent text-lg mb-4">
+            &gt; stack.generate(ai)
+          </p>
+          <div className="h-4 w-full border-2 border-primary/60 bg-bg-deep overflow-hidden relative">
+            <div
+              className="h-full bg-gradient-to-r from-primary via-accent to-secondary transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="mt-4 font-mono text-sm text-text/70">
+            {LOADING_STAGES[stage]}
+          </p>
+          <p className="mt-1 font-mono text-xs text-text/40">{progress}%</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6">
+        <div className="max-w-md text-center">
+          <p className="font-mono text-primary text-lg mb-3">&gt; error</p>
+          <p className="text-text/80 mb-6">{error}</p>
+          <button onClick={retake} className="btn-accent">↻ Retake Quiz</button>
+        </div>
       </div>
     );
   }
@@ -100,9 +165,14 @@ export default function ResultsPage() {
             <span className="text-gradient">Your stack</span>
             <span className="text-text">, {stack.length} items.</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-text/70 text-base sm:text-lg">
-            Based on your answers — screenshot it, tweak it, or retake the quiz anytime.
-            Check with your doctor before starting anything new.
+          {summary && (
+            <p className="mt-4 max-w-2xl text-text/80 text-base sm:text-lg">
+              {summary}
+            </p>
+          )}
+          <p className="mt-3 max-w-2xl text-text/60 text-sm sm:text-base">
+            Screenshot it, tweak it, or retake the quiz anytime. Check with your
+            doctor before starting anything new.
           </p>
         </section>
 
