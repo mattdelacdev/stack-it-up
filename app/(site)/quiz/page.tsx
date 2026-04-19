@@ -18,6 +18,8 @@ type Step = {
   question: string;
   subtitle: string;
   multi?: boolean;
+  kind?: "options" | "text";
+  placeholder?: string;
   options: { value: string; label: string; emoji?: string; hint?: string }[];
 };
 
@@ -96,6 +98,17 @@ const STEPS: Step[] = [
       { value: "over50", label: "Over 50" },
     ],
   },
+  {
+    id: "extras",
+    label: "Extras",
+    question: "Anything else we should know?",
+    subtitle:
+      "Optional. Medical conditions, medications, allergies, budget, specific goals — anything that helps the AI tailor your stack.",
+    kind: "text",
+    placeholder:
+      "e.g. I have mild high blood pressure, take a statin, am trying to get pregnant, want to keep cost under $50/month…",
+    options: [],
+  },
 ];
 
 const DEFAULTS: QuizAnswers = {
@@ -105,6 +118,7 @@ const DEFAULTS: QuizAnswers = {
   sleepQuality: "okay",
   sun: "medium",
   ageGroup: "30to50",
+  extras: "",
 };
 
 export default function QuizPage() {
@@ -160,6 +174,7 @@ export default function QuizPage() {
 
   function isSelected(value: string) {
     if (step.id === "goals") return answers.goals.includes(value as Goal);
+    if (step.kind === "text") return false;
     return String(answers[step.id]) === value;
   }
 
@@ -280,6 +295,23 @@ export default function QuizPage() {
 
           <fieldset className="mt-8 sm:mt-10">
             <legend className="sr-only">{step.question}</legend>
+            {step.kind === "text" ? (
+              <div>
+                <textarea
+                  value={answers.extras ?? ""}
+                  onChange={(e) =>
+                    setAnswers((prev) => ({ ...prev, extras: e.target.value }))
+                  }
+                  placeholder={step.placeholder}
+                  rows={6}
+                  maxLength={1000}
+                  className="w-full resize-y border-4 border-text/20 focus:border-accent outline-none bg-bg-deep/60 p-4 sm:p-5 font-body text-base sm:text-lg text-text placeholder:text-text/40"
+                />
+                <p className="mt-2 font-mono text-xs text-text/50">
+                  {(answers.extras ?? "").length} / 1000 · optional
+                </p>
+              </div>
+            ) : (
             <div
               className={
                 step.id === "goals"
@@ -318,6 +350,7 @@ export default function QuizPage() {
                 );
               })}
             </div>
+            )}
           </fieldset>
 
           <div className="mt-10 flex items-center justify-between gap-4">

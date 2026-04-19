@@ -78,7 +78,14 @@ export default function ResultsPage() {
       body: JSON.stringify({ answers: a }),
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error((await res.text()) || "Request failed");
+        if (!res.ok) {
+          let msg = "Request failed";
+          try {
+            const body = await res.json();
+            if (body?.error) msg = body.error;
+          } catch {}
+          throw new Error(msg);
+        }
         return res.json() as Promise<{ stack: Supplement[]; summary: string }>;
       })
       .then((data) => {
@@ -134,10 +141,23 @@ export default function ResultsPage() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-md text-center">
-          <p className="font-mono text-primary text-lg mb-3">&gt; error</p>
-          <p className="text-text/80 mb-6">{error}</p>
-          <button onClick={retake} className="btn-accent">↻ Retake Quiz</button>
+        <div className="max-w-md text-center card-retro !p-8 !border-primary">
+          <p className="text-5xl mb-4" aria-hidden>🧪</p>
+          <h1 className="font-display text-2xl text-primary mb-3 uppercase tracking-wider">
+            Our AI needs a breather
+          </h1>
+          <p className="text-text/80 mb-6 leading-relaxed">{error}</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <button
+              onClick={() => window.location.reload()}
+              className="btn-accent"
+            >
+              ↻ Try Again
+            </button>
+            <button onClick={retake} className="btn-ghost">
+              Retake Quiz
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -186,6 +206,16 @@ export default function ResultsPage() {
             <ProfileRow label="Sun" value={answers.sun} />
             <ProfileRow label="Age" value={answers.ageGroup.replace("to", "–").replace("under", "<").replace("over", ">")} />
           </dl>
+          {answers.extras && answers.extras.trim() && (
+            <div className="mt-4 pt-4 border-t border-primary/20">
+              <p className="font-display text-xs uppercase tracking-widest text-text/50 mb-2">
+                Extra context
+              </p>
+              <p className="text-text/80 text-sm sm:text-base whitespace-pre-wrap">
+                {answers.extras}
+              </p>
+            </div>
+          )}
         </section>
 
         <div className="space-y-10 sm:space-y-14">

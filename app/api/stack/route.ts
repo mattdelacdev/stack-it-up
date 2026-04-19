@@ -11,6 +11,7 @@ Rules:
 - Pick only supplements from the provided catalog (by id). Do not invent ids.
 - Typical stack size: 5–10 items. Always include basic core staples (a multivitamin and omega-3 if present in the catalog) unless there's a clear reason not to.
 - Prioritize the user's stated goals, then correct likely deficiencies implied by diet/sun/age/activity.
+- If the user provides extra context (medical conditions, medications, allergies, budget, pregnancy, specific goals), treat it as high-priority — remove contraindicated picks, add relevant ones, and acknowledge constraints in the summary. If they mention medications or serious medical conditions, note in the summary that they should check with their doctor first.
 - Avoid redundant overlap (e.g. don't pick multiple items that do the same job).
 - For each pick, write a 1-sentence "why" tailored to THIS user's answers (personal, specific — e.g. "For your vegan diet and low sun exposure…"). Max ~140 chars.
 - Return a concise "summary" (2–3 sentences) explaining the overall shape of the stack.`;
@@ -49,7 +50,7 @@ export async function POST(req: Request) {
     const prompt = `User quiz answers:\n${JSON.stringify(answers, null, 2)}\n\nAvailable supplements (pick from these ids only):\n${JSON.stringify(catalogForAi, null, 2)}\n\nReturn a JSON object with "picks" (ordered array of {id, why}) and "summary".`;
 
     const res = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       config: {
         systemInstruction: SYSTEM,
@@ -93,7 +94,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ summary: parsed.summary, stack });
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    const raw = err instanceof Error ? err.message : "Unknown error";
+    const isQuota = /RESOURCE_EXHAUSTED|quota|429/i.test(raw);
+    const msg = isQuota
+      ? "We've hit today's free-tier AI quota — please try again in a little while, or come back tomorrow."
+      : "Something went wrong generating your stack. Please try again.";
+    return NextResponse.json({ error: msg }, { status: isQuota ? 429 : 500 });
   }
 }

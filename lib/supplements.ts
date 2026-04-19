@@ -21,6 +21,7 @@ export interface QuizAnswers {
   sun: SunExposure;
   sleepQuality: "poor" | "okay" | "good";
   ageGroup: "under30" | "30to50" | "over50";
+  extras?: string;
 }
 
 export interface SupplementForm {
