@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+// @vitest-environment jsdom
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import NewsletterForm from "@/components/NewsletterForm";
@@ -9,7 +10,6 @@ describe("NewsletterForm", () => {
       new Response(null, { status: 200 }),
     );
   });
-  afterEach(() => vi.restoreAllMocks());
 
   it("shows error when first name empty", async () => {
     render(<NewsletterForm />);

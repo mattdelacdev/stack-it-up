@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from "vitest";
 import { saveAnswers, loadAnswers, clearAnswers } from "@/lib/storage";
 import type { QuizAnswers } from "@/lib/supplements";
