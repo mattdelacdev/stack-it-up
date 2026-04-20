@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 type AuthUser = {
   email: string;
@@ -13,6 +14,14 @@ type AuthUser = {
 export default function AuthNav({ user }: { user: AuthUser }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      Sentry.setUser({ email: user.email, username: user.username ?? undefined });
+    } else {
+      Sentry.setUser(null);
+    }
+  }, [user]);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {

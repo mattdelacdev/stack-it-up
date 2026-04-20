@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
+import * as Sentry from "@sentry/nextjs";
 import { stripe } from "@/lib/stripe";
 import { getServiceSupabase } from "@/lib/supabase/service";
 
@@ -94,6 +95,12 @@ export async function POST(req: Request) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Webhook handler failed";
     console.error("Stripe webhook error:", msg);
+    Sentry.withScope((scope) => {
+      scope.setTag("route", "stripe-webhook");
+      scope.setTag("stripe_event_type", event.type);
+      scope.setContext("stripe_event", { id: event.id, type: event.type });
+      Sentry.captureException(err);
+    });
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 
