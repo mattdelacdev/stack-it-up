@@ -115,7 +115,14 @@ export default async function PublicProfilePage({
     <main className="min-h-screen bg-bg text-text px-6 py-16">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e")
+            .replace(/&/g, "\\u0026")
+            .replace(/\u2028/g, "\\u2028")
+            .replace(/\u2029/g, "\\u2029"),
+        }}
       />
       <div className="mx-auto max-w-2xl">
         <div className="card-retro">
