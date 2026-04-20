@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { getSupabase } from "@/lib/supabase/browser";
 
 export default function NewsletterForm() {
   const [firstName, setFirstName] = useState("");
@@ -22,11 +21,13 @@ export default function NewsletterForm() {
     }
     setError(null);
     setPending(true);
-    const { error: dbError } = await getSupabase()
-      .from("subscribers")
-      .insert({ email, first_name: firstName.trim(), source: "newsletter" });
+    const res = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, firstName: firstName.trim() }),
+    });
     setPending(false);
-    if (dbError && dbError.code !== "23505") {
+    if (!res.ok) {
       setError("Something went wrong. Please try again.");
       return;
     }
