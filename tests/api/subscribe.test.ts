@@ -55,6 +55,29 @@ describe("/api/subscribe POST", () => {
     expect((await res.json()).error).toMatch(/first name/i);
   });
 
+  it.each([
+    "UGbmadSWVYmzkqUmp",
+    "RscUBvgnZZUooaNplORd",
+    "KZllKfgmMahSFVUA",
+    "asrwjwtwEuHOQNzMG",
+    "this-is-way-way-way-too-long-to-be-a-name",
+    "Matt123",
+    "<script>",
+  ])("rejects bot-like first name %s", async (firstName) => {
+    const res = await POST(req({ email: "a@b.co", firstName }));
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toMatch(/invalid first name/i);
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it.each(["Matt", "Mary Ann", "MacDonald", "DeShawn", "O'Brien", "Jean-Luc", "Renée"])(
+    "accepts real-looking name %s",
+    async (firstName) => {
+      const res = await POST(req({ email: "a@b.co", firstName }));
+      expect(res.status).toBe(200);
+    },
+  );
+
   it("inserts subscriber and returns ok", async () => {
     const res = await POST(req({ email: "Matt@Example.com", firstName: "  Matt  " }));
     expect(res.status).toBe(200);

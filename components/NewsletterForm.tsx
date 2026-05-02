@@ -63,6 +63,7 @@ export default function NewsletterForm() {
                   name="firstName"
                   type="text"
                   required
+                  maxLength={30}
                   autoComplete="given-name"
                   placeholder="First name"
                   value={firstName}

@@ -6,6 +6,15 @@ export const runtime = "nodejs";
 
 const FROM = "StackItUp <hello@stackitup.app>";
 
+function looksLikeRealName(name: string): boolean {
+  if (name.length === 0 || name.length > 30) return false;
+  if (!/^[\p{L}][\p{L}\s'.\-]*$/u.test(name)) return false;
+  const upper = name.match(/\p{Lu}/gu)?.length ?? 0;
+  const letters = name.match(/\p{L}/gu)?.length ?? 0;
+  if (upper > 3 && upper !== letters) return false;
+  return true;
+}
+
 function welcomeEmailHtml(firstName: string) {
   const name = firstName.replace(/[<>&"']/g, "");
   return `<!doctype html>
@@ -88,6 +97,9 @@ export async function POST(req: Request) {
     }
     if (!firstName) {
       return NextResponse.json({ error: "Missing first name" }, { status: 400 });
+    }
+    if (!looksLikeRealName(firstName)) {
+      return NextResponse.json({ error: "Invalid first name" }, { status: 400 });
     }
 
     const supabase = await getServerSupabase();
