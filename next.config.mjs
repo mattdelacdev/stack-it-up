@@ -9,6 +9,12 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  async rewrites() {
+    return [
+      { source: "/u/script.js", destination: "https://cloud.umami.is/script.js" },
+      { source: "/u/api/send", destination: "https://api-gateway.umami.dev/api/send" },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {
