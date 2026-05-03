@@ -1,13 +1,14 @@
 import Bugsnag from "@bugsnag/js";
-import BugsnagPluginReact from "@bugsnag/plugin-react";
 
 const apiKey = process.env.NEXT_PUBLIC_BUGSNAG_API_KEY;
 
-if (apiKey && !Bugsnag.isStarted()) {
+if (apiKey && !Bugsnag.isStarted() && process.env.NODE_ENV !== "test") {
   Bugsnag.start({
     apiKey,
-    plugins: [new BugsnagPluginReact()],
+    appType: "server",
     releaseStage: process.env.NODE_ENV,
     enabledReleaseStages: ["production"],
   });
 }
+
+export default Bugsnag;

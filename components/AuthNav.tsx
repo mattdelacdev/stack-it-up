@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import Bugsnag from "@bugsnag/js";
 
 type AuthUser = {
   email: string;
@@ -16,10 +16,11 @@ export default function AuthNav({ user }: { user: AuthUser }) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (!Bugsnag.isStarted()) return;
     if (user) {
-      Sentry.setUser({ email: user.email, username: user.username ?? undefined });
+      Bugsnag.setUser(user.email, user.email, user.username ?? undefined);
     } else {
-      Sentry.setUser(null);
+      Bugsnag.setUser();
     }
   }, [user]);
 

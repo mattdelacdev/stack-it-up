@@ -2,6 +2,7 @@
 
 import { Bungee, Space_Grotesk } from "next/font/google";
 import { useEffect } from "react";
+import Bugsnag from "@bugsnag/js";
 import "./globals.css";
 
 const display = Bungee({
@@ -27,6 +28,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     console.error(error);
+    if (Bugsnag.isStarted()) Bugsnag.notify(error);
   }, [error]);
 
   return (
